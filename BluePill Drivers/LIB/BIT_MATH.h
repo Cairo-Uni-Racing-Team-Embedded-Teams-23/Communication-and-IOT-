@@ -17,45 +17,45 @@
 
 //MACROS FOR PIN
 
-#define WRITE_BIT(reg , bit , data)	(  reg  =  (reg& ~(1<<bit))  | (data<<bit)  )
-#define GET_BIT(reg , bit)		( ((reg)&(1<<bit))>>bit  )
-#define CHK_BIT(reg , bit)		((reg) & (1<<bit) )
-#define TOG_BIT(reg , bit)		(  reg  ^= (1<<bit)  )
-#define SET_BIT(reg , bit)		(  reg  |= (1<<bit)  )
-#define CLR_BIT(reg , bit)		(  reg  &=~(1<<bit)  )
+#define WRITE_BIT(REG , BIT , DATA)		( REG = (REG& ~(1<<BIT)) | (DATA<<BIT))
+#define GET_BIT(REG , BIT)				(((REG)&(1<<BIT))>>BIT )
+#define CHK_BIT(REG , BIT)				((REG) & (1<<BIT))
+#define TOG_BIT(REG , BIT)				(REG  ^= (1<<BIT))
+#define SET_BIT(REG , BIT)				(REG  |= (1<<BIT))
+#define CLR_BIT(REG , BIT)				(REG  &=~(1<<BIT))
 
 //MACROS FOR PORTS AND REGISTERS
 
-#define WRITE_PORT(reg , data)		(  reg = data        )
-#define PORT_SET_MASK(reg , mask)	(  reg |= (mask)     )
-#define PORT_CLEAR_MASK(reg ,mask)	(  reg &=~(mask)     )
+#define WRITE_PORT(REG , DATA)			(REG = DATA)
+#define PORT_SET_MASK(REG , MASK)		(REG |= (MASK))
+#define PORT_CLEAR_MASK(REG ,MASK)		(REG &=~(MASK))
 
 
 
-#define PORT_MASK(reg , clr , set)  (  reg = (reg&~(clr))|(set))
+#define PORT_MASK(REG , CLR , SET)  	(REG = (REG&~(CLR))|(SET))
 
 
 
-#define SET_REG(reg)				(  reg = 0xffffffff    	)
-#define CLEAR_REG(reg)				(  reg = 0x00000000    	)
-#define TOGGLE_REG(reg)				(  reg ^=0xffffffff	)
+#define SET_REG(REG)					(REG = 0xffffffff)
+#define CLEAR_REG(REG)					(REG = 0x00000000)
+#define TOGGLE_REG(REG)					(REG ^=0xffffffff)
 
-//LOWER NIBBLE MACROS	(0 - 3)
+//LOWER NIBBLE MACROS	(0 - 15)
 
-#define GET_LOWER(reg)				(  reg &   0x0000ffff      )
-#define SET_LOWER_NIBBLE(reg)			(  reg | = 0x0000ffff		 )
-#define CLEAR_LOWER_NIBBLE(reg)			(  reg & = 0xffff0000      )
+#define GET_LOWER(REG)					(REG &   0x0000ffff)
+#define SET_LOWER_NIBBLE(REG)			(REG | = 0x0000ffff)
+#define CLEAR_LOWER_NIBBLE(REG)			(REG & = 0xffff0000)
 
 
-#define LOWER_NIBBLE_DATA(reg , data) ( reg = (reg&0xffff0000)|data ) 
+#define LOWER_NIBBLE_DATA(REG , DATA) 	(REG = (REG&0xffff0000)|DATA ) 
 
-//HIGHER NIBBLE MACROS	(4 - 7)
+//HIGHER NIBBLE MACROS	(16 - 31)
 
-#define GET_HIGHER(reg)				(  (reg&0xffff0000)>>4    )
-#define SET_HIGHER_NIBBLE(reg)		(  reg | =0xffff0000		)
-#define CLEAR_HIGHER_NIBBLE(reg)	(  reg & = 0x0000ffff     )
+#define GET_HIGHER(REG)					((REG&0xffff0000)>>16)
+#define SET_HIGHER_NIBBLE(REG)			(REG | =0xffff0000)
+#define CLEAR_HIGHER_NIBBLE(REG)		(REG & = 0x0000ffff)
 
-#define HIGHER_NIBBLE_DATA(reg , data)	(	reg = (reg&0x0000ffff) | (data<<4) )
+#define HIGHER_NIBBLE_DATA(REG , DATA)	(REG = (REG&0x0000ffff) | (DATA<<16))
 
 
 

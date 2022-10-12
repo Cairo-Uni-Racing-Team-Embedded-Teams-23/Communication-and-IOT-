@@ -14,6 +14,8 @@
 #ifndef RCC_PRIVATE_H
 #define RCC_PRIVATE_H
 
+#include "../../LIB/STD_TYPES.h"
+
 
 typedef struct
 {
