@@ -62,7 +62,7 @@ void RCC_voidInitSysClock(void)
     SET_BIT(RCC->CR, RCC_CR_HSI);
 
 #else
-#error "[ERROR] Incorrect clock source selected. Please refer to RCC_config.h
+#error "[ERROR] Incorrect clock source selected. Please refer to RCC_config.h"
 #endif
 }
 
