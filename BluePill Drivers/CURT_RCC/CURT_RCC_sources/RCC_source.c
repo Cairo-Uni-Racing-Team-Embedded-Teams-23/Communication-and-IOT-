@@ -77,7 +77,7 @@ void RCC_voidInitSysClock(void)
 void RCC_voidEnableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
 {
     /* Invalid peripheral ID*/
-    if (Copy_u8PerId > 32)
+    if (Copy_u8PerId > 31)
         return;
     /* Enable clock based on the selected bus*/
     switch (Copy_u8BusId)
@@ -110,7 +110,7 @@ void RCC_voidEnableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
 void RCC_voidDisableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
 {
     /* Invalid peripheral ID*/
-    if (Copy_u8PerId > 32)
+    if (Copy_u8PerId > 31)
         return;
 
     switch (Copy_u8BusId)
