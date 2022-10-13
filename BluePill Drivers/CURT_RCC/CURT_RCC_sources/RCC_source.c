@@ -117,15 +117,15 @@ void RCC_voidDisableClock(u8 Copy_u8BusId, u8 Copy_u8PerId)
     {
     case APB1:
         /* Stop clock for peripheral*/
-        CLEAR_BIT(RCC->APB1ENR, Copy_u8PerId);
+        CLR_BIT(RCC->APB1ENR, Copy_u8PerId);
         break;
     case APB2:
         /* Stop clock for peripheral*/
-        CLEAR_BIT(RCC->APB2ENR, Copy_u8PerId);
+        CLR_BIT(RCC->APB2ENR, Copy_u8PerId);
         break;
     case AHB:
         /* Stop clock for peripheral*/
-        CLEAR_BIT(RCC->AHBENR, Copy_u8PerId);
+        CLR_BIT(RCC->AHBENR, Copy_u8PerId);
         break;
     default:
         break;
