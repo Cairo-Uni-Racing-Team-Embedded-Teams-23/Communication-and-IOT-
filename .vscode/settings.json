@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "rcc_private.h": "c",
+        "rcc_config.h": "c",
+        "rcc_interface.h": "c",
+        "GPIO_SOURCE.C": "cpp"
+    }
+}

@@ -1,22 +1,22 @@
 /*******************************************************************************
  *																				*
- * 	Module			: RCC														*
+ * 	Module		: RCC   														*
  *																				*
- * 	File Name		: RCC_source.c												*
+ * 	File Name	: RCC_source.c  												*
  *																				*
- * 	Author			: Hazem Montasser										*
+ * 	Author		: Hazem Montasser   										    *
  *																				*
- *	Date 			: 12/10/2022												*
+ *	Date 		: 12/10/2022    												*
  *																				*
- *	Version			: v1.0														*
+ *	Version		: v1.0  														*
  * 																				*
  *******************************************************************************/
 
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
-#include "RCC_private.h"
-#include "RCC_config.h"
-#include "RCC_interface.h"
+#include "../CURT_RCC_headers/RCC_private.h"
+#include "../CURT_RCC_headers/RCC_config.h"
+#include "../CURT_RCC_headers/RCC_interface.h"
 
 /*******************************************************************************
  *	Author :    Hazem Montasser
@@ -28,6 +28,7 @@
 
 void RCC_voidInitSysClock(void)
 {
+    /* Reset registers in-case they contain garbage or configuration from other code*/
     RCC->CR = 0;
     RCC->CFGR = 0;
 

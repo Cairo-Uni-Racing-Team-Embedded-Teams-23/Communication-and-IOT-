@@ -1,15 +1,15 @@
 /*******************************************************************************
- *																				*
- * 	Module			: RCC											     		*
- *																				*
- * 	File Name		: RCC_private.h												*
- *																				*
- * 	Author			: Hazem Montasser										*
- *																				*
- *	Date 			: 12/10/2022												*
- *																				*
- *	Version			: v1.0														*
- * 																				*
+ *																				                                     *
+ * 	Module			: RCC											     		                             *
+ *																				                                     *
+ * 	File Name		: RCC_private.h											                         	 *
+ *																				                                     *
+ * 	Author			: Hazem Montasser										                           *
+ *																				                                     *
+ *	Date 			  : 12/10/2022											                             *
+ *																				                                     *
+ *	Version			: v1.0														                             *
+ * 																				                                     *
  *******************************************************************************/
 #ifndef RCC_PRIVATE_H
 #define RCC_PRIVATE_H

@@ -9,7 +9,7 @@
  ************************************************************************************************/
 #ifndef GPIO_REG_H_
 #define GPIO_REG_H_
-
+#include "std_types.h"
 typedef struct{
 
 	volatile uint32 CRL  ;

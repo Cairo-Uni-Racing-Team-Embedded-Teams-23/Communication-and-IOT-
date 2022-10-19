@@ -1,14 +1,14 @@
 /*******************************************************************************
  *																				*
- * 	Module			: RCC      													*
+ * 	Module		: RCC	      													*
  *																				*
- * 	File Name		: RCC_config.h												*
+ * 	File Name	: RCC_config.h													*
  *																				*
- * 	Author			: Hazem Montasser					    					*
+ * 	Author		: Hazem Montasser						    					*
  *																				*
- *	Date 			: 12/10/2022												*
+ *	Date 		: 12/10/2022													*
  *																				*
- *	Version			: v1.0														*
+ *	Version		: v1.0															*
  * 																				*
  *******************************************************************************/
 
