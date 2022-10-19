@@ -41,6 +41,7 @@ uint16 port_val = GPIO_getPort(GPIO_PortC, PIN14);  /* Read the value PORT C*/
 
 #### Notes
 
-- When a pin or port is configured as INPUT_PULLUP_PULLDOWN, writing 0 to that pin or port will activate the internal weak **pull-down** resistor.
+##### Using GPIO_setPinValue and GPIO_writePort when configured as input
+- When a pin or port is configured as _INPUT_PULLUP_PULLDOWN_, writing 0 to that pin or port will activate the internal weak **pull-down** resistor.
 
-- When a pin or port is configured as INPUT_PULLUP_PULLDOWN, writing 1 to that pin or port will activate the internal weak **pull-up** resistor.
+- When a pin or port is configured as _INPUT_PULLUP_PULLDOWN_, writing 1 to that pin or port will activate the internal weak **pull-up** resistor.
