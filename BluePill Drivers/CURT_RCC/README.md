@@ -18,7 +18,7 @@ This is a RCC driver implementation for the STM32F103C8 based on ARM Cortex-M3. 
 
 #### Pre-build configuration
 
-#### RCC_CLOCK_TYPE
+##### RCC_CLOCK_TYPE
 
 The main system clock that is used for the core. Multiple options are available based on the hardware configuration (external crystal/internal RC/PLL):
 ```c

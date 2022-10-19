@@ -1,8 +1,25 @@
+/*************************************************************************************************
+ * [MODULE_NAME]:    GPIO_SOURCE.c
+ *
+ * [DATE CREATED]:  18/10/2022
+ *
+ * [Author]:        Hazem Montasser
+ *
+ * [DESCRIPTION]:   GPIO driver source code for API functions.
+ ************************************************************************************************/
+
+/******************************************************************************
+*                              Includes                                       *
+*******************************************************************************/
 #include "../CURT_GPIO_headers/GPIO_INTERFACE.h"
 #include "../CURT_GPIO_headers/GPIO_PRIVATE.h"
 #include "../CURT_GPIO_headers/GPIO_REG.h"
 #include "../../LIB/BIT_MATH.h"
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
+
+/******************************************************************************
+*                           Public functions definitions                      *
+*******************************************************************************/
 
 void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode)
 {
