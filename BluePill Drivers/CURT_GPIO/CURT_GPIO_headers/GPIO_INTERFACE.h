@@ -1,49 +1,54 @@
 /*************************************************************************************************
- * [MODULE_NAME]:  GPIO_INTERFACE.h
+ * [MODULE_NAME]:    GPIO_INTERFACE.h
  *
- * [DATE CREATED]:
+ * [DATE CREATED]:  18/10/2022
  *
- * [Author]:
+ * [Author]:        Hazem Montasser
  *
- * [DESCRIPTION]:  All # Defines to be used by User & Function's prototype
+ * [DESCRIPTION]:   All # Defines to be used by User & Function's prototype
  ************************************************************************************************/
 #ifndef GPIO_INTERFACE_H_
 #define GPIO_INTERFACE_H_
 
+/******************************************************************************
+*                              Includes                                    *
+*******************************************************************************/
+
 #include "std_types.h"
 
-#define NUM_OF_PINS_PER_PORT 15
-#define NUM_OF_PORTS 3
+/******************************************************************************
+*                              Definitions                                    *
+*******************************************************************************/
 
-#define GPIOA_ID 0
-#define GPIOB_ID 1
-#define GPIOC_ID 2
+#define NUM_OF_PINS_PER_PORT  (15U)
+#define NUM_OF_PORTS          (3U)
 
-#define PIN0 0
-#define PIN1 1
-#define PIN2 2
-#define PIN3 3
-#define PIN4 4
-#define PIN5 5
-#define PIN6 6
-#define PIN7 7
-#define PIN8 8
-#define PIN9 9
-#define PIN10 10
-#define PIN11 11
-#define PIN12 12
-#define PIN13 13
-#define PIN14 14
-#define PIN15 15
+#define GPIOA_ID              (0U)
+#define GPIOB_ID              (1U)
+#define GPIOC_ID              (2U)
+#define PIN0                  (0U)
+#define PIN1                  (1U)
+#define PIN2                  (2U)
+#define PIN3                  (3U)
+#define PIN4                  (4U)
+#define PIN5                  (5U)
+#define PIN6                  (6U)
+#define PIN7                  (7U)
+#define PIN8                  (8U)
+#define PIN9                  (9U)
+#define PIN10                 (10U)
+#define PIN11                 (11U)
+#define PIN12                 (12U)
+#define PIN13                 (13U)
+#define PIN14                 (14U)
+#define PIN15                 (15U)
 
-#define HIGH 1
-#define LOW 0
 
-#define HIGH_PORT 0XFFFF
-#define LOW_PORT 0
+#define GPIO_HIGH_PORT        (0xFFFFU)
+#define GPIO_LOW_PORT         (0x0000U)
 
-#define LOW_PINS 0
-#define HIGH_PINS 1
+#define LOW_PINS              (0U)
+#define HIGH_PINS             (1U)
 
 /**********************************************************************/
 /*                                                                    */
@@ -66,27 +71,45 @@
 /*                                                                    */
 /**********************************************************************/
 
-#define INPUT_ANLOG 0b0000
-#define INPUT_FLOATING 0b0100
-#define INPUT_PULLUP_PULLDOWN 0b1000
+#define INPUT_ANLOG             (0b0000U)   /*< Input analog */
+#define INPUT_FLOATING          (0b0100U)   /*< Input floating */
+#define INPUT_PULLUP_PULLDOWN   (0b1000U)   /*< Input pull-up or pull-down */
 
 // For Speed 10
-#define OUTPUT_SPEED_10MHZ_PP 0b0001
-#define OUTPUT_SPEED_10MHZ_OD 0b0101
-#define OUTPUT_SPEED_10MHZ_AFPP 0b1001
-#define OUTPUT_SPEED_10MHZ_AFOD 0b1101
+#define OUTPUT_SPEED_10MHZ_PP   (0b0001U)   /*< Output Push-Pull 10MHz */
+#define OUTPUT_SPEED_10MHZ_OD   (0b0101U)   /*< Output Open-drain 10MHz */
+#define OUTPUT_SPEED_10MHZ_AFPP (0b1001U)   /*< Output Alternate function Push-Pull 10MHz */
+#define OUTPUT_SPEED_10MHZ_AFOD (0b1101U)   /*< Output Alternate function Open-drain 10MHz */
 
 // For Speed 2
-#define OUTPUT_SPEED_2MHZ_PP 0b0010
-#define OUTPUT_SPEED_2MHZ_OD 0b0110
-#define OUTPUT_SPEED_2MHZ_AFPP 0b1010
-#define OUTPUT_SPEED_2MHZ_AFOD 0b1110
+#define OUTPUT_SPEED_2MHZ_PP    (0b0010U)   /*< Output Push-Pull 2MHz */
+#define OUTPUT_SPEED_2MHZ_OD    (0b0110U)   /*< Output Open-drain 2MHz */
+#define OUTPUT_SPEED_2MHZ_AFPP  (0b1010U)   /*< Output Alternate function Push-Pull 2MHz */
+#define OUTPUT_SPEED_2MHZ_AFOD  (0b1110U)   /*< Output Alternate function Open-drain 2MHz */
 
 // For Speed 50
-#define OUTPUT_SPEED_50MHZ_PP 0b0011
-#define OUTPUT_SPEED_50MHZ_OD 0b0111
-#define OUTPUT_SPEED_50MHZ_AFPP 0b1011
-#define OUTPUT_SPEED_50MHZ_AFOD 0b1111
+#define OUTPUT_SPEED_50MHZ_PP   (0b0011U)   /*< Output Push-Pull 50MHz */
+#define OUTPUT_SPEED_50MHZ_OD   (0b0111U)   /*< Output Open-drain 50MHz */
+#define OUTPUT_SPEED_50MHZ_AFPP (0b1011U)   /*< Output Alternate function Push-Pull 50MHz */
+#define OUTPUT_SPEED_50MHZ_AFOD (0b1111U)   /*< Output Alternate function Open-drain 50MHz */
+
+/******************************************************************************
+*                              Type definitions                               *
+*******************************************************************************/
+
+typedef enum
+{
+    GPIO_PortA = 0,
+    GPIO_PortB = 1,
+    GPIO_PortC = 2
+} GPIO_PortNameType;
+
+typedef enum
+{
+    GPIO_PIN_RESET,
+    GPIO_PIN_SET
+} GPIO_PinStateType;
+
 
 // typedef enum
 // {
@@ -109,20 +132,9 @@
 //     GPIO_Mode_OUTPUT_SPEED_50MHZ_AFOD = 0b1111
 // }GPIO_ModeType2;
 
-typedef enum
-{
-    GPIO_PortA = 0,
-    GPIO_PortB = 1,
-    GPIO_PortC = 2
-} GPIO_PortNameType;
-
-typedef enum
-{
-    GPIO_Mode_Input = 0b00,
-    GPIO_Mode_Output_10MHz = 0b01,
-    GPIO_Mode_Output_2MHz = 0b10,
-    GPIO_Mode_Output_50MHz = 0b11
-} GPIO_ModeType;
+/******************************************************************************
+*                              Function Prototypes                            *
+*******************************************************************************/
 
 /*
  * Description :
@@ -176,12 +188,8 @@ void GPIO_togglePinValue(uint8 port_num, uint8 pin_num);
 
 void GPIO_enablePortClock(uint8 port_num);
 
-/****************************************************************************************************************************************************
-*Functions will be added to be used in another drivers
-
 void GPIO_setPortDirection_H_L( uint8 Port , uint8 Position , uint8 Mode );
 
 void GPIO_setPortValue_H_L( uint8 Port , uint8 Position , uint16 Value );
-****************************************************************************************************************************************************/
 
 #endif
