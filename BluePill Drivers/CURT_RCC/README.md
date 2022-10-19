@@ -50,8 +50,7 @@ RCC_PLLMUL_6_5  /* PLL input clock x6.5*/
 RCC_PLLMUL_7    /* PLL input clock x7*/
 RCC_PLLMUL_8    /* PLL input clock x8*/
 RCC_PLLMUL_9    /* PLL input clock x9*/
-*```
-
+```
 
 #### Steps
 
