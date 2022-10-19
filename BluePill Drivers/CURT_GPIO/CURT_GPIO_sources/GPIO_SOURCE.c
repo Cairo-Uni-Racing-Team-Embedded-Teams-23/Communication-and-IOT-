@@ -9,8 +9,8 @@
  ************************************************************************************************/
 
 /******************************************************************************
-*                              Includes                                       *
-*******************************************************************************/
+ *                              Includes                                       *
+ *******************************************************************************/
 #include "../CURT_GPIO_headers/GPIO_INTERFACE.h"
 #include "../CURT_GPIO_headers/GPIO_PRIVATE.h"
 #include "../CURT_GPIO_headers/GPIO_REG.h"
@@ -18,8 +18,8 @@
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 
 /******************************************************************************
-*                           Public functions definitions                      *
-*******************************************************************************/
+ *                           Public functions definitions                      *
+ *******************************************************************************/
 
 void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode)
 {
@@ -88,27 +88,27 @@ void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode)
 void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value)
 {
     /* Invalid pin number input */
-    if (pin_num > GPIOA_MAX_PINS)
+    if (pin_num > NUM_OF_PINS_PER_PORT)
         return;
 
     switch (port_num)
     {
     case GPIO_PortA:
-        if (value == GPIO_PIN_RESET)
+        if (value != GPIO_PIN_RESET)
             SET_BIT(GPIOA->BSRR, pin_num);
         else
             SET_BIT(GPIOA->BRR, pin_num);
 
         break;
     case GPIO_PortB:
-        if (value == GPIO_PIN_RESET)
+        if (value != GPIO_PIN_RESET)
             SET_BIT(GPIOB->BSRR, pin_num);
         else
             SET_BIT(GPIOB->BRR, pin_num);
 
         break;
     case GPIO_PortC:
-        if (value == GPIO_PIN_RESET)
+        if (value != GPIO_PIN_RESET)
             SET_BIT(GPIOC->BSRR, pin_num);
         else
             SET_BIT(GPIOC->BRR, pin_num);
@@ -236,10 +236,10 @@ void GPIO_togglePinValue(uint8 port_num, uint8 pin_num)
         TOG_BIT(GPIOA->ODR, pin_num);
         break;
     case GPIO_PortB:
-        TOG_BIT(GPIOA->ODR, pin_num);
+        TOG_BIT(GPIOB->ODR, pin_num);
         break;
     case GPIO_PortC:
-        TOG_BIT(GPIOA->ODR, pin_num);
+        TOG_BIT(GPIOC->ODR, pin_num);
         break;
     default:
         break;
@@ -264,7 +264,8 @@ void GPIO_enablePortClock(uint8 port_num)
         break;
     }
 }
-void GPIO_setPortDirection_H_L(uint8 Port, uint8 Position, uint8 Mode)
+
+void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode)
 {
     /* Copy the mode into all bits of the register for each pin */
     uint32 reg_val = (mode |
@@ -279,21 +280,21 @@ void GPIO_setPortDirection_H_L(uint8 Port, uint8 Position, uint8 Mode)
     switch (port_num)
     {
     case GPIO_PortA:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
             GPIOA->CRL = reg_val;
         else
             GPIOA->CRH = reg_val;
         break;
 
     case GPIO_PortB:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
             GPIOB->CRL = reg_val;
         else
             GPIOB->CRH = reg_val;
         break;
 
     case GPIO_PortC:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
 
             GPIOC->CRL = reg_val;
         else
@@ -305,14 +306,14 @@ void GPIO_setPortDirection_H_L(uint8 Port, uint8 Position, uint8 Mode)
     }
 }
 
-void GPIO_setPortValue_H_L(uint8 Port, uint8 Position, uint16 Value);
+void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value)
 {
 
     /* Determine port and set the high or low part based on position argument*/
     switch (port_num)
     {
     case GPIO_PortA:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
             GPIOA->ODR |= value;
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
@@ -320,7 +321,7 @@ void GPIO_setPortValue_H_L(uint8 Port, uint8 Position, uint16 Value);
         break;
 
     case GPIO_PortB:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
             GPIOB->ODR |= value;
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
@@ -328,7 +329,7 @@ void GPIO_setPortValue_H_L(uint8 Port, uint8 Position, uint16 Value);
         break;
 
     case GPIO_PortC:
-        if (Position == GPIO_Port_Low)
+        if (position == GPIO_LOW_PORT)
             GPIOC->ODR |= value;
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/

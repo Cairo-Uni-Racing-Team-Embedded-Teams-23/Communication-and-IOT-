@@ -188,8 +188,8 @@ void GPIO_togglePinValue(uint8 port_num, uint8 pin_num);
 
 void GPIO_enablePortClock(uint8 port_num);
 
-void GPIO_setPortDirection_H_L( uint8 Port , uint8 Position , uint8 Mode );
+void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode);
 
-void GPIO_setPortValue_H_L( uint8 Port , uint8 Position , uint16 Value );
+void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value);
 
 #endif
