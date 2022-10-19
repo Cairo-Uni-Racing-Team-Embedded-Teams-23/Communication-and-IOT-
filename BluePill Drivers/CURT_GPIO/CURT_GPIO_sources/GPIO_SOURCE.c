@@ -128,19 +128,19 @@ uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num)
     switch (port_num)
     {
     case GPIO_PortA:
-        if (GPIOA->IDR & (pin_num) == 0U)
+        if (GPIOA->IDR & (1<<pin_num) == 0U)
             return GPIO_PIN_RESET;
         else
             return GPIO_PIN_SET;
         break;
     case GPIO_PortB:
-        if (GPIOB->IDR & (pin_num) == 0U)
+        if (GPIOB->IDR & (1<<pin_num) == 0U)
             return GPIO_PIN_RESET;
         else
             return GPIO_PIN_SET;
         break;
     case GPIO_PortC:
-        if (GPIOC->IDR & (pin_num) == 0U)
+        if (GPIOC->IDR & (1<<pin_num) == 0U)
             return GPIO_PIN_RESET;
         else
             return GPIO_PIN_SET;
