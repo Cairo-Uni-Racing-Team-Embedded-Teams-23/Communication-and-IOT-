@@ -56,9 +56,11 @@ RCC_PLLMUL_9    /* PLL input clock x9*/
 #### Steps
 
 1. Initialize system clock. This selects the clock for the core based on the selected clock from the pre-build configuration file in RCC_config.h. 
+
 ```c
 RCC_voidInitSysClock();
 ```
+
 2. Start or stop the clock for a peripheral on the system buses
 ```c
 RCC_voidEnableClock(APB2, 4);
