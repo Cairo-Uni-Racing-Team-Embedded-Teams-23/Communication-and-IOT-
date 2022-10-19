@@ -275,24 +275,24 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value) {
 		if (position == GPIO_LOW_PORT)
 			GPIOA->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOA->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
+			GPIOA->ODR |= (((uint32) value) << 8);
 		break;
 
 	case GPIO_PortB:
 		if (position == GPIO_LOW_PORT)
 			GPIOB->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOB->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
+			GPIOB->ODR |= (((uint32) value) << 8);
 		break;
 
 	case GPIO_PortC:
 		if (position == GPIO_LOW_PORT)
 			GPIOC->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOC->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
+			GPIOC->ODR |= (((uint32) value) << 8);
 		break;
 
 	default:

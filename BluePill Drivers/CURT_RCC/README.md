@@ -1,18 +1,19 @@
 # CURT Communications & IoT 2023 
-# RCC Driver
+# RCC Driver by Hazem Montasser
 ## Overview
 
 This is a RCC driver implementation for the STM32F103C8 based on ARM Cortex-M3. It contains basic functions start system clock, start or stop clock on AHB, APB1, APB2 buses.
+
 ## RCC Driver documentation
 
 ### File information
 - In CURT_RCC_headers
-	1. RCC_interface.h: Contains API functions for using the RCC driver
-	2. RCC_private.h: Contains some definitions and registers used internally within the source
-	3. RCC_reg: Defines register adresses
-	4. RCC_config.h: Pre-build configuration file
-- In CURT_RCC_srouces
-	1. RCC_SOURCE.c: Source code for the RCC driver
+	1. **RCC_interface.h**: Contains API functions for using the RCC driver
+	2. **RCC_private.h**: Contains some definitions and registers used internally within the source
+	3. **RCC_reg**: Defines register adresses
+	4. **RCC_config.h**: Pre-build configuration file
+- In CURT_RCC_sources
+	1. **RCC_SOURCE.c**: Source code for the RCC driver
 
 ### How to use this driver
 
@@ -54,7 +55,7 @@ RCC_PLLMUL_9    /* PLL input clock x9*/
 
 #### Steps
 
-1. Initialize system clock. This selects the clock for the core based on the selected clock from the pre-build configuration file in RCC_config.h. 
+1. Initialize system clock. This selects the clock for the core based on the selected clock from the pre-build configuration file in RCC_config.h. This should be called at the very start of the main function before anything else.
 
 ```c
 RCC_voidInitSysClock();
@@ -67,3 +68,11 @@ RCC_voidEnableClock(APB2, 4);
 RCC_voidDisableClock(AB1, 12);
 ```
 #### Notes
+
+#### TODO
+
+- Loop on ready flags to ensure clock has stabilized
+- Add enums/defs for all bus IDs for peripherals
+- Function for enabling/disabling MCO pin and selecting its input clock
+- Function to calibrate the clock 
+- Reset functions for peripherals' clocks
