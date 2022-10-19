@@ -8,7 +8,7 @@
  * [DESCRIPTION]:   GPIO driver source code for API functions.
  ************************************************************************************************/
 
-/******************************************************************************
+/*******************************************************************************
  *                              Includes                                       *
  *******************************************************************************/
 #include "../CURT_GPIO_headers/GPIO_INTERFACE.h"
@@ -17,7 +17,7 @@
 #include "../../LIB/BIT_MATH.h"
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 
-/******************************************************************************
+/*******************************************************************************
  *                           Public functions definitions                      *
  *******************************************************************************/
 
@@ -155,13 +155,13 @@ uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num)
 void GPIO_setupPortMode(uint8 port_num, uint8 mode)
 {
     /* Copy the mode into all bits of the register for each pin */
-    uint32 reg_val = (mode |
-                      (mode << 4) |
-                      (mode << 8) |
-                      (mode << 12) |
-                      (mode << 16) |
-                      (mode << 20) |
-                      (mode << 24) |
+    uint32 reg_val = (mode |\
+                      (mode << 4) |\
+                      (mode << 8) |\
+                      (mode << 12) |\
+                      (mode << 16) |\
+                      (mode << 20) |\
+                      (mode << 24) |\
                       (mode << 28));
     switch (port_num)
     {
@@ -268,13 +268,13 @@ void GPIO_enablePortClock(uint8 port_num)
 void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode)
 {
     /* Copy the mode into all bits of the register for each pin */
-    uint32 reg_val = (mode |
-                      (mode << 4) |
-                      (mode << 8) |
-                      (mode << 12) |
-                      (mode << 16) |
-                      (mode << 20) |
-                      (mode << 24) |
+    uint32 reg_val = (mode |\
+                      (mode << 4) |\
+                      (mode << 8) |\
+                      (mode << 12) |\
+                      (mode << 16) |\
+                      (mode << 20) |\
+                      (mode << 24) |\
                       (mode << 28));
     /* Determine port and set the high or low part based on position argument*/
     switch (port_num)
@@ -314,7 +314,7 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value)
     {
     case GPIO_PortA:
         if (position == GPIO_LOW_PORT)
-            GPIOA->ODR |= value;
+            GPIOA->ODR |= (value&0x00FF);
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
             GPIOA->ODR |= (((uint32)value) << 16);
@@ -322,7 +322,7 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value)
 
     case GPIO_PortB:
         if (position == GPIO_LOW_PORT)
-            GPIOB->ODR |= value;
+            GPIOB->ODR |= (value&0x00FF);
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
             GPIOB->ODR |= (((uint32)value) << 16);
@@ -330,7 +330,7 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value)
 
     case GPIO_PortC:
         if (position == GPIO_LOW_PORT)
-            GPIOC->ODR |= value;
+            GPIOC->ODR |= (value&0x00FF);
         else
             /* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
             GPIOC->ODR |= (((uint32)value) << 16);
