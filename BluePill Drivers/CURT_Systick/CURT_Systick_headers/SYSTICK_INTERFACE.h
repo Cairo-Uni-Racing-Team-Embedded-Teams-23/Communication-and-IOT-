@@ -10,30 +10,40 @@
 
 #ifndef SYSTICK_INTERFACE_H_
 #define SYSTICK_INTERFACE_H_
+#include "../../LIB/STD_TYPES.h"
 
 #define STK_SRC_AHB             0
 #define STK_SRC_AHB_8           1
 
-#define STK_SINGLE_INTERVAL     1
-#define STK_PERIOD_INTERVAL     2
+#define STK_MAX_PRELOAD_VALUE (0x00FFFFFFU)
+#define STK_MIN_PRELOAD_VALUE (0x00000001U)
 
-typedef enum{
+#define STK_COUNTFLAG_READY (0U)
 
-	ENABLE0       ,
-	TICKINT      ,
-	CLKSOURCE    ,
-	COUNTFLAG=16
-}CTRL;
+typedef enum {
 
-void STK_init                (void);
-void STK_stopInterval        (void);
+	ENABLE = 0, TICKINT, CLKSOURCE, COUNTFLAG = 16
+} CTRL_Reg;
 
-u32  STK_getElapsedTime       (void);
-u32  STK_getRemainingTime     (void);
+typedef enum {
+	SysTick_ClockSource_AHB, SysTick_ClockSource_AHB_8
+} SysTick_ClockSource;
 
-void STK_setBusyWait         ( u32 Ticks );
+typedef enum {
+	SysTick_IntervalMode_Single = 1,
+	SysTick_IntervalMode_Period = 2,
+	SysTick_IntervalMode_NotSpecified = 3
+} SysTick_IntervalMode;
 
-void STK_setIntervalSingle   ( u32 Ticks, void (*copy_ptr)(void) );
-void STK_setIntervalPeriodic ( u32 Ticks, void (*copy_ptr)(void) );
+void STK_init(void);
+void STK_stopInterval(void);
+
+u32 STK_getElapsedTime(void);
+u32 STK_getRemainingTime(void);
+
+void STK_setBusyWait(u32 Ticks);
+
+void STK_setIntervalSingle(u32 Ticks, void (*copy_ptr)(void));
+void STK_setIntervalPeriodic(u32 Ticks, void (*copy_ptr)(void));
 
 #endif

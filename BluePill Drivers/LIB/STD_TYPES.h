@@ -1,6 +1,6 @@
  /*******************************************************************************
  *																				*
- * 	Module			: Standard Types														*
+ * 	Module			: Standard Types										    *
  *																				*
  * 	File Name		: STD_TYPES.h												*		
  *																				*	
@@ -41,8 +41,6 @@ typedef		unsigned char			bool;
 #define		ONE						(1u)
 #define		ZERO					(0u)
 
-#define 	ENABLE 					(1)
-#define 	DISABLE 				(0)
 
 //Pointers 
 #define		NULLPTR					((void*)0)

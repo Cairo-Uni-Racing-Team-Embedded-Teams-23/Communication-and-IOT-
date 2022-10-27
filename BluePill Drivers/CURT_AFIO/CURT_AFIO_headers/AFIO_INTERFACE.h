@@ -1,15 +1,15 @@
 /*************************************************************************************************
  * [MODULE_NAME]:  AFIO_INTERFACE.h
  *
- * [DATE CREATED]: 
+ * [DATE CREATED]: 25/10/2022
  *
- * [Author]:      
+ * [Author]:       Hazem Montasser
  *
  * [DESCRIPTION]:  All # Defines to be used by User & Function's prototype
  ************************************************************************************************/
 #ifndef AFIO_INTERFACE_H_
 #define AFIO_INTERFACE_H_
-
+#include "../../LIB/STD_TYPES.h"
 
 #define AFIO_FSMC_NADV              30
 #define AFIO_TIM14_REMAP            29
