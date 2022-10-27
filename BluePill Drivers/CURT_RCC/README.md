@@ -72,7 +72,7 @@ RCC_voidDisableClock(AB1, 12);
 #### TODO
 
 - Loop on ready flags to ensure clock has stabilized
-- Add enums/defs for all bus IDs for peripherals
+- ~~Add enums/defs for all bus IDs for peripherals~~
 - Function for enabling/disabling MCO pin and selecting its input clock
 - Function to calibrate the clock 
 - Reset functions for peripherals' clocks
