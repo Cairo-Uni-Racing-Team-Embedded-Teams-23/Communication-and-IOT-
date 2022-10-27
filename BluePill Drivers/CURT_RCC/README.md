@@ -24,13 +24,9 @@ This is a RCC driver implementation for the STM32F103C8 based on ARM Cortex-M3. 
 The main system clock that is used for the core. Multiple options are available based on the hardware configuration (external crystal/internal RC/PLL):
 ```c
 RCC_HSE_CRYSTAL        ;High speed Crystal on the external Pin
-
 RCC_HSE_RC             ;High speed RC oscillator on the External pin
-
 RCC_HSI                ;High speed RC oscillator Interanl
-
 RCC_PLL                ;Phase Lock Loop
-
 ```
 
 ##### RCC_PLL_INPUT 
@@ -64,8 +60,10 @@ RCC_voidInitSysClock();
 2. Start or stop the clock for a peripheral on the system buses
 ```c
 RCC_voidEnableClock(APB2, 4);
-
 RCC_voidDisableClock(AB1, 12);
+
+/* Optionally use the enum for the bus ID instead of numbers*/
+RCC_voidEnableClock(APB2,RCC_APB2_USART1EN);	/* Enable USART1 on APB2 */
 ```
 #### Notes
 
