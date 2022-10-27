@@ -34,11 +34,13 @@ STK_SRC_AHB_8    /* Timer source is the AHB/8 clock */
 ```c
 STK_init();
 ```
-	The timer is now ready for usage, but at this point, it is halted and has a preload value initialized to the maximum value of 0x00FFFFFF. This function also resets the private variables and the callback function to null.
+_The timer is now ready for usage, but at this point, it is halted and has a preload value initialized to the maximum value of 0x00FFFFFF. This function also resets the private variables and the callback function to null._
+
 2. Use to implement a busy wait delay
 ```c
 STK_setBusyWait(300);  /* Wait for 300 ticks*/
 ```
+
 3. Use as a single or periodic interrupt. This immediately starts the timer for the specified amount of ticks and attaches the given callback function to the Systick interrupt handler.
 
 _It must be noted that the callback function executes under the Systick_Handler ISR context, so there could be risk of errors or infinite loops if the callback function provided relies on other interrupts with lower priority than the Systick handler._
@@ -49,10 +51,12 @@ STK_setIntervalSingle(500, myCallbackFunc)
 /* Call 'myCallbackFunc' every 500 ticks */
 STK_setIntervalPeriodic(500, myCallbackFunc)
 ```
+
 4. If the timer is running in periodic mode, we can stop the periodic interrupts using the stop interval function
 ```c
 STK_stopInterval();
 ```
+
 5. If the timer has been started in the single or periodic modes, we can get elapsed tick count since then or the remaining ticks till the next interrupt.
 ```c
 u32 ticksRemaining = STK_getRemainingTime();
