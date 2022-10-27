@@ -23,8 +23,8 @@ This driver implements both polling and interrupt techniques for using the timer
 #### STK_CLK_SRC
 This configuration specifies the clock source for the Systick timer. There are 2 options available:
 ```c
-STK_SRC_AHB      /* Timer source is the AHB clock   */
-STK_SRC_AHB_8    /* Timer source is the AHB/8 clock */
+STK_SRC_AHB      /* Timer source is the AHB clock              */
+STK_SRC_AHB_8    /* Timer source is the AHB clock divided by 8 */
 ```
 
 #### Steps
@@ -46,10 +46,10 @@ STK_setBusyWait(300);  /* Wait for 300 ticks*/
 _It must be noted that the callback function executes under the Systick_Handler ISR context, so there could be risk of errors or infinite loops if the callback function provided relies on other interrupts with lower priority than the Systick handler._
 ```c
 /* Call 'myCallbackFunc' after 500 ticks */
-STK_setIntervalSingle(500, myCallbackFunc)
+STK_setIntervalSingle(500, myCallbackFunc);
 
 /* Call 'myCallbackFunc' every 500 ticks */
-STK_setIntervalPeriodic(500, myCallbackFunc)
+STK_setIntervalPeriodic(500, myCallbackFunc);
 ```
 
 4. If the timer is running in periodic mode, we can stop the periodic interrupts using the stop interval function
