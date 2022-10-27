@@ -21,13 +21,14 @@
  *                              Definitions                                    *
  *******************************************************************************/
 
-#define STK_SRC_AHB 			0
-#define STK_SRC_AHB_8 			1
+#define STK_SRC_AHB 			1
+#define STK_SRC_AHB_8 			0
 
 #define STK_MAX_PRELOAD_VALUE 	(0x00FFFFFFU)
 #define STK_MIN_PRELOAD_VALUE 	(0x00000001U)
 
 #define STK_COUNTFLAG_READY 	(0U)
+
 /*******************************************************************************
  *                              Type definitions                               *
  *******************************************************************************/

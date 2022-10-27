@@ -98,6 +98,7 @@ void STK_setBusyWait(u32 Ticks)
 
 	/* Start SysTick */
 	SET_BIT(SYSTICK->CTRL, 0);
+
 	for (u32 timer_ticks = 0; timer_ticks < Ticks; ++timer_ticks)
 	{
 		/* Busy wait on the COUNTFLAG until it is 1
