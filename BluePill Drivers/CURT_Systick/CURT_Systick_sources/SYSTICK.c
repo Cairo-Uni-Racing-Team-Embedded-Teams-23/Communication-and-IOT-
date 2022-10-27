@@ -1,11 +1,12 @@
 /*************************************************************************************************
- * [MODULE_NAME]:  SYSTICK_Prog.c
+ * [MODULE_NAME]:  SYSTICK.c
  *
- * [DATE CREATED]: 
+ * [DATE CREATED]: 25/10/2022
  *
- * [Author]:      
+ * [Author]:	   Hazem Montasser
  *
- * [DESCRIPTION]:  SYSTICK Program
+ * [DESCRIPTION]:  Source file for the CORTEX M3 Systick timer. Implements polling and interrupt
+ * 				functions which utilize the timer.
  ************************************************************************************************/
 
 /* include lib Files */
@@ -17,11 +18,12 @@
 #include "../../LIB/BIT_MATH.h"
 
 static volatile u8 STK_modeOfInterval = 0;
-static volatile void (*STK_callBack)(void)=NULLPTR;
+static volatile void (*STK_callBack)(void) = NULLPTR;
 static volatile u32 STK_ticksGoal = 0;
 static volatile u32 STK_ticks = 0;
 
-void STK_init(void) {
+void STK_init(void)
+{
 
 	/* Stop system timer as we are configuring it*/
 	SYSTICK->CTRL = 0;
@@ -30,10 +32,10 @@ void STK_init(void) {
 	 * 1: AHB
 	 * */
 #if STK_CLK_SRC == STK_SRC_AHB_8
-
+	/* Leave CLKSOURCE bit as zero */
 #elif STK_CLK_SRC == STK_SRC_AHB
 
-	SET_BIT(SYSTICK->CTRL,CLKSOURCE);
+	SET_BIT(SYSTICK->CTRL, CLKSOURCE);
 
 #else
 #error "[ERROR] SysTick clock source is incorrectly configured. Please refer to SysTick_CONFIG.h"
@@ -49,10 +51,10 @@ void STK_init(void) {
 
 	/* Reset ticks variable */
 	STK_ticks = 0;
-
 }
 
-void STK_stopInterval(void) {
+void STK_stopInterval(void)
+{
 
 	/* Stop the timer */
 	CLR_BIT(SYSTICK->CTRL, 0);
@@ -65,19 +67,20 @@ void STK_stopInterval(void) {
 
 	/* Reset system timer callback*/
 	STK_callBack = NULLPTR;
-
 }
 
-u32 STK_getElapsedTime(void) {
-	return (u32) (STK_ticks);
-
+u32 STK_getElapsedTime(void)
+{
+	return (u32)(STK_ticks);
 }
 
-u32 STK_getRemainingTime(void) {
-	return (u32) (STK_ticksGoal - STK_ticks);
+u32 STK_getRemainingTime(void)
+{
+	return (u32)(STK_ticksGoal - STK_ticks);
 }
 
-void STK_setBusyWait(u32 Ticks) {
+void STK_setBusyWait(u32 Ticks)
+{
 	/* Stop the timer */
 	CLR_BIT(SYSTICK->CTRL, 0);
 
@@ -86,26 +89,45 @@ void STK_setBusyWait(u32 Ticks) {
 
 	/* Start SysTick */
 	SET_BIT(SYSTICK->CTRL, 0);
-	for (u32 timer_ticks = 0; timer_ticks < Ticks; ++timer_ticks) {
-
-		/* Busy wait on the COUNTFLAG until it is 1 which means the counter has reset*/
+	for (u32 timer_ticks = 0; timer_ticks < Ticks; ++timer_ticks)
+	{
+		/* Busy wait on the COUNTFLAG until it is 1
+		 * which means the counter has reset */
 		while (!GET_BIT(SYSTICK->CTRL, COUNTFLAG))
 			;
 	}
-
 }
 
-void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void)) {
+void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void))
+{
+	/* Null check*/
+	if (ptr == NULLPTR)
+		return;
 
 	/* Set callback when interval is over */
 	STK_callBack = ptr;
 
-	/* Set interval mode to single */
+	/* Set interval mode to period */
 	STK_modeOfInterval = SysTick_IntervalMode_Single;
 
+	/* Set the ticks variable to a global private variable */
+	STK_ticksGoal = Ticks;
+
+	/* Reset ticks variable */
+	STK_ticks = 0;
+
+	/* Enable interrupt on every tick */
+	SET_BIT(SYSTICK->CTRL, TICKINT);
+
+	/* Start SysTick */
+	SET_BIT(SYSTICK->CTRL, 0);
 }
 
-void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void)) {
+void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void))
+{
+	/* Null check*/
+	if (ptr == NULLPTR)
+		return;
 
 	/* Set callback when interval is over */
 	STK_callBack = ptr;
@@ -116,6 +138,9 @@ void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void)) {
 	/* Set the ticks variable to a global private variable */
 	STK_ticksGoal = Ticks;
 
+	/* Reset ticks variable */
+	STK_ticks = 0;
+
 	/* Enable interrupt on every tick */
 	SET_BIT(SYSTICK->CTRL, TICKINT);
 
@@ -123,17 +148,20 @@ void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void)) {
 	SET_BIT(SYSTICK->CTRL, 0);
 }
 
-void SysTick_Handler(void) {
+void SysTick_Handler(void)
+{
 
 	/* Increment ticks */
 	++STK_ticks;
 
 	/* Reset the mode of interval to non specified if it was configured as single interval interrupt
 	 * then stop the timer */
-	if (STK_modeOfInterval == SysTick_IntervalMode_Single
-			&& STK_ticks == STK_ticksGoal) {
+	if (STK_modeOfInterval == SysTick_IntervalMode_Single && STK_ticks == STK_ticksGoal)
+	{
 		STK_stopInterval();
 	}
+
 	/* Callback notification for the user */
-	(*STK_callBack)();
+	if (STK_callBack != NULLPTR)
+		(*STK_callBack)();
 }
