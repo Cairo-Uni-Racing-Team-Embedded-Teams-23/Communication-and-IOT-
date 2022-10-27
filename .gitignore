@@ -5,3 +5,6 @@
 BluePill Drivers/CURT_GPIO/.obsidian
 BluePill Drivers/CURT_RCC/.obsidian
 /Button_3LEDS_Non_HAL/
+/RemoteSystemsTempFiles/
+/Systick_Test/
+/SysTick_Testing/
