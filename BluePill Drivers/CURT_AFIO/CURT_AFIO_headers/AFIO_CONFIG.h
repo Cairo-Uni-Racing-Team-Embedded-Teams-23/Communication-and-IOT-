@@ -1,11 +1,11 @@
 /*************************************************************************************************
- * [MODULE_NAME]:  AFIO_INTERFACE.h
+ * [MODULE_NAME]:  AFIO_CONFIG.h
  *
- * [DATE CREATED]: 
+ * [DATE CREATED]: 25/10/2022
  *
- * [Author]:      
+ * [Author]:       Hazem Montasser
  *
- * [DESCRIPTION]:  All # Defines to be used by User & Function's prototype
+ * [DESCRIPTION]:  Pre-build configuration file
  ************************************************************************************************/
 #ifndef AFIO_CONFIG_H_
 #define AFIO_CONFIG_H_

@@ -9,18 +9,27 @@
  * 				functions which utilize the timer.
  ************************************************************************************************/
 
-/* include lib Files */
+/*******************************************************************************
+ *                              Includes                                       *
+ *******************************************************************************/
 
 #include "../CURT_Systick_headers/SYSTICK_INTERFACE.h"
 #include "../CURT_Systick_headers/SYSTICK_REG.h"
-#include "../CURT_Systick_headers/SYSTICK_CONFG.h"
+#include "../CURT_Systick_headers/SYSTICK_CONFIG.h"
 #include "../../LIB/STD_TYPES.h"
 #include "../../LIB/BIT_MATH.h"
+/*******************************************************************************
+ *                        Private global variables                             *
+ *******************************************************************************/
 
 static volatile u8 STK_modeOfInterval = 0;
 static volatile void (*STK_callBack)(void) = NULLPTR;
 static volatile u32 STK_ticksGoal = 0;
 static volatile u32 STK_ticks = 0;
+
+/*******************************************************************************
+ *                         Private functions definitions                       *
+ *******************************************************************************/
 
 void STK_init(void)
 {

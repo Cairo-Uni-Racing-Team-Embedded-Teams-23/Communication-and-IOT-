@@ -15,7 +15,7 @@ This driver implements both polling and interrupt techniques for using the timer
 	3. **SYSTICK_reg**: Defines register adresses
 	4. **SYSTICK_config.h**: Pre-build configuration file
 - In CURT_Systick_sources
-	1. **SYSTICK_SOURCE.c**: Source code for the RCC driver
+	1. **SYSTICK_SOURCE.c**: Source code for the SysTick driver
 
 ### How to use this driver
 
@@ -65,7 +65,10 @@ u32 ticksElapsed = STK_ElapsedTime();
 - A 'tick' definition here refers to a complete countdown of the timer from the value `0x00FFFFFF` to `0x00000000`. Therefore, if used for a millisecond delay function, the correct number of ticks needs to be calculated according to the maximum pre-load value & the frequency of the timer.
 - The provided callback function should be as small as possible as it executes under the context of the Systick_Handler.
 - The provided callback function must not rely on other interrupts with lower priority than the Systick interrupt.
+- If the **core** clock is halted for any reason, the Systick timer also halts as it is a core peripheral.
 
 #### TODO
 - Add a function to setup Systick priority in NVIC (??)
+- Add a function to change the LOAD value
+- Add a function to calibrate the timer
 - Allow for more than 1 attached interrupt in any mode
