@@ -36,7 +36,7 @@ STK_init();
 ```
 _The timer is now ready for usage, but at this point, it is halted and has a preload value initialized to the maximum value of 0x00FFFFFF. This function also resets the private variables and the callback function to null._
 
-2. Use to implement a busy wait delay
+2. Use to implement a busy wait/blocking delay
 ```c
 STK_setBusyWait(300);  /* Wait for 300 ticks*/
 ```
