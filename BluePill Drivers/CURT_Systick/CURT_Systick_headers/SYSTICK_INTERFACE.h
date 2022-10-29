@@ -40,7 +40,7 @@
 typedef enum
 {
 
-	ENABLE = 0,
+	ENABLE1 = 0,
 	TICKINT,
 	CLKSOURCE,
 	COUNTFLAG = 16

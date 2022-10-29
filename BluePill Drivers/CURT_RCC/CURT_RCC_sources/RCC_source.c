@@ -17,6 +17,7 @@
 #include "../CURT_RCC_headers/RCC_private.h"
 #include "../CURT_RCC_headers/RCC_config.h"
 #include "../CURT_RCC_headers/RCC_interface.h"
+#include "../../CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h"
 
 /*******************************************************************************
  *	Author :    Hazem Montasser
@@ -127,4 +128,13 @@ void RCC_voidDisableClock(u8 Copy_u8BusId, u8 Copy_u8PerId) {
 	default:
 		break;
 	}
+}
+
+void RCC_configMCO(RCC_MCOOutput mco_mode) {
+	GPIO_setupPinMode(GPIO_PortA, PIN8, OUTPUT_SPEED_50MHZ_AFPP);
+	/* Clear 3 MCO o/p bits*/
+	RCC->CFGR &= ~((0b111) << 24);
+	/* Insert 3 MCO mode bits */
+	RCC->CFGR |= ((mco_mode & 0x07) << 24);
+
 }

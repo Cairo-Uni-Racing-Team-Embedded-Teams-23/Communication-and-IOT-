@@ -69,10 +69,20 @@ typedef enum {
 
 } RCC_APB2;
 
+typedef enum {
+	RCC_MCO_Src_SYSCLK = (0x4),
+	RCC_MCO_Src_HSI = (0x5),
+	RCC_MCO_Src_HSE = (0x6),
+	RCC_MCO_Src_PLL_DIV_2 = (0x7),
+	RCC_MCO_Src_Disable = (0x0)
+} RCC_MCOOutput;
+
 void RCC_voidInitSysClock(void);
 
 void RCC_voidEnableClock(RCC_Bus Copy_u8BusId, u8 Copy_u8PerId);
 
 void RCC_voidDisableClock(RCC_Bus Copy_u8BusId, u8 Copy_u8PerId);
+
+void RCC_configMCO(RCC_MCOOutput mco_mode);
 
 #endif

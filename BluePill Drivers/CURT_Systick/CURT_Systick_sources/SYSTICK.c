@@ -103,7 +103,7 @@ void STK_setBusyWait(u32 Ticks)
 	{
 		/* Busy wait on the COUNTFLAG until it is 1
 		 * which means the counter has reset */
-		while (!GET_BIT(SYSTICK->CTRL, COUNTFLAG))
+		while (GET_BIT(SYSTICK->CTRL, COUNTFLAG)==0)
 			;
 	}
 }
