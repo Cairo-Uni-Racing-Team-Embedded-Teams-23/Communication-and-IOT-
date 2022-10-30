@@ -1,0 +1,36 @@
+-GPIO function description:
+(General Purpose I/Os)
+
+-drivers required:
+RCC driver
+
+-BUS responsible for thi peripheral:
+APB2
+
+-Each of the general-purpose I/O ports has two 32-bit configuration registers (GPIOx_CRL, 
+GPIOx_CRH), two 32-bit data registers (GPIOx_IDR, GPIOx_ODR), a 32-bit set/reset 
+register (GPIOx_BSRR), a 16-bit reset register (GPIOx_BRR) and a 32-bit locking register 
+(GPIOx_LCKR)
+
+-configuration options for each pin:
+ Input floating 
+ Input pull-up
+ Input-pull-down
+ Analog
+ Output open-drain
+ Output push-pull
+ Alternate function push-pull
+ Alternate function open-drain
+
+
+-driver functions description:
+1) void GPIO_voidSetPinDirection(u8 Copy_u8PORT, u8 Copy_u8PIN, u8 Copy_u8Mode)
+this function is responsible for setting the pin mode , either INPUT or OUTPUT with different options
+
+2) void GPIO_voidSetPinValue(u8 Copy_u8PORT, u8 Copy_u8PIN, u8 Copy_u8Value)
+function responsible for writing the pin value if this pin is output mode
+
+3) u8 GPIO_voidGetPinValue(u8 Copy_u8PORT, u8 Copy_u8PIN)
+function reads the pin value if this pin is input mode
+
+
