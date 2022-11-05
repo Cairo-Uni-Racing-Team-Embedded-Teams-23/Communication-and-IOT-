@@ -17,6 +17,7 @@
 #define CAN1_BASE_ADDRESS (0x40006400)
 #define CAN2_BASE_ADDRESS (0x40006800) 
 
+#include "STD_TYPES.h"
 
 typedef struct
 {
