@@ -14,11 +14,23 @@
 #ifndef CAN_PRIVATE_H
 #define CAN_PRIVATE_H
 
-#define CAN1_BASE_ADDRESS (0x40006400)
-#define CAN2_BASE_ADDRESS (0x40006800)
+/*******************************************************************************
+ *                                Includes                                     *
+ *******************************************************************************/
 
 #include "STD_TYPES.h"
 
+/*******************************************************************************
+ *                                Definitions                                  *
+ *******************************************************************************/
+#define CAN1_BASE_ADDRESS (0x40006400)
+#define CAN2_BASE_ADDRESS (0x40006800)
+
+/**
+ * @struct
+ * @brief
+ *
+ */
 typedef struct
 {
     volatile u32 TIR;
@@ -27,6 +39,11 @@ typedef struct
     volatile u32 TDHR;
 } CAN_TxMailBox_TypeDef;
 
+/**
+ * @struct
+ * @brief
+ *
+ */
 typedef struct
 {
     volatile u32 RIR;
@@ -35,12 +52,22 @@ typedef struct
     volatile u32 RDHR;
 } CAN_FIFOMailBox_TypeDef;
 
+/**
+ * @struct
+ * @brief
+ *
+ */
 typedef struct
 {
     volatile u32 FR1;
     volatile u32 FR2;
 } CAN_FilterRegister_TypeDef;
 
+/**
+ * @struct
+ * @brief
+ *
+ */
 typedef struct
 {
     volatile u32 MCR;
@@ -74,9 +101,15 @@ typedef struct
 /**
  * @brief Macro used to assert that the passed pointer is an actual
  *      CAN instance. Used to avoid incorrect memory accessing.
- * 
+ *
+ *      0 -> Not a CAN typedef instance
+ *      1 -> Is a CAN typedef instance
  */
 #define IS_CAN_INSTANCE(CANx) ((CANx == CAN1) || (CANx == CAN2))
+
+/*******************************************************************************
+ *                              Bit Definitions                                *
+ *******************************************************************************/
 
 // CAN Master Control Register (MCR) Important Bits
 // Initialization Mode Request
