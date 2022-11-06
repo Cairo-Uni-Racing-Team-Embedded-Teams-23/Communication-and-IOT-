@@ -64,8 +64,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
            SLAK = 0
         */
         while (
-            GET_BIT(CANx->MSR, MSR_INAK) &&
-            !GET_BIT(CANx->MSR, MSR_SLAK))
+            !GET_BIT(CANx->MSR, MSR_INAK) &&
+            GET_BIT(CANx->MSR, MSR_SLAK))
             ;
 
         /* Set up timing parameters */
