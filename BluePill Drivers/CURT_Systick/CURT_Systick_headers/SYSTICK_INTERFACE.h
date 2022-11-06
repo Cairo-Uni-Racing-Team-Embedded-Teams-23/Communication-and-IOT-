@@ -10,6 +10,7 @@
 
 #ifndef SYSTICK_INTERFACE_H_
 #define SYSTICK_INTERFACE_H_
+#include "../../LIB/STD_TYPES.h"
 
 /*******************************************************************************
  *                              Includes                                       *

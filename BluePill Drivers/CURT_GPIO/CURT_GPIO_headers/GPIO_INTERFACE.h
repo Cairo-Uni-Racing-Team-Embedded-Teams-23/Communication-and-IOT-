@@ -119,7 +119,7 @@ typedef enum {
  * @param pin_num  Pin number
  * @param mode	   Mode used to set the pin
  */
-void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode);
+void GPIO_setupPinMode(uint8 port_num, uint8 pin_num,uint8 mode);
 
 /**
  * @fn void GPIO_setPinValue(uint8, uint8, uint8)
@@ -132,7 +132,7 @@ void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode);
  * @param pin_num  Pin number
  * @param value	   Value to set the pin state
  */
-void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value);
+void GPIO_setPinValue(u8 port_num, u8 pin_num, u8 value);
 
 /**
  * @fn uint8 GPIO_getPinValue(uint8, uint8)
@@ -144,7 +144,7 @@ void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value);
  * @param pin_num  Pin number
  * @return Pin value
  */
-uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num);
+u8 GPIO_getPinValue(u8 port_num, u8 pin_num);
 
 /**
  * @fn void GPIO_setupPortMode(uint8, uint8)
@@ -157,7 +157,7 @@ uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num);
  * @param port_num Port number
  * @param mode     Mode used to set all pins on the port
  */
-void GPIO_setupPortMode(uint8 port_num, uint8 mode);
+void GPIO_setupPortMode(u8 port_num, u8 mode);
 
 /**
  * @fn void GPIO_writePort(uint8, uint16)
@@ -171,7 +171,7 @@ void GPIO_setupPortMode(uint8 port_num, uint8 mode);
  * @param port_num Port number
  * @param value	   Value used to write to the port
  */
-void GPIO_writePort(uint8 port_num, uint16 value);
+void GPIO_writePort(u8 port_num, u16 value);
 
 /**
  * @fn uint16 GPIO_getPort(uint8)
@@ -183,42 +183,11 @@ void GPIO_writePort(uint8 port_num, uint16 value);
  * @param port_num Port number
  * @return Value on the port
  */
-uint16 GPIO_getPort(uint8 port_num);
+u16 GPIO_getPort(u8 port_num);
 
-/**
- * @fn void GPIO_togglePinValue(uint8, uint8)
- * @brief Toggles the pin value.
- *
- * @pre port_num must be a valid port, and pin_num must be less than or equal to NUM_OF_PINS_PER_PORT
- * @post Pin value is toggled
- * @param port_num Port number
- * @param pin_num  Pin number
- */
-void GPIO_togglePinValue(uint8 port_num, uint8 pin_num);
+uint8   GPIO_togglePinValue (uint8 port_num, uint8 pin_num);
 
-/**
- * @fn void GPIO_enablePortClock(uint8)
- * @brief Enables the clock for a specified port
- *
- * @pre port_num must be a valid port from the available enum
- * @post Clock for the specified port is started
- * @param port_num	Port on which to enable the clock
- */
-void GPIO_enablePortClock(uint8 port_num);
-
-/**
- * @fn void GPIO_setPortDirection_H_L(uint8, uint8, uint8)
- * @brief Sets up half of the port with a specified mode. If the position is GPIO_LOW_PORT, then
- * 		the lower part of the port (pins 0-7) are setup. Otherwise, the higher part of the port (pins 8-15)
- * 		are setup
- * 	**Note: The user is responsible for selecting a correct mode and position.
- * @pre   port_num must be valid
- * @post  Half of the selected port is setup using the specified mode.
- * @param port_num Port number
- * @param position Lower or higher part of the port
- * @param mode	   Mode used to setup the port half
- */
-void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode);
+void GPIO_enablePortClock (uint8 port_num);
 
 /**
  * @fn void GPIO_setPortValue_H_L(uint8, uint8, uint16)
@@ -234,28 +203,9 @@ void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode);
  */
 void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value);
 
-/**
- * @fn void GPIO_lockPin(uint8, uint16)
- * @brief Locks the pin selected. Any modification on the pin mode or value will not take
- * 		effect until next reset.
- *
- * @pre port_num must be valid. Pins is the bit-wise OR'ing of the bits to lock.
- * 		Ex. : pin 0, pin 4, pin13 -> pins=(1<<0)|(1<<4)|(1<<13);
- * @post The pins specified are locked till next reset.
- * @param port_num	Port number
- * @param pins		Bit-wise OR'ed pins needed to be locked
- */
-void GPIO_lockPin(uint8 port_num, uint16 pins);
+void GPIO_setPortDirection_H_L( uint8 Port , uint8 Position , uint8 Mode );
 
-/**
- * @fn void GPIO_lockPort(uint8)
- * @brief Locks the port selected. Any modification on the port mode or value will not take
- * 		effect until next reset.
- *
- * @pre port_num must be valid.
- * @post All of the port pins are locked till next reset.
- * @param port_num Port number
- */
-void GPIO_lockPort(uint8 port_num);
+void GPIO_setPortValue_H_L( uint8 Port , uint8 Position , uint16 Value );
+****************************************************************************************************************************************************/
 
 #endif

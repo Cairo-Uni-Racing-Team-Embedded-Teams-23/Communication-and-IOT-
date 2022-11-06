@@ -106,16 +106,11 @@ void STK_setBusyWait(u32 Ticks) {
 	}
 }
 
-void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void)) {
-	/* Null check*/
-	if (ptr == NULLPTR)
-		return;
+void STK_setBusyWait( u32 Ticks )
+{
+	
 
-	/* Set callback when interval is over */
-	STK_callBack = ptr;
-
-	/* Set interval mode to period */
-	STK_modeOfInterval = SysTick_IntervalMode_Single;
+void STK_setIntervalSingle   ( u32 Ticks, void (*ptr)(void) ){
 
 	/* Set the ticks variable to a global private variable */
 	STK_ticksGoal = Ticks;

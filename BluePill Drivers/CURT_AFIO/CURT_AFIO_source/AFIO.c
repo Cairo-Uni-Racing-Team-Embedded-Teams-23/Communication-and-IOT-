@@ -63,6 +63,7 @@ void AFIO_setEXTIConfiguration(u8 EXTI_Line, u8 PortMap)
 
 void AFIO_enableClock(void)
 {
+
 	/* Enable AFIO Clock */
 	RCC_voidEnableClock(APB2, RCC_APB2_AFIOEN);
 }
