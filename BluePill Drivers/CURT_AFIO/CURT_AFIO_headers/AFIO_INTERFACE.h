@@ -9,6 +9,7 @@
  ************************************************************************************************/
 #ifndef AFIO_INTERFACE_H_
 #define AFIO_INTERFACE_H_
+#include "../../LIB/STD_TYPES.h"
 
 
 #define AFIO_FSMC_NADV              30

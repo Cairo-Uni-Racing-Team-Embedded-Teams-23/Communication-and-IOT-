@@ -10,10 +10,10 @@
 
 /* include lib Files */ 
 
-#include "SYSTICK_INTERFACE.h"
-#include "SYSTICK_REG.h"
-#include "SYSTICK_CONFG.h"
-
+#include "../CURT_SYSTICK_headers/SYSTICK_INTERFACE.h"
+#include "../CURT_SYSTICK_headers/SYSTICK_REG.h"
+#include "../CURT_SYSTICK_headers/SYSTICK_CONFG.h"
+#include "../../LIB/STD_TYPES.h"
 static u8 STK_modeOfInterval=0;
 static void(*STK_callBack)(void);
 
@@ -38,7 +38,7 @@ u32 STK_getRemainingTime(void) {
 void STK_setBusyWait( u32 Ticks )
 {
 	
-
+}
 void STK_setIntervalSingle   ( u32 Ticks, void (*ptr)(void) ){
 
 

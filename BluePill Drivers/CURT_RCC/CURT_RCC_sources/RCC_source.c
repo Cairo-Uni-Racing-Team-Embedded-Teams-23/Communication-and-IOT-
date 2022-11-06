@@ -15,9 +15,9 @@
 
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
-#include "RCC_private.h"
-#include "RCC_config.h"
-#include "RCC_interface.h"
+#include "../CURT_RCC_headers/RCC_private.h"
+#include "../CURT_RCC_headers/RCC_config.h"
+#include "../CURT_RCC_headers/RCC_interface.h"
 
 
  /*******************************************************************************

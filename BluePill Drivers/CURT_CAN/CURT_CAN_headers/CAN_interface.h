@@ -19,8 +19,8 @@
  *                                Includes                                     *
  *******************************************************************************/
 
-#include "STD_TYPES.h"
-#include "CAN_private.h"
+#include "../../LIB/STD_TYPES.h"
+#include "../CURT_CAN_headers/CAN_private.h"
 
 /*******************************************************************************
  *                           Type definitions                                  *
