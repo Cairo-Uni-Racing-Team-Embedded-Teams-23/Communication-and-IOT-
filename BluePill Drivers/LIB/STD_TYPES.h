@@ -45,6 +45,8 @@ typedef		unsigned char			bool;
 //Pointers 
 #define		NULLPTR					((void*)0)
 
+#define DISABLE (0U)
+#define ENABLE (1U)
 
 
 #endif /* STDTYPES_H_ */
