@@ -90,14 +90,14 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
                      (CAN2_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
         /* Exit sleep mode */
-        CLR_BIT(CANx->MCR, MCR_SLEEP);
+        SET_BIT(CANx->MCR, MCR_INRQ);
         /* Wait until HW is in initialization  mode, so that we can setup timing parameters:
            INAK = 1
            SLAK = 0
         */
         while (
-            GET_BIT(CANx->MSR, MSR_INAK) &&
-            !GET_BIT(CANx->MSR, MSR_SLAK))
+            !GET_BIT(CANx->MSR, MSR_INAK) &&
+            GET_BIT(CANx->MSR, MSR_SLAK))
             ;
 
         /* Set up timing parameters */
