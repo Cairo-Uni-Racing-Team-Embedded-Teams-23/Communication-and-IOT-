@@ -106,10 +106,6 @@ void STK_setBusyWait(u32 Ticks) {
 	}
 }
 
-void STK_setBusyWait( u32 Ticks )
-{
-	
-
 void STK_setIntervalSingle   ( u32 Ticks, void (*ptr)(void) ){
 
 	/* Set the ticks variable to a global private variable */

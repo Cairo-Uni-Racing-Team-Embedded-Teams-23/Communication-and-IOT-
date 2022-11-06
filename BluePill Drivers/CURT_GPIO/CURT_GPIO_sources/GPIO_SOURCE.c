@@ -161,13 +161,13 @@ void GPIO_writePort(uint8 port_num, uint16 value) {
 
 	switch (port_num) {
 	case GPIO_PortA:
-		*(u16*)&GPIOA->ODR = value;
+		GPIOA->ODR = value;
 		break;
 	case GPIO_PortB:
-		*(u16*)&GPIOB->ODR = value;
+		GPIOB->ODR = value;
 		break;
 	case GPIO_PortC:
-		*(u16*)&GPIOC->ODR = value;
+		GPIOC->ODR = value;
 		break;
 	default:
 		break;
@@ -275,24 +275,24 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value) {
 		if (position == GPIO_LOW_PORT)
 			GPIOA->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
-			GPIOA->ODR |= (((uint32) value) << 8);
+			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
+			GPIOA->ODR |= (((uint32) value) << 16);
 		break;
 
 	case GPIO_PortB:
 		if (position == GPIO_LOW_PORT)
 			GPIOB->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
-			GPIOB->ODR |= (((uint32) value) << 8);
+			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
+			GPIOB->ODR |= (((uint32) value) << 16);
 		break;
 
 	case GPIO_PortC:
 		if (position == GPIO_LOW_PORT)
 			GPIOC->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 8 bits left to align it to the higher part of the port*/
-			GPIOC->ODR |= (((uint32) value) << 8);
+			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
+			GPIOC->ODR |= (((uint32) value) << 16);
 		break;
 
 	default:

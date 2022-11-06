@@ -171,9 +171,9 @@ typedef struct
 // Resync Jump Width
 #define BTR_SJW_2BITS 24
 // Time Segment 2
-#define BTR_TS2_3BITS 22
+#define BTR_TS2_3BITS 20
 // Time Segment 1
-#define BTR_TS1_4BITS 19
+#define BTR_TS1_4BITS 16
 // Baud Rate Prescaler
 #define BTR_BRP_10BITS 0
 
