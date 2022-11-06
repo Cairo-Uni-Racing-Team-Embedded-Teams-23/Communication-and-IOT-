@@ -39,8 +39,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
     /* Set up GPIO pins as Alternate function mode for CAN pins */
     GPIO_enablePortClock(GPIOA_ID);
-    GPIO_setupPinMode(GPIOA_ID,PIN11,OUTPUT_SPEED_10MHZ_AFPP);
-    GPIO_setupPinMode(GPIOA_ID,PIN12,OUTPUT_SPEED_10MHZ_AFPP);
+    GPIO_setupPinMode(GPIOA_ID, PIN11, OUTPUT_SPEED_10MHZ_AFPP);
+    GPIO_setupPinMode(GPIOA_ID, PIN12, OUTPUT_SPEED_10MHZ_AFPP);
 
     switch (Copy_enuCANConfig)
     {
@@ -57,8 +57,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
                      (CAN1_AUTOMATIC_BUS_OFF << MCR_ABOT) |
                      (CAN1_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
-        /* Exit sleep mode */
-        CLR_BIT(CANx->MCR, MCR_SLEEP);
+        /* Exit sleep mode to init mode */
+        SET_BIT(CANx->MCR, MCR_INRQ);
         /* Wait until HW is in initialization  mode, so that we can setup timing parameters:
            INAK = 1
            SLAK = 0
@@ -89,7 +89,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
                      (CAN2_AUTOMATIC_BUS_OFF << MCR_ABOT) |
                      (CAN2_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
-        /* Exit sleep mode */
+        /* Exit sleep mode to init mode */
         SET_BIT(CANx->MCR, MCR_INRQ);
         /* Wait until HW is in initialization  mode, so that we can setup timing parameters:
            INAK = 1
