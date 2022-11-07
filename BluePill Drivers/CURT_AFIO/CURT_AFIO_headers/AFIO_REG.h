@@ -9,6 +9,7 @@
  ************************************************************************************************/
 #ifndef AFIO_REG_H_
 #define AFIO_REG_H_
+#include "../../LIB/STD_TYPES.h"
 
 
 typedef struct {

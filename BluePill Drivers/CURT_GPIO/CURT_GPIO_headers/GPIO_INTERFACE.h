@@ -10,6 +10,8 @@
 #ifndef GPIO_INTERFACE_H_
 #define GPIO_INTERFACE_H_
 
+#include "../../LIB/STD_TYPES.h"
+
 #define NUM_OF_PINS_PER_PORT 15
 #define NUM_OF_PORTS 3
 
@@ -93,7 +95,7 @@
  * Setup the Mode & Direction of the required pin from 16 Modes.
  * If the input port number or pin number are not correct, The function will not handle the request.
  */
-void GPIO_setupPinMode(uint8 port_num, uint8 pin_num,uint8 mode);
+void GPIO_setupPinMode(u8 port_num, u8 pin_num,u8 mode);
 
 /*
  * Description :
@@ -101,14 +103,14 @@ void GPIO_setupPinMode(uint8 port_num, uint8 pin_num,uint8 mode);
  * If the input port number or pin number are not correct, The function will not handle the request.
  * If the pin is input, this function will enable/disable the internal pull-up/pull-down resistor.
  */
-void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value);
+void GPIO_setPinValue(u8 port_num, u8 pin_num, u8 value);
 
 /*
  * Description :
  * Read and return the value for the required pin, it should be Logic High or Logic Low.
  * If the input port number or pin number are not correct, The function will return Logic Low.
  */
-uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num);
+u8 GPIO_getPinValue(u8 port_num, u8 pin_num);
 
 /*
  * Description :
@@ -117,7 +119,7 @@ uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num);
  * If the direction value is PORT_OUTPUT all pins in this port should be output pins.
  * If the input port number is not correct, The function will not handle the request.
  */
-void GPIO_setupPortMode(uint8 port_num, uint8 mode);
+void GPIO_setupPortMode(u8 port_num, u8 mode);
 
 /*
  * Description :
@@ -126,25 +128,25 @@ void GPIO_setupPortMode(uint8 port_num, uint8 mode);
  * If any pin in the port is input pin this will activate/deactivate the internal pull-up resistor.
  * If the input port number is not correct, The function will not handle the request.
  */
-void GPIO_writePort(uint8 port_num, uint16 value);
+void GPIO_writePort(u8 port_num, u16 value);
 
 /*
  * Description :
  * Read and return the value of the required port.
  * If the input port number is not correct, The function will return ZERO value.
  */
-uint16 GPIO_getPort(uint8 port_num);
+u16 GPIO_getPort(u8 port_num);
 
-uint8   GPIO_togglePinValue (uint8 port_num, uint8 pin_num);
+u8   GPIO_togglePinValue (u8 port_num, u8 pin_num);
 
-void GPIO_enablePortClock (uint8 port_num);
+void GPIO_enablePortClock (u8 port_num);
 
 /****************************************************************************************************************************************************
 *Functions will be added to be used in another drivers
 
-void GPIO_setPortDirection_H_L( uint8 Port , uint8 Position , uint8 Mode );
+void GPIO_setPortDirection_H_L( u8 Port , u8 Position , u8 Mode );
 
-void GPIO_setPortValue_H_L( uint8 Port , uint8 Position , uint16 Value );
+void GPIO_setPortValue_H_L( u8 Port , u8 Position , u16 Value );
 ****************************************************************************************************************************************************/
 
 #endif

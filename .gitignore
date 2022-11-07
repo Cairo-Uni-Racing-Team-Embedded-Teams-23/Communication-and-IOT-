@@ -1,0 +1,11 @@
+# Ignore eclipse metadata folder
+.metadata/
+# Ignore this folder
+BluePill Drivers/.obsidian/
+# Ignore everything
+*/  
+# Ignore EVERYTHING except bluepill drivers folder
+# To add more folders, add rules like this below:
+#  ! {FOLDER or FILE_NAME}
+
+!*/BluePill Drivers/

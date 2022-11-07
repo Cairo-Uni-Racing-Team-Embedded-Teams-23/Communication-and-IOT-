@@ -10,8 +10,9 @@
  
 /* Include LIB Files */
 
-#include "AFIO_INTERFACE.h"
-#include "AFIO_REG.h"
+#include "../CURT_AFIO_headers/AFIO_INTERFACE.h"
+#include "../CURT_AFIO_headers/AFIO_REG.h"
+#include "../../LIB/STD_TYPES.h"
 
 /* inlcude RCC interface file */ 
 
