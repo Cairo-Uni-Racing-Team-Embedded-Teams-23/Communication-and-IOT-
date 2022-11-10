@@ -1,6 +1,7 @@
 #include "../../LIB/STD_TYPES.h"
 
-typedef enum {
+typedef enum
+{
 	IRQ_NMI = -14,
 	IRQ_Hard_Fault = -13,
 	IRQ_MemManage = -12,
@@ -71,7 +72,8 @@ typedef enum {
 
 } IRQn_t;
 
-typedef enum {
+typedef enum
+{
 	IRQPGroup_3 = 0b011,
 	IRQPGroup_4 = 0b100,
 	IRQPGroup_5 = 0b101,
@@ -79,20 +81,20 @@ typedef enum {
 	IRQPGroup_7 = 0b111
 } IRQPgroup_t;
 
-void NVIC_enableInterrupts();
-void NVIC_disableInterrupts();
+inline void NVIC_enableInterrupts();
+inline void NVIC_disableInterrupts();
 
-void NVIC_init();
-void NVIC_setPriorityGrouping(IRQPgroup_t priorityGroup);
+inline void NVIC_init();
+inline void NVIC_setPriorityGrouping(IRQPgroup_t priorityGroup);
 
-void NVIC_enableIRQ(IRQn_t IRQn);
-void NVIC_disableIRQ(IRQn_t IRQn);
-u32 getEnableIRQ(IRQn_t IRQn);
-u32 getActiveIRQ(IRQn_t IRQn);
+inline void NVIC_enableIRQ(IRQn_t IRQn);
+inline void NVIC_disableIRQ(IRQn_t IRQn);
+inline u32 getEnableIRQ(IRQn_t IRQn);
+inline u32 getActiveIRQ(IRQn_t IRQn);
 
-void NVIC_setPriority(IRQn_t IRQn, u32 priority);
-u32 NVIC_getPriority(IRQn_t IRQn);
+inline void NVIC_setPriority(IRQn_t IRQn, u32 priority);
+inline u32 NVIC_getPriority(IRQn_t IRQn);
 
-void NVIC_setPendingIRQ(IRQn_t IRQn);
-u32 NVIC_getPendingIRQ(IRQn_t IRQn);
-void NVIC_clearPendingIRQ(IRQn_t IRQn);
+inline void NVIC_setPendingIRQ(IRQn_t IRQn);
+inline u32 NVIC_getPendingIRQ(IRQn_t IRQn);
+inline void NVIC_clearPendingIRQ(IRQn_t IRQn);

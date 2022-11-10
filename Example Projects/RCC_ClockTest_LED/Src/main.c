@@ -23,7 +23,7 @@
 int main() {
 
 	RCC_voidInitSysClock();
-	NVIC_init();
+	//NVIC_init();
 	GPIO_enablePortClock(GPIO_PortA);
 	GPIO_setupPinMode(GPIO_PortA, PIN6, OUTPUT_SPEED_2MHZ_PP);
 
@@ -38,7 +38,7 @@ int main() {
 		 * Ttick = 1/1Mhz = 1us
 		 * Ttimer = Max Value * Ttick = 2^24 * 10^-6 = 16.7s
 		 */
-		STK_setBusyWait(10);
+		STK_setBusyWait(1);
 
 	}
 }
