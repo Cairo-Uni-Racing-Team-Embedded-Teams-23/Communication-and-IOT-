@@ -41,6 +41,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>CURT_NVIC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>CURT_RCC</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -109,6 +114,16 @@
 			<name>CURT_GPIO/README.md</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/README.md</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
 			<name>CURT_RCC/CURT_RCC_headers</name>
@@ -204,6 +219,31 @@
 			<name>CURT_GPIO/CURT_GPIO_sources/GPIO_SOURCE.c</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_sources/GPIO_SOURCE.c</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_headers/NVIC_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_config.h</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_headers/NVIC_private.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_private.h</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_headers/NVIC_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_reg.h</locationURI>
+		</link>
+		<link>
+			<name>CURT_NVIC/CURT_NVIC_sources/NVIC_source.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_sources/NVIC_source.c</locationURI>
 		</link>
 		<link>
 			<name>CURT_RCC/CURT_RCC_headers/RCC_config.h</name>

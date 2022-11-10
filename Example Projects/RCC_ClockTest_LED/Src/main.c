@@ -19,11 +19,11 @@
 #include "CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h"
 #include "CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h"
-
+#include "CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
 int main() {
 
 	RCC_voidInitSysClock();
-
+	NVIC_init();
 	GPIO_enablePortClock(GPIO_PortA);
 	GPIO_setupPinMode(GPIO_PortA, PIN6, OUTPUT_SPEED_2MHZ_PP);
 

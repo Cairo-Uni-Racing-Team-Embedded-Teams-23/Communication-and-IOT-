@@ -1,23 +1,9 @@
-# Ignore eclipse metadata folder
-.metadata/
-# Ignore this folder
-BluePill Drivers/.obsidian/
 # Ignore everything
-*/  
+/*
+
 # Ignore EVERYTHING except bluepill drivers folder
 # To add more folders, add rules like this below:
-#  ! {FOLDER or FILE_NAME}
-/.metadata/
-/.vscode/
-/Drivers/
-/Button_3LEDS/
-BluePill Drivers/CURT_GPIO/.obsidian
-BluePill Drivers/CURT_RCC/.obsidian
-/Button_3LEDS_Non_HAL/
-/RemoteSystemsTempFiles/
-/Systick_Test/
-/SysTick_Testing/
-BluePill Drivers/.obsidian/
-Docs/
-Test/
-!*/BluePill Drivers/
+#/  ! {FOLDER or FILE_NAME}
+!/BluePill Drivers/
+!/Example Projects/
+/BluePill Drivers/.obsidian
