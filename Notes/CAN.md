@@ -188,7 +188,8 @@ It is transmitted in 3 cases:
 
 ### Bit timing requirements
 
-![[Pasted image 20221105143754.png]]
+![](Pasted image 20221105143754.png)
+
 $$
 Nominal~Bit~Time = \frac{1}{Bit~Rate} 
 $$
@@ -217,7 +218,9 @@ $$
 	- Two receive FIFOs with 3 stages
 	- Filtration of messages
 ## Modes
+
 ![[Pasted image 20221106093241.png]]
+
 ### Sleep
 	SLAK = 1
 	INAK = 0
@@ -270,6 +273,7 @@ Notes:
 - If the node has to send a dominant bit (ACK, overload, error), it routes this bit internally to the CANRX and does not actually send it on the bus.
 - 
 ### Loopback mode
+
 ![[Pasted image 20221106094650.png]]
 
 - In this mode, sent messages are sent on the bus from CANTX and routed to CANRX as received messages.
@@ -277,9 +281,9 @@ Notes:
 - CANRX pin value does not contain the message sent by the node
 - To monitor messages in this mode, monitor CANTX
 - This mode ignores ACK errors
-- 
+
 ### Loopback silent mode
-![[Pasted image 20221106094637.png]]
+![image]("Pasted image 20221106094637.png")
 
 - In this mode, the node does not affect the CAN bus, so its CANTX output is always recessive (1)
 - Any sent message from the node is routed internally to the CANRX as a received message
