@@ -1,29 +1,29 @@
 /******************************************************************************
  *
  * Module: SysTick Blink led example.
+ * File Name: main.c
+ *
+ * Description:
  * 			- Sets up system clock to external crystal clock
  * 			- Initializes Systick with max value 0x00FFFFFF
+ *			- Blinks the LED every 16.7s (if Fsystick=1MHz)
  *
- * File Name: .
- *
- * Description: file for
- *
- * Date Created:
+ * Date Created: 6/11/2022
  *
  * Author: Hazem Montasser
- *
  *******************************************************************************/
 
 #include <stdint.h>
 
-#include "CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h"
-#include "CURT_RCC/CURT_RCC_headers/RCC_interface.h"
-#include "CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h"
-#include "CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
+#include "../BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h"
+#include "../BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_interface.h"
+#include "../BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h"
+#include "../BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
+#include "../BluePill Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h"
+
 int main() {
 
 	RCC_voidInitSysClock();
-	//NVIC_init();
 	GPIO_enablePortClock(GPIO_PortA);
 	GPIO_setupPinMode(GPIO_PortA, PIN6, OUTPUT_SPEED_2MHZ_PP);
 
