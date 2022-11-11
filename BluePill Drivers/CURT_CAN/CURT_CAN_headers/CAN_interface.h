@@ -36,8 +36,8 @@
 typedef enum
 {
 
-  CAN_STANDARD_IDENTIFIER = 0,/**< CAN_STANDARD_IDENTIFIER */
-  CAN_EXTENDED_IDENTIFIER = 1 /**< CAN_EXTENDED_IDENTIFIER */
+  CAN_STANDARD_IDENTIFIER = 0, /**< CAN_STANDARD_IDENTIFIER */
+  CAN_EXTENDED_IDENTIFIER = 1  /**< CAN_EXTENDED_IDENTIFIER */
 
 } CAN_Identifier_TypeDef;
 
@@ -49,13 +49,13 @@ typedef enum
 typedef enum
 {
 
-  CAN_TX_MAILBOX_1,          /**< CAN_TX_MAILBOX_1 */
+  CAN_TX_MAILBOX_1, /**< CAN_TX_MAILBOX_1 */
 
-  CAN_TX_MAILBOX_2,          /**< CAN_TX_MAILBOX_2 */
+  CAN_TX_MAILBOX_2, /**< CAN_TX_MAILBOX_2 */
 
-  CAN_TX_MAILBOX_3,          /**< CAN_TX_MAILBOX_3 */
+  CAN_TX_MAILBOX_3, /**< CAN_TX_MAILBOX_3 */
 
-  CAN_TX_NO_EMPTY_MAILBOX = 4/**< CAN_TX_NO_EMPTY_MAILBOX */
+  CAN_TX_NO_EMPTY_MAILBOX = 4 /**< CAN_TX_NO_EMPTY_MAILBOX */
 
 } CAN_Tx_MailBox_TypeDef;
 
@@ -67,9 +67,9 @@ typedef enum
 typedef enum
 {
 
-  CAN_RX_FIFO_1,/**< CAN_RX_FIFO_1 */
+  CAN_RX_FIFO_1, /**< CAN_RX_FIFO_1 */
 
-  CAN_RX_FIFO_2,/**< CAN_RX_FIFO_2 */
+  CAN_RX_FIFO_2, /**< CAN_RX_FIFO_2 */
 
 } CAN_Rx_FIFO_TypeDef;
 
@@ -137,14 +137,24 @@ typedef struct
  */
 typedef struct
 {
-  u16 FilterIdHigh;
-  u16 FilterIdLow;
+  u16 FilterIdLowR1;
+  u16 FilterIdHighR1;
+
+  u16 FilterIdLowR2;
+  u16 FilterIdHighR2;
+
+  /* for mask mode */
   u16 FilterMaskIdHigh;
   u16 FilterMaskIdLow;
+
   u16 FilterFIFOAssignment;
+
   u8 FilterNumber;
+
   u8 FilterMode;
+
   u8 FilterScale;
+
   u8 FilterActivation;
 } CAN_FilterInitTypeDef;
 
@@ -156,12 +166,24 @@ typedef struct
 typedef enum
 {
 
-  CAN_CONFIG_1,/**< CAN_CONFIG_1 */
+  CAN_CONFIG_1, /**< CAN_CONFIG_1 */
 
   CAN_CONFIG_2 /**< CAN_CONFIG_2 */
 
 } CAN_TypeDef_Config;
 
+/*CAN filter configuration */
+typedef enum
+{
+  MASK,
+  LIST
+} CAN_FilterMode;
+
+typedef enum
+{
+  DOUBLE_16,
+  SINGLE_32
+} CAN_FilterScale;
 /*******************************************************************************
  *                       Public functions prototypes                           *
  *******************************************************************************/
@@ -205,7 +227,6 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_u8FilterNumber);
  * @param Copy_u8CANBankNumber
  */
 void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber);
-
 
 // Yousery
 /**

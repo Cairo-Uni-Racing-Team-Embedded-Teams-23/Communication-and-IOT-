@@ -1,5 +1,29 @@
+/**
+ * @file NVIC_reg.h
+ * @author Hazem Montasser
+ * @brief Header file which defines registers & addresses used in the driver source
+ * @version 0.1
+ * @date 2022-11-10
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+
+/*******************************************************************************
+ *                        Includes                                             *
+ *******************************************************************************/
+
 #include "../../LIB/STD_TYPES.h"
 
+/*******************************************************************************
+ *                        Type definitions                                     *
+ *******************************************************************************/
+
+/**
+ * @struct
+ * @brief   Memory map struct used to access NVIC registers
+ *
+ */
 typedef struct
 {
     volatile u32 ISER[8U]; /*!<Interrupt Set Enable Register */
@@ -17,6 +41,11 @@ typedef struct
     volatile u32 STIR; /*!< Software Trigger Interrupt Register */
 } NVIC_TypeDef;
 
+/**
+ * @struct
+ * @brief Memory map struct used to access SCB registers
+ *
+ */
 typedef struct
 {
     volatile u32 CPUID;    /*!< CPUID Base Register */
@@ -42,6 +71,18 @@ typedef struct
     volatile u32 CPACR; /*!< Coprocessor Access Control Register */
 } SCB_TypeDef;
 
+/*******************************************************************************
+ *                        Definitions                                          *
+ *******************************************************************************/
+
+/**
+ * @brief NVIC memory mapped pointer, used to access NVIC registers
+ *
+ */
 #define NVIC ((volatile NVIC_TypeDef *)0xE000E100)
 
+/**
+ * @brief SCB memory mapped pointer, used to access SCB registers
+ *
+ */
 #define SCB ((volatile SCB_TypeDef *)0xE000ED00)

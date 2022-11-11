@@ -1,7 +1,49 @@
+/**
+ * @file NVIC_source.c
+ * @author Hazem Montasser
+ * @brief NVIC driver source file.
+ * @version 0.1
+ * @date 2022-11-10
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+
+/*******************************************************************************
+ *                        Includes                                             *
+ *******************************************************************************/
+
 #include "../CURT_NVIC_headers/NVIC_interface.h"
 #include "../CURT_NVIC_headers/NVIC_reg.h"
 #include "../CURT_NVIC_headers/NVIC_private.h"
 #include "../CURT_NVIC_headers/NVIC_config.h"
+
+/*******************************************************************************
+ *                       Public functions defintions                           *
+ *******************************************************************************/
+/*
+ *	A very common theme in algorithms in this driver is a a lot of shifting &
+ *  IRQ number manipulation to reach the correct position in the register.
+ *
+ *  IRQn
+ *  0-31  ISER[0] ICER[0] ISPR[0] ICPR[0] IABR[0]
+ *  32-63 ISER[1] ICER[1] ISPR[1] ICPR[1] IABR[1]
+ *  64-67 ISER[2] ICER[2] ISPR[2] ICPR[2] IABR[2]
+ *	Therefore, to reach the correct index based on IRQn, we
+ *	can notice that each register index depends on the IRQn by the following relation:
+ *		IRQn < 32 -> bit6,5 = 00 Ex.: IRQn = 23 = 0b 0 [00] 10111
+ * 		IRQn < 64 -> bit6,5 = 01 Ex.: IRQn = 47 = 0b 0 [01] 01111
+ * 		IRQn < 68 -> bit6,5 = 10 Ex.: IRQn = 65=  0b 0 [10] 00001
+ * Using that relation, we only need to shift the IRQn by 5 bits to obtain the correct
+ * index.
+ *
+ * More notes:
+ * - Masking with 1F because IRQn value must be 7 bits not more
+ * - Shifting priority by 8 - NVIC_PRIORITY_BITS because NVIC implements its priority
+ * 		in the most significant bits like in the case of STM32, only the higher
+ * 		4 bits are used.
+ *
+ */
 
 void NVIC_enableInterrupts()
 {
@@ -128,8 +170,13 @@ u32 NVIC_getPriority(IRQn_t IRQn)
 
 void NVIC_setPendingIRQ(IRQn_t IRQn)
 {
+	/* We can only pend non fault interrupts & maskable ones */
 	if (IRQn >= 0)
 	{
+		/* IRQn >> 5 -> Shifting by 5 to determine in which
+			array the interrupt belongs to
+			Example: IRQn =
+			*/
 		NVIC->ISPR[(((u32)IRQn) >> 5UL)] = (u32)(1 << IRQn & 0x1FUL);
 	}
 }
