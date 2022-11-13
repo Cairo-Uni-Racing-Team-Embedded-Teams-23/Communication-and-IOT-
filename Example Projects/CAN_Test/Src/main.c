@@ -38,7 +38,7 @@ int main(void) {
 
 	/* Init CAN & filter */
 	CAN_FilterInitTypeDef can_filter = { 0 };
-	CanRxMsg can_msg = { 0 };
+	CanRxMsg can_rx_msg = { 0 };
 	can_filter.FilterIdLowR1 = 0;
 	can_filter.FilterIdHighR1 = 0;
 	can_filter.FilterIdLowR2 = 0;
@@ -53,11 +53,21 @@ int main(void) {
 	CAN_init(CAN1, CAN_CONFIG_1);
 	CAN_initFilter(&can_filter);
 	CAN_setSlaveStartBank(2);
-
+	/* Create new message 'CURT' DLC = 4*/
+	CanTxMsg can_tx_msg = { 0 };
+	can_tx_msg.Data[0] = 'C';
+	can_tx_msg.Data[1] = 'U';
+	can_tx_msg.Data[2] = 'R';
+	can_tx_msg.Data[3] = 'T';
+	can_tx_msg.DLC = 4;
+	can_tx_msg.IDE = CAN_STANDARD_IDENTIFIER;
+	can_tx_msg.RTR = 0;
+	can_tx_msg.StdId = 0x52353;
 	for (;;) {
-		CAN_receive(CAN1, CAN_RX_FIFO_1, &can_msg);
-		if (can_msg.Data[0] == 'C' && can_msg.Data[1] == 'U'
-				&& can_msg.Data[2] == 'R' && can_msg.Data[3] == 'T') {
+		CAN_transmit(CAN1, &can_tx_msg);
+		CAN_receive(CAN1, CAN_RX_FIFO_1, &can_rx_msg);
+		if (can_rx_msg.Data[0] == 'C' && can_rx_msg.Data[1] == 'U'
+				&& can_rx_msg.Data[2] == 'R' && can_rx_msg.Data[3] == 'T') {
 			GPIO_togglePinValue(GPIO_PortA, PIN6);
 			STK_setBusyWait(1);
 			GPIO_togglePinValue(GPIO_PortA, PIN6);

@@ -278,7 +278,7 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
 
 	/* First Step: Select an Empty Mailbox to Use for Transmission */
 
-	CAN_TxMailBox_TypeDef Local_CAN_TxMailBox_TypeDef_CurrentMailBox;  // variable to save the used MailBox in
+	CAN_Tx_MailBox_TypeDef Local_CAN_TxMailBox_TypeDef_CurrentMailBox;  // variable to save the used MailBox in
 
 	/* Check Which MailBox is Empty to use */
 	if (GET_BIT(CANx->TSR , TSR_TME0))
