@@ -1,17 +1,16 @@
- /*******************************************************************************
- *																
- * 	Module			: CAN BUS									
- *																
- * 	File Name		: CAN_source.c										
- *																	
- * 	Author			: 						
- *																
- *	Date 			: 									
- *																
- *	Version			: v1.0										
- * 																
+/*******************************************************************************
+ *
+ * 	Module			: CAN BUS
+ *
+ * 	File Name		: CAN_source.c
+ *
+ * 	Author			:
+ *
+ *	Date 			:
+ *
+ *	Version			: v1.0
+ *
  *******************************************************************************/
-
 
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
@@ -21,8 +20,8 @@
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h"
 
-
-void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
+void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
+{
 
 	/* Instance check */
 	if (!IS_CAN_INSTANCE(CANx))
@@ -82,18 +81,14 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 	 *		tq = (BRP[9:0]+1) x tPCLK
 	 *
 	 * */
-	switch (Copy_enuCANConfig) {
+	switch (Copy_enuCANConfig)
+	{
 	case CAN_CONFIG_1:
 
 		/* Disable all CAN interrupts */
 		CANx->IER = 0;
 		/* Set the bits for settings we need in configuration 1 */
-		CANx->MCR = ((CAN1_FIFO_PRIORITY << MCR_TXFP)
-				| (CAN1_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM)
-				| (CAN1_NO_AUTOMATIC_RETRANSMISSION << MCR_NART)
-				| (CAN1_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM)
-				| (CAN1_AUTOMATIC_BUS_OFF << MCR_ABOT)
-				| (CAN1_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
+		CANx->MCR = ((CAN1_FIFO_PRIORITY << MCR_TXFP) | (CAN1_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM) | (CAN1_NO_AUTOMATIC_RETRANSMISSION << MCR_NART) | (CAN1_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM) | (CAN1_AUTOMATIC_BUS_OFF << MCR_ABOT) | (CAN1_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
@@ -105,12 +100,9 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 			;
 
 		/* Set up timing parameters */
-		CANx->BTR = ((CAN1_MODE << BTR_LBKM)
-				| (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS)
-				| (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS)
-				| (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS)
-				| (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-
+		CANx->BTR = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
+		/* Go to normal mode */
+		SET_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	case CAN_CONFIG_2:
 
@@ -118,12 +110,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 		CANx->IER = 0;
 
 		/* Set the bits for settings we need in configuration 1*/
-		CANx->MCR = ((CAN2_FIFO_PRIORITY << MCR_TXFP)
-				| (CAN2_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM)
-				| (CAN2_NO_AUTOMATIC_RETRANSMISSION << MCR_NART)
-				| (CAN2_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM)
-				| (CAN2_AUTOMATIC_BUS_OFF << MCR_ABOT)
-				| (CAN2_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
+		CANx->MCR = ((CAN2_FIFO_PRIORITY << MCR_TXFP) | (CAN2_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM) | (CAN2_NO_AUTOMATIC_RETRANSMISSION << MCR_NART) | (CAN2_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM) | (CAN2_AUTOMATIC_BUS_OFF << MCR_ABOT) | (CAN2_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
@@ -135,19 +122,17 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 			;
 
 		/* Set up timing parameters */
-		CANx->BTR = ((CAN2_MODE << BTR_LBKM)
-				| (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS)
-				| (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS)
-				| (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS)
-				| (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-
+		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
+		/* Go to normal mode */
+		SET_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	default:
 		break;
 	}
 }
 
-void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit) {
+void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
+{
 	/* the initialization of the filter values  is independent from initialization Mode,
 	 * but must be done when the filter is not active (corresponding FACTx bit in CAN_FAR cleared).
 	 * the filter scale and mode of configuration must be done before entering the
@@ -181,83 +166,84 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit) {
 	CLR_BIT(CAN1->FA1R, PTR_sFilterInit->FilterNumber);
 
 	/* adjust CAN filter mode : */
-	CAN1->FM1R = (CAN1->FM1R & ~(1 << PTR_sFilterInit->FilterNumber))
-			| (PTR_sFilterInit->FilterMode << PTR_sFilterInit->FilterNumber);
+	CAN1->FM1R = (CAN1->FM1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterMode << PTR_sFilterInit->FilterNumber);
 	/* adjust CAN scale mode : */
-	CAN1->FS1R = (CAN1->FS1R & ~(1 << PTR_sFilterInit->FilterNumber))
-			| (PTR_sFilterInit->FilterScale << PTR_sFilterInit->FilterNumber);
+	CAN1->FS1R = (CAN1->FS1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterScale << PTR_sFilterInit->FilterNumber);
 	/* state if the message passed to the filterNumber will be stored in FIFO 0 or  FIFO 1 */
-	CAN1->FFA1R = (CAN1->FFA1R & ~(1 << PTR_sFilterInit->FilterNumber))
-			| (PTR_sFilterInit->FilterFIFOAssignment
-					<< PTR_sFilterInit->FilterNumber);
+	CAN1->FFA1R = (CAN1->FFA1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterFIFOAssignment
+																		   << PTR_sFilterInit->FilterNumber);
 	/* adjust filter activation mode */
 	CAN1->FA1R = (PTR_sFilterInit->FilterActivation)
-			<< (PTR_sFilterInit->FilterNumber);
+				 << (PTR_sFilterInit->FilterNumber);
 
 	/* copy identifier into filter bank */
-	switch (PTR_sFilterInit->FilterScale) {
-	case SINGLE_32: {
-		switch (PTR_sFilterInit->FilterMode) {
+	switch (PTR_sFilterInit->FilterScale)
+	{
+	case SINGLE_32:
+	{
+		switch (PTR_sFilterInit->FilterMode)
+		{
 
-		case MASK: {
+		case MASK:
+		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR2 = 0;
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 = 0;
 
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR2 =
-					(PTR_sFilterInit->FilterMaskIdHigh) << 16
-							| (PTR_sFilterInit->FilterMaskIdLow);
+				(PTR_sFilterInit->FilterMaskIdHigh) << 16 | (PTR_sFilterInit->FilterMaskIdLow);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 =
-					(PTR_sFilterInit->FilterIdHighR1) << 16
-							| (PTR_sFilterInit->FilterIdLowR1);
+				(PTR_sFilterInit->FilterIdHighR1) << 16 | (PTR_sFilterInit->FilterIdLowR1);
 		}
-			break;
-
-		case LIST: {
-			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-					(PTR_sFilterInit->FilterIdHighR1) << 16
-							| (PTR_sFilterInit->FilterIdLowR1);
-			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
-					(PTR_sFilterInit->FilterIdHighR2) << 16
-							| (PTR_sFilterInit->FilterIdLowR2);
-		}
-			break;
-		}
-	}
 		break;
 
-	case DOUBLE_16: {
-		switch (PTR_sFilterInit->FilterMode) {
-		case MASK: {
+		case LIST:
+		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-					(PTR_sFilterInit->FilterIdLowR1);
+				(PTR_sFilterInit->FilterIdHighR1) << 16 | (PTR_sFilterInit->FilterIdLowR1);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
-					(PTR_sFilterInit->FilterIdLowR2);
+				(PTR_sFilterInit->FilterIdHighR2) << 16 | (PTR_sFilterInit->FilterIdLowR2);
+		}
+		break;
+		}
+	}
+	break;
+
+	case DOUBLE_16:
+	{
+		switch (PTR_sFilterInit->FilterMode)
+		{
+		case MASK:
+		{
+			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
+				(PTR_sFilterInit->FilterIdLowR1);
+			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
+				(PTR_sFilterInit->FilterIdLowR2);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 |=
-					(PTR_sFilterInit->FilterMaskIdLow) << 16;
+				(PTR_sFilterInit->FilterMaskIdLow) << 16;
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 |=
-					(PTR_sFilterInit->FilterMaskIdHigh) << 16;
+				(PTR_sFilterInit->FilterMaskIdHigh) << 16;
 		}
-			break;
+		break;
 
-		case LIST: {
+		case LIST:
+		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-					(PTR_sFilterInit->FilterIdLowR1)
-							| (PTR_sFilterInit->FilterIdHighR1) << 16;
+				(PTR_sFilterInit->FilterIdLowR1) | (PTR_sFilterInit->FilterIdHighR1) << 16;
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-					(PTR_sFilterInit->FilterIdLowR2)
-							| (PTR_sFilterInit->FilterIdHighR2) << 16;
+				(PTR_sFilterInit->FilterIdLowR2) | (PTR_sFilterInit->FilterIdHighR2) << 16;
 		}
-			break;
+		break;
 		}
 	}
-		break;
+	break;
 	}
 
 	/* disable filter initialize mode */
 	CLR_BIT(CAN1->FMR, FINIT);
 }
 
-void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber) {
+void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber)
+{
 	/* define the start bank for the CAN2 interface in range from ( 0 to 27 ) */
 	/* assign 0 to CAN2SB[5:0] == no filters are assigned to CAN1
 	 * assign 28 to CAN2SB[5:0] == all filters are assigned to CAN1
@@ -270,26 +256,25 @@ void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber) {
 	CLR_BIT(CAN1->FMR, FINIT); /* active filter mode enabled */
 }
 
-
-CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
+CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 {
-	
+
 	/* Transmisson Handling Function */
 
 	/* First Step: Select an Empty Mailbox to Use for Transmission */
 
-	CAN_Tx_MailBox_TypeDef Local_CAN_TxMailBox_TypeDef_CurrentMailBox;  // variable to save the used MailBox in
+	CAN_Tx_MailBox_TypeDef Local_CAN_TxMailBox_TypeDef_CurrentMailBox; // variable to save the used MailBox in
 
 	/* Check Which MailBox is Empty to use */
-	if (GET_BIT(CANx->TSR , TSR_TME0))
+	if (GET_BIT(CANx->TSR, TSR_TME0))
 	{
 		Local_CAN_TxMailBox_TypeDef_CurrentMailBox = CAN_TX_MAILBOX_1;
 	}
-	else if (GET_BIT(CANx->TSR , TSR_TME1))
+	else if (GET_BIT(CANx->TSR, TSR_TME1))
 	{
 		Local_CAN_TxMailBox_TypeDef_CurrentMailBox = CAN_TX_MAILBOX_2;
 	}
-	else if (GET_BIT(CANx->TSR , TSR_TME2))
+	else if (GET_BIT(CANx->TSR, TSR_TME2))
 	{
 		Local_CAN_TxMailBox_TypeDef_CurrentMailBox = CAN_TX_MAILBOX_3;
 	}
@@ -307,22 +292,22 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
 	 */
 
 	/* Choose Whether Its Standard or Extended Frame */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR , TIR_IDE , TxMessage->IDE);
+	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_IDE, TxMessage->IDE);
 
 	/*Choose Whether Its Remote Frame or No */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR , TIR_RTR , TxMessage->RTR);
+	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_RTR, TxMessage->RTR);
 
 	/* Setup The Identifier */
 
-	//Standard Identifier is 11 Bits
-	if(TxMessage->IDE  == CAN_STANDARD_IDENTIFIER)
+	// Standard Identifier is 11 Bits
+	if (TxMessage->IDE == CAN_STANDARD_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->StdId&0x7FF)<< TIR_STID_11BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS);
 	}
-	//Extended Identifier is 29 Bits
-	else if(TxMessage->IDE  == CAN_EXTENDED_IDENTIFIER)
+	// Extended Identifier is 29 Bits
+	else if (TxMessage->IDE == CAN_EXTENDED_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->ExtId&0x1FFFFFFF)<< TIR_EXID_17BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS);
 	}
 
 	/* Setting The DLC*/
@@ -332,71 +317,50 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef* CANx, CanTxMsg* TxMessage)
 	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR &= 0xFFFFFFF0;
 	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR |= TxMessage->DLC;
 
+	// Setting the Data in the Message
 
-	//Setting the Data in the Message
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDHR = (((u32)TxMessage->Data[7] << 24) |
+																		 ((u32)TxMessage->Data[6] << 16) |
+																		 ((u32)TxMessage->Data[5] << 8) |
+																		 ((u32)TxMessage->Data[4]));
 
-
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDHR = (	((u32)TxMessage->Data[7] << 24) |
-																			((u32)TxMessage->Data[6] << 16) |
-																			((u32)TxMessage->Data[5] << 8)  |
-																			((u32)TxMessage->Data[4]));
-
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDLR = (	((u32)TxMessage->Data[3] << 24) |
-																		((u32)TxMessage->Data[2] << 16) |
-																		((u32)TxMessage->Data[1] << 8)  |
-																		((u32)TxMessage->Data[0]));
-
-
-
-
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDLR = (((u32)TxMessage->Data[3] << 24) |
+																		 ((u32)TxMessage->Data[2] << 16) |
+																		 ((u32)TxMessage->Data[1] << 8) |
+																		 ((u32)TxMessage->Data[0]));
 
 	/* Final Step: Request The Transmission*/
-	SET_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR , TIR_TXRQ);
-
+	SET_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_TXRQ);
 
 	/* Return The used MailBox*/
 	return Local_CAN_TxMailBox_TypeDef_CurrentMailBox;
-
-
-
-
-
 }
 
-void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage) {
-	/*Checking on the entered FIFO number to know which mailbox to work with*/
-	switch (FIFONumber) {
-	/*If the first FIFO mailbox is selected*/
-	case (CAN_RX_FIFO_1): {
-		/*Setting the RFOM bit to release output from mailbox*/
-		SET_BIT(CANx->RF0R, RFR_RFOM);
-		break;
-	}
-		/*If the second FIFO mailbox is selected*/
-	case (CAN_RX_FIFO_2): {
-		/*Setting the RFOM bit to release output from mailbox*/
-		SET_BIT(CANx->RF1R, RFR_RFOM);
-		break;
-	}
-	}
+void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
+{
 
 	/*Getting the identifier type either Standard or Extended from received message*/
-	RxMessage->IDE = (u8) GET_BIT(CANx->sFIFOMailBox[FIFONumber].RIR, RIR_IDE);
+	RxMessage->IDE = (u8)GET_BIT(CANx->sFIFOMailBox[FIFONumber].RIR, RIR_IDE);
 
 	/*Operating depending on the received identifier type*/
-	switch (RxMessage->IDE) {
+	switch (RxMessage->IDE)
+	{
 	/*Standard Identifier*/
-	case (CAN_STANDARD_IDENTIFIER): {
+	case (CAN_STANDARD_IDENTIFIER):
+	{
 		/*Get the value of the Standard Identifier*/
-		RxMessage->StdId = (u16) ((CANx->sFIFOMailBox[FIFONumber].RIR
-				<< RIR_STID_11BITS) & 0x000007FF);
+		RxMessage->StdId = (u16)((CANx->sFIFOMailBox[FIFONumber].RIR
+								  << RIR_STID_11BITS) &
+								 0x000007FF);
 		break;
 	}
 		/*Extended Identifier*/
-	case (CAN_EXTENDED_IDENTIFIER): {
+	case (CAN_EXTENDED_IDENTIFIER):
+	{
 		/*Get the value of the Extended Identifier*/
-		RxMessage->ExtId = (u32) ((CANx->sFIFOMailBox[FIFONumber].RIR
-				<< RIR_EXID_17BITS) & 0x1FFFFFFF);
+		RxMessage->ExtId = (u32)((CANx->sFIFOMailBox[FIFONumber].RIR
+								  << RIR_EXID_17BITS) &
+								 0x1FFFFFFF);
 		break;
 	}
 	}
@@ -405,27 +369,40 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage) {
 	RxMessage->RTR = GET_BIT(CANx->sFIFOMailBox[FIFONumber].RIR, RIR_RTR);
 
 	/*Get the value of the data length code*/
-	RxMessage->DLC = (u8) (0x0F & (CANx->sFIFOMailBox[FIFONumber].RDTR));
+	RxMessage->DLC = (u8)(0x0F & (CANx->sFIFOMailBox[FIFONumber].RDTR));
 
 	/*Read the index of the filter message*/
-	RxMessage->FMI = (u8) (0x0F
-			& (CANx->sFIFOMailBox[FIFONumber].RDTR >> RDTR_FMI_8BITS));
+	RxMessage->FMI = (u8)(0x0F & (CANx->sFIFOMailBox[FIFONumber].RDTR >> RDTR_FMI_8BITS));
 
 	/*Read the data received*/
 	/*Reading the data from the RDLR register*/
-	RxMessage->Data[0] = (u8) (0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR));
+	RxMessage->Data[0] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR));
 	RxMessage->Data[1] =
-			(u8) (0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR >> 8));
-	RxMessage->Data[2] = (u8) (0xFF
-			& (CANx->sFIFOMailBox[FIFONumber].RDLR >> 16));
-	RxMessage->Data[3] = (u8) (0xFF
-			& (CANx->sFIFOMailBox[FIFONumber].RDLR >> 24));
+		(u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR >> 8));
+	RxMessage->Data[2] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR >> 16));
+	RxMessage->Data[3] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDLR >> 24));
 	/*Reading the data from the RDHR register*/
-	RxMessage->Data[4] = (u8) (0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR));
+	RxMessage->Data[4] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR));
 	RxMessage->Data[5] =
-			(u8) (0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 8));
-	RxMessage->Data[6] = (u8) (0xFF
-			& (CANx->sFIFOMailBox[FIFONumber].RDHR >> 16));
-	RxMessage->Data[7] = (u8) (0xFF
-			& (CANx->sFIFOMailBox[FIFONumber].RDHR >> 24));
+		(u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 8));
+	RxMessage->Data[6] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 16));
+	RxMessage->Data[7] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 24));
+	/*Checking on the entered FIFO number to know which mailbox to work with*/
+	switch (FIFONumber)
+	{
+	/*If the first FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_1):
+	{
+		/*Setting the RFOM bit to release output from mailbox*/
+		SET_BIT(CANx->RF0R, RFR_RFOM);
+		break;
+	}
+		/*If the second FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_2):
+	{
+		/*Setting the RFOM bit to release output from mailbox*/
+		SET_BIT(CANx->RF1R, RFR_RFOM);
+		break;
+	}
+	}
 }
