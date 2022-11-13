@@ -101,7 +101,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-
+		/* Go to normal mode */
+		SET_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	case CAN_CONFIG_2:
 
@@ -122,7 +123,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-
+		/* Go to normal mode */
+		SET_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	default:
 		break;
@@ -336,24 +338,6 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 
 void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 {
-	/*Checking on the entered FIFO number to know which mailbox to work with*/
-	switch (FIFONumber)
-	{
-	/*If the first FIFO mailbox is selected*/
-	case (CAN_RX_FIFO_1):
-	{
-		/*Setting the RFOM bit to release output from mailbox*/
-		SET_BIT(CANx->RF0R, RFR_RFOM);
-		break;
-	}
-		/*If the second FIFO mailbox is selected*/
-	case (CAN_RX_FIFO_2):
-	{
-		/*Setting the RFOM bit to release output from mailbox*/
-		SET_BIT(CANx->RF1R, RFR_RFOM);
-		break;
-	}
-	}
 
 	/*Getting the identifier type either Standard or Extended from received message*/
 	RxMessage->IDE = (u8)GET_BIT(CANx->sFIFOMailBox[FIFONumber].RIR, RIR_IDE);
@@ -403,4 +387,22 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 		(u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 8));
 	RxMessage->Data[6] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 16));
 	RxMessage->Data[7] = (u8)(0xFF & (CANx->sFIFOMailBox[FIFONumber].RDHR >> 24));
+	/*Checking on the entered FIFO number to know which mailbox to work with*/
+	switch (FIFONumber)
+	{
+	/*If the first FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_1):
+	{
+		/*Setting the RFOM bit to release output from mailbox*/
+		SET_BIT(CANx->RF0R, RFR_RFOM);
+		break;
+	}
+		/*If the second FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_2):
+	{
+		/*Setting the RFOM bit to release output from mailbox*/
+		SET_BIT(CANx->RF1R, RFR_RFOM);
+		break;
+	}
+	}
 }
