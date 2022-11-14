@@ -16,6 +16,18 @@
  *                                Definitions                                  *
  *******************************************************************************/
 
+#define CAN_OLD_VECTORS 1
+#define CAN_NEW_VECTORS 0
+/**
+ * ______ CAN interrupt handlers _______ 
+ * 	Available options:
+ * 				CAN_OLD_VECTORS
+ * 				CAN_NEW_VECTORS
+ */
+
+#define CAN_VECTORS CAN_NEW_VECTORS
+
+
 #define CAN_NORMAL_MODE 0b00
 #define CAN_LOOP_BACK_MODE 0b01
 #define CAN_SILENT_MODE 0b10

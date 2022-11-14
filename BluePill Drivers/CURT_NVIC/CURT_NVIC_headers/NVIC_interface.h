@@ -121,7 +121,6 @@ typedef enum
  * @fn void NVIC_enableInterrupts()
  * @brief	Enables interrupts globally by resetting the PRIMASK register.
  *
- *
  */
 void NVIC_enableInterrupts();
 
@@ -136,7 +135,6 @@ void NVIC_disableInterrupts();
  * @fn void NVIC_init()
  * @brief	Initializes the interrupt vector table by setting its offset and
  * 		specifying its location (code/SRAM)
- *
  */
 void NVIC_init();
 

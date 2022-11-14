@@ -41,6 +41,15 @@ typedef enum
 
 } CAN_Identifier_TypeDef;
 
+typedef enum
+{
+  CAN_Interrupt_Transmit,
+  CAN_Interrupt_FIFO0,
+  CAN_Interrupt_FIFO1,
+  CAN_Interrupt_Status
+
+} CAN_Interrupt_TypeDef;
+
 /**
  * @enum
  * @brief
@@ -251,4 +260,31 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage);
  */
 void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber, CanRxMsg *RxMessage);
 
+/* High level CAN wrapper functions */
+
+void CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
+void CAN_removeDeviceFromBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
+
+// void CAN_sendMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
+// void CAN_receiveMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
+
+void CAN_sendMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
+void CAN_receiveMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
+
+void CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
+
+/* Interrupt handlers */
+
+void USB_HP_CAN_TX_IRQHandler(void);
+void USB_LP_CAN_RX0_IRQHandler(void);
+void CAN_RX1_IRQHandler(void);
+void CAN_SCE_IRQHandler(void);
+
+// #ifdef STM32F10x_CL
+// #ifdef STM32F10x_HD
+// #ifdef STM32F10x_MD
+// #ifdef STM32F10x_LD
+// #elif CAN_VECTORS == CAN_NEW_VECTORS
+
+// #endif
 #endif

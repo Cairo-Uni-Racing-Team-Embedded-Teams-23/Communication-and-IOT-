@@ -102,7 +102,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
 		/* Go to normal mode */
-		SET_BIT(CANx->MCR, MCR_INRQ);
+		CLR_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	case CAN_CONFIG_2:
 
@@ -124,7 +124,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
 		/* Go to normal mode */
-		SET_BIT(CANx->MCR, MCR_INRQ);
+		CLR_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	default:
 		break;
