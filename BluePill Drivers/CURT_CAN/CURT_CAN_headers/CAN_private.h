@@ -19,13 +19,27 @@
  *******************************************************************************/
 
 #include "../../LIB/STD_TYPES.h"
+#include "../../LIB/STD_TYPES.h"
+
+/*******************************************************************************
+ *                           Private global variables                          *
+ *******************************************************************************/
+
+/* Number of devices whose ID is currently allowed to be received*/
+static volatile u8 CAN_devicesCount = 0;
+
+/* Callback functions pointers*/
+static volatile void (*CAN_transmit_CallbackPtr)() = NULLPTR;
+static volatile void (*CAN_FIFO0_CallbackPtr)() = NULLPTR;
+static volatile void (*CAN_FIFO1_CallbackPtr)() = NULLPTR;
+static volatile void (*CAN_Status_CallbackPtr)() = NULLPTR;
 
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
 #define CAN1_BASE_ADDRESS (0x40006400)
 #define CAN2_BASE_ADDRESS (0x40006800)
-
+#define CAN_MAX_DEVICES_COUNT (28U)
 /**
  * @struct
  * @brief
@@ -255,5 +269,35 @@ typedef enum
 // CAN Filter Bank
 // Filter Init
 #define FMR_FINIT 0
+
+// CAN interrupt enable
+//Transmit mailbox empty interrupt enable
+#define IER_TMEIE  (0U)
+// FIFO message pending interrupt enable
+#define IER_FMPIE0  (1U)
+//  FIFO full interrupt enable
+#define IER_FFIE0   (2U)
+// FIFO overrun interrupt enable
+#define IER_FOVIE0  (3U)
+// FIFO message pending interrupt enable
+#define IER_FMPIE1  (4U)
+// FIFO full interrupt enable
+#define IER_FFIE1   (5U)
+// FIFO overrun interrupt enable
+#define IER_FOVIE1  (6U)
+// Error warning interrupt enable
+#define IER_EWGIE   (8U)
+// Error passive interrupt enable
+#define IER_EPVIE   (9U)
+// Bus-off interrupt enable
+#define IER_BOFIE   (10U)
+// Last error code interrupt enable
+#define IER_LECIE   (11U)
+// Error interrupt enable
+#define IER_ERRIE   (15U)
+// Wakeup interrupt enable
+#define IER_WKUIE   (16U)
+// Sleep interrupt enable
+#define IER_SLKIE   (17U)
 
 #endif

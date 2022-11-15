@@ -100,7 +100,8 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 			;
 
 		/* Set up timing parameters */
-		CANx->BTR = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
+		u32 btr = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
+		CANx->BTR = btr;
 		/* Go to normal mode */
 		CLR_BIT(CANx->MCR, MCR_INRQ);
 		break;
@@ -124,7 +125,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
 		/* Go to normal mode */
-		CLR_BIT(CANx->MCR, MCR_INRQ);
+		// CLR_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	default:
 		break;
@@ -167,15 +168,17 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 
 	/* adjust CAN filter mode : */
 	CAN1->FM1R = (CAN1->FM1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterMode << PTR_sFilterInit->FilterNumber);
+
 	/* adjust CAN scale mode : */
 	CAN1->FS1R = (CAN1->FS1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterScale << PTR_sFilterInit->FilterNumber);
+
 	/* state if the message passed to the filterNumber will be stored in FIFO 0 or  FIFO 1 */
 	CAN1->FFA1R = (CAN1->FFA1R & ~(1 << PTR_sFilterInit->FilterNumber)) | (PTR_sFilterInit->FilterFIFOAssignment
 																		   << PTR_sFilterInit->FilterNumber);
+
 	/* adjust filter activation mode */
 	CAN1->FA1R = (PTR_sFilterInit->FilterActivation)
 				 << (PTR_sFilterInit->FilterNumber);
-
 	/* copy identifier into filter bank */
 	switch (PTR_sFilterInit->FilterScale)
 	{
@@ -190,18 +193,18 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 = 0;
 
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR2 =
-				(PTR_sFilterInit->FilterMaskIdHigh) << 16 | (PTR_sFilterInit->FilterMaskIdLow);
+				((PTR_sFilterInit->FilterMaskIdHigh) << 16) | (PTR_sFilterInit->FilterMaskIdLow);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 =
-				(PTR_sFilterInit->FilterIdHighR1) << 16 | (PTR_sFilterInit->FilterIdLowR1);
+				((PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
 		}
 		break;
 
 		case LIST:
 		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				(PTR_sFilterInit->FilterIdHighR1) << 16 | (PTR_sFilterInit->FilterIdLowR1);
+				((PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
-				(PTR_sFilterInit->FilterIdHighR2) << 16 | (PTR_sFilterInit->FilterIdLowR2);
+				((PTR_sFilterInit->FilterIdHighR2) << 16) | (PTR_sFilterInit->FilterIdLowR2);
 		}
 		break;
 		}
@@ -219,27 +222,25 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
 				(PTR_sFilterInit->FilterIdLowR2);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 |=
-				(PTR_sFilterInit->FilterMaskIdLow) << 16;
+				((PTR_sFilterInit->FilterMaskIdLow) << 16);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 |=
-				(PTR_sFilterInit->FilterMaskIdHigh) << 16;
+				((PTR_sFilterInit->FilterMaskIdHigh) << 16);
 		}
 		break;
 
 		case LIST:
 		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				(PTR_sFilterInit->FilterIdLowR1) | (PTR_sFilterInit->FilterIdHighR1) << 16;
+				(PTR_sFilterInit->FilterIdLowR1) | ((PTR_sFilterInit->FilterIdHighR1) << 16);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				(PTR_sFilterInit->FilterIdLowR2) | (PTR_sFilterInit->FilterIdHighR2) << 16;
+				(PTR_sFilterInit->FilterIdLowR2) | ((PTR_sFilterInit->FilterIdHighR2) << 16);
 		}
 		break;
 		}
 	}
 	break;
 	}
-
-	/* disable filter initialize mode */
-	CLR_BIT(CAN1->FMR, FINIT);
+	CLR_BIT(CAN1->FMR, FMR_FINIT);
 }
 
 void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber)
@@ -292,45 +293,48 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 	 */
 
 	/* Choose Whether Its Standard or Extended Frame */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_IDE, TxMessage->IDE);
+	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR,
+			  TIR_IDE, TxMessage->IDE);
 
 	/*Choose Whether Its Remote Frame or No */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_RTR, TxMessage->RTR);
+	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR,
+			  TIR_RTR, TxMessage->RTR);
 
 	/* Setup The Identifier */
 
 	// Standard Identifier is 11 Bits
 	if (TxMessage->IDE == CAN_STANDARD_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |=
+			((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS);
 	}
 	// Extended Identifier is 29 Bits
 	else if (TxMessage->IDE == CAN_EXTENDED_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |= ((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |=
+			((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS);
 	}
 
 	/* Setting The DLC*/
 	/* Choose Data length 8 Bytes */
 
 	u8 Local_u8DLC = 0b1111;
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR &= 0xFFFFFFF0;
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR |= TxMessage->DLC;
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR &=
+		0xFFFFFFF0;
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR |=
+		TxMessage->DLC;
 
 	// Setting the Data in the Message
 
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDHR = (((u32)TxMessage->Data[7] << 24) |
-																		 ((u32)TxMessage->Data[6] << 16) |
-																		 ((u32)TxMessage->Data[5] << 8) |
-																		 ((u32)TxMessage->Data[4]));
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDHR =
+		(((u32)TxMessage->Data[7] << 24) | ((u32)TxMessage->Data[6] << 16) | ((u32)TxMessage->Data[5] << 8) | ((u32)TxMessage->Data[4]));
 
-	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDLR = (((u32)TxMessage->Data[3] << 24) |
-																		 ((u32)TxMessage->Data[2] << 16) |
-																		 ((u32)TxMessage->Data[1] << 8) |
-																		 ((u32)TxMessage->Data[0]));
+	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDLR =
+		(((u32)TxMessage->Data[3] << 24) | ((u32)TxMessage->Data[2] << 16) | ((u32)TxMessage->Data[1] << 8) | ((u32)TxMessage->Data[0]));
 
 	/* Final Step: Request The Transmission*/
-	SET_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR, TIR_TXRQ);
+	SET_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR,
+			TIR_TXRQ);
 
 	/* Return The used MailBox*/
 	return Local_CAN_TxMailBox_TypeDef_CurrentMailBox;
@@ -405,4 +409,191 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 		break;
 	}
 	}
+}
+
+CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID)
+{
+	if (!IS_CAN_INSTANCE(CANx))
+		return CAN_Status_NullError;
+
+	if (CAN_devicesCount == CAN_MAX_DEVICES_COUNT)
+		return CAN_Status_MaxDevicesReached;
+
+	CAN_Status_Typedef localStatus = CAN_Status_OK;
+
+	do
+	{
+		u8 emptyFilterIdx = 0;
+		/* TODO Choose a new filter bank*/
+		/*
+		 TODO If a filter is used, check if either of its registers are used or not (FR1 or FR2)
+		 TODO How do we know if its used? -> Its value must be non zero if its used
+		 TODO During init we should write them all to have zero value?
+		*/
+		for (; emptyFilterIdx < CAN_MAX_DEVICES_COUNT; ++emptyFilterIdx)
+		{
+			/* Find de-activated filter which is unused*/
+			if (!GET_BIT(CAN1->FA1R, emptyFilterIdx))
+				break;
+		}
+		/* No empty filter banks are found, exit*/
+		if (emptyFilterIdx == CAN_MAX_DEVICES_COUNT)
+		{
+			localStatus |= CAN_Status_MaxDevicesReached;
+			break;
+		}
+		/* Found an empty filter bank to use */
+		CAN_FilterInitTypeDef localFilterConfig = {0};
+		/**
+		 * Filter mode -> List identifier for multiple ID's
+		 */
+		localFilterConfig.FilterMode = LIST;
+		localFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO_1;
+		localFilterConfig.FilterActivation = ENABLE;
+
+		localFilterConfig.FilterScale = SINGLE_32;
+		localFilterConfig.FilterNumber = emptyFilterIdx;
+
+		localFilterConfig.FilterIdHighR1 = (devID >> 13);
+		localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
+
+		localFilterConfig.FilterIdHighR2 = 0;
+		localFilterConfig.FilterIdLowR2 = 0;
+
+		/* Initialize selected filter */
+		CAN_initFilter(&localFilterConfig);
+
+		break;
+	} while (0);
+
+	return localStatus;
+}
+
+CAN_Status_Typedef CAN_removeDeviceFromBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID)
+{
+}
+
+CAN_Status_Typedef CAN_sendMessage_Interrupt(CAN_TypeDef *CANx,
+											 const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID)
+{
+
+	/* Instance & null check */
+	if (!IS_CAN_INSTANCE(CANx) || (a_data == NULLPTR))
+		return CAN_Status_NullError;
+
+	/* Status code */
+	CAN_Status_Typedef localStatus = CAN_Status_OK;
+
+	do
+	{
+		/* Return if data length is greater than max CAN data bytes */
+		if (a_len > 8)
+		{
+			localStatus |= CAN_Status_OverMaxLength;
+			break;
+		}
+
+		/* Create a new tx frame */
+		CanTxMsg localTxMsg = {0};
+
+		/* Copy DLC byte */
+		localTxMsg.DLC = a_len;
+
+		/* Copy data from buffer to frame */
+		for (int i = 0; i < a_len; i++)
+		{
+			localTxMsg.Data[i] = a_data[i];
+		}
+
+		/* Decide identifier type */
+
+		///////////////////////////
+		///////////////////////////
+		CAN_Tx_MailBox_TypeDef mailbox_used = CAN_transmit(CANx, &localTxMsg);
+
+		/* No empty mailboxes, return */
+		if (mailbox_used == CAN_TX_NO_EMPTY_MAILBOX)
+		{
+			localStatus |= CAN_Status_FullMailboxes;
+			break;
+		}
+
+	} while (0);
+
+	/* Return status code */
+	return localStatus;
+}
+
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID)
+{
+}
+
+CAN_Status_Typedef CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)())
+{
+	if (!IS_CAN_INSTANCE(CANx) || a_callbackPtr == NULLPTR)
+		return CAN_Status_NullError;
+
+	switch (a_interruptType)
+	{
+	case CAN_Interrupt_Transmit:
+		CAN_transmit_CallbackPtr = a_callbackPtr;
+		/* Enable interrupts for transmit event */
+		SET_BIT(CANx->IER, IER_TMEIE);
+		break;
+	case CAN_Interrupt_FIFO0:
+		CAN_FIFO0_CallbackPtr = a_callbackPtr;
+		/* Enable interrupts for transmit event */
+		SET_BIT(CANx->IER, IER_FMPIE0);
+		break;
+	case CAN_Interrupt_FIFO1:
+		CAN_FIFO1_CallbackPtr = a_callbackPtr;
+		SET_BIT(CANx->IER, IER_FMPIE1);
+		break;
+	case CAN_Interrupt_Status:
+		CAN_Status_CallbackPtr = a_callbackPtr;
+		SET_BIT(CANx->IER, IER_ERRIE);
+		SET_BIT(CANx->IER, IER_EWGIE);
+		SET_BIT(CANx->IER, IER_EPVIE);
+		SET_BIT(CANx->IER, IER_BOFIE);
+		SET_BIT(CANx->IER, IER_LECIE);
+		SET_BIT(CANx->IER, IER_WKUIE);
+		SET_BIT(CANx->IER, IER_SLKIE);
+		break;
+	default:
+		// TODO change this error, add another error to enum
+		return CAN_Status_NullError;
+		break;
+	}
+	/* Return OK on operation success */
+	return CAN_Status_OK;
+}
+
+/* Interrupt handlers */
+
+void USB_HP_CAN_TX_IRQHandler(void)
+{
+	/* Call user callback function if not null*/
+	if (CAN_transmit_CallbackPtr != NULLPTR)
+		(*CAN_transmit_CallbackPtr)();
+}
+
+void USB_LP_CAN_RX0_IRQHandler(void)
+{
+	/* Call user callback function if not null*/
+	if (CAN_FIFO0_CallbackPtr != NULLPTR)
+		(*CAN_FIFO0_CallbackPtr)();
+}
+
+void CAN_RX1_IRQHandler(void)
+{
+	/* Call user callback function if not null*/
+	if (CAN_FIFO1_CallbackPtr != NULLPTR)
+		(*CAN_FIFO1_CallbackPtr)();
+}
+
+void CAN_SCE_IRQHandler(void)
+{
+	/* Call user callback function if not null*/
+	if (CAN_Status_CallbackPtr != NULLPTR)
+		(*CAN_Status_CallbackPtr)();
 }
