@@ -22,7 +22,10 @@ It is a serial, multi-master, message broadcast system developed by Bosch. It's 
 			- Overload notification
 			- Recovery management
 
----
+
+
+<div style="page-break-after: always;"></div>
+
 # CAN Bus signals
 
 - If MCU does not support CAN by having a CAN Trcv, it only needs the CAN controller which outputs TX & RX at TTL levels to the CAN Trcv, which then transforms the data into CANH & CANL.
@@ -147,9 +150,9 @@ It is transmitted in 3 cases:
 ## Error counts
 
 - Receive error count *(REC)* 
-	- + 1 
+	- (+) 1 
 		- Receiver detects error
-	- + 8
+	- (+) 8
 		- Receiver detects error during sending of active error/overload flag
 			- ex. 0001 <--- Detecting 1 during sending dominant 0, so it must be an internal error in the receiver circuits.
 		- Receiver detects a dominant bit as the first bit after sending an error flag ( even though it should detect recessive bits (1's))
@@ -157,19 +160,22 @@ It is transmitted in 3 cases:
 			- ex. Error flag:   0 0 0 0 0 0 1 1 1 1 1 1 1 x
 				- Sending 6 dominant & 7 recessive
 				- x must be recessive also, so if it is dominant, an error occurred
-	- - 1
+	- (-) 1
 		- Receiver received a message without error (up to ACK slot) successfully and sending the ACK successfully
-	__Notes
-	- If REC is already 0 and decremented, it stays 0
-	- If REC is 127 and incremented, it gets set to a value between __119 & 127__.
+__Notes__
+- If REC is already 0 and decremented, it stays 0
+- If REC is 127 and incremented, it gets set to a value between __119 & 127__.
+
+
+<div style="page-break-after: always;"></div>
 
 - Transmit error count *(TEC)*
-	- + 8
+	- (+) 8
 		- When a transmitter sends an error flag
 		- Transmitter detects a bit error while sending an active error/overload flag.
 			-  ex. 0001 <--- Detecting 1 during sending dominant 0, so it must be an internal error in the transmitter circuits.
 		- When many dominant bits are detected after error/overload flag.
-	- - 1
+	- (-) 1
 		- Frame transmission was successful and getting ACK.
 ---
 ## Node states & error counts
@@ -203,9 +209,7 @@ $$
 - SYNC SEG can only be +/- 1
 - If a delay in a bit edge increases, we increase the length of PHASE SEG1 to shift the sample **point right**.
 - If a bit edge arrives before we expect it, then we should decrease PHASE SEG2 to shift the sample **point left**.
-
-
-
+---
 # CAN in STM
 ## Features
 - Supports version 2.0 A(standard) & B(extended)
@@ -254,7 +258,9 @@ Notes:
 1. From mode X to mode Y: Set the bit of mode Y
 2. From mode X to normal: Clear the bit of mode Y
 3. To initialize filter banks, we must set FINIT bit
----
+
+
+<div style="page-break-after: always;"></div>
 
 ## bxCAN bus modes
 
@@ -272,6 +278,9 @@ Notes:
 - In this mode, CANTX is in recessive state.
 - If the node has to send a dominant bit (ACK, overload, error), it routes this bit internally to the CANRX and does not actually send it on the bus.
 
+
+<div style="page-break-after: always;"></div>
+
 ### Loopback mode
 
 
@@ -283,6 +292,8 @@ Notes:
 - To monitor messages in this mode, monitor CANTX
 - This mode ignores ACK errors
 
+<div style="page-break-after: always;"></div>
+
 ### Loopback silent mode
 
 ![[Pasted image 20221106094637.png]]
@@ -290,6 +301,9 @@ Notes:
 - In this mode, the node does not affect the CAN bus, so its CANTX output is always recessive (1)
 - Any sent message from the node is routed internally to the CANRX as a received message
 
+
+
+<div style="page-break-after: always;"></div>
 
 ## bxCAN filter
 
@@ -368,13 +382,23 @@ Assign FR1 & FR2 registers to mask values or identifier list values
 Activate the filter by setting the corresponding _FACTx_ bit in **CAN_FA1R** register.
 
 
+<div style="page-break-after: always;"></div>
+
+
 ### Inserting the right values in FR1 & FR2
 
 ![[Pasted image 20221115233411.png]]
 
+
+
+
+
+<div style="page-break-after: always;"></div>
+
 ##### 32-bit scale
 
 ![[Pasted image 20221115233435.png]]
+
 
 
 ###### Standard Identifier (11bit)
@@ -406,8 +430,8 @@ u32 ext_id      = 0b0000_0000_0000_0011_1011_0011_1010_1010;
 u32 std_mask    = 0b0000_0000_0000_0001_1100_0111_0000_1100;
 u32 ext_mask    = 0b0000_0000_0000_0001_0000_0000_0110_1011;
 
-ext_mask&= (0x1FFFFFFF);/* Ensure it is 29 bits*/
-ext_id&  = (0x1FFFFFFF);
+ext_mask&= (0x3FFFF);/* Ensure it is 18 bits*/
+ext_id&  = (0x3FFFF);
 
 std_mask&= (0x7FF);     /* Ensure it is 11 bits*/
 std_id&=   (0x7FF);
@@ -428,6 +452,9 @@ FR2High =  (ext_mask>>13) | (std_mask<<5);
 ```
 
 
+
+
+<div style="page-break-after: always;"></div>
 
 ##### 16-bit scale
 
@@ -451,6 +478,9 @@ FR1High = (std_id >> 3);
 FR2High = (std_mask >> 3);
 ```
 
+
+<div style="page-break-after: always;"></div>
+
 ###### Extended Identifier (29bit-> 11 bit stdID & 18 bit EXTID)
 
 Assuming that STDID is 11 bit only and EXTID is 18 bits only
@@ -465,8 +495,8 @@ u32 ext_id      = 0b0000_0000_0000_0011_1011_0011_1010_1010;
 u32 std_mask    = 0b0000_0000_0000_0001_1100_0111_0000_1100;
 u32 ext_mask    = 0b0000_0000_0000_0001_0000_0000_0110_1011;
 
-ext_mask&= (0x1FFFFFFF);/* Ensure it is 29 bits*/
-ext_id&  = (0x1FFFFFFF);
+ext_mask&= (0x3FFFF);/* Ensure it is 18 bits*/
+ext_id&  = (0x3FFFF);
 
 std_mask&= (0x7FF);     /* Ensure it is 11 bits*/
 std_id&=   (0x7FF);
