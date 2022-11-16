@@ -29,10 +29,10 @@
 static volatile u8 CAN_devicesCount = 0;
 
 /* Callback functions pointers*/
-static volatile void (*CAN_transmit_CallbackPtr)() = NULLPTR;
-static volatile void (*CAN_FIFO0_CallbackPtr)() = NULLPTR;
-static volatile void (*CAN_FIFO1_CallbackPtr)() = NULLPTR;
-static volatile void (*CAN_Status_CallbackPtr)() = NULLPTR;
+static volatile void (*CAN_transmit_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_FIFO0_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_FIFO1_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_Status_CallbackPtr)(void) = NULLPTR;
 
 /*******************************************************************************
  *                                Definitions                                  *
@@ -265,6 +265,7 @@ typedef enum
 
 // CAN Receiver FIFO Release
 #define RFR_RFOM 5
+#define RFR_FMP 0
 
 // CAN Filter Bank
 // Filter Init

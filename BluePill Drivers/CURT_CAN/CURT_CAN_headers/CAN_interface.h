@@ -47,7 +47,9 @@ typedef enum
   CAN_Status_OverMaxLength = 1 << 0,
   CAN_Status_FullMailboxes = 1 << 1,
   CAN_Status_NullError = 1 << 2,
-  CAN_Status_MaxDevicesReached = 1 << 3
+  CAN_Status_MaxDevicesReached = 1 << 3,
+  CAN_Status_DeviceIDInvalid = 1 << 4,
+  CAN_Status_Error = 1 << 5,
 } CAN_Status_Typedef;
 
 typedef enum
@@ -271,16 +273,19 @@ void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber, CanRxMsg *Rx
 
 /* High level CAN wrapper functions */
 
-CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
-CAN_Status_Typedef CAN_removeDeviceFromBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
+u32 CAN_formatIdentifierIntoFRx(u32 ID, CAN_Identifier_TypeDef idType, u8 RTR);
+
+CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID);
+CAN_Status_Typedef CAN_removeDeviceFromBus(u32 devID);
 
 // void CAN_sendMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
 // void CAN_receiveMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
 
-CAN_Status_Typedef CAN_sendMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
-CAN_Status_Typedef CAN_receiveMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
+CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef idType, u32 a_devID);
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(const u8 *a_data, u8 a_len, u32 a_devID);
 
-CAN_Status_Typedef CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
+CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
+CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType);
 
 /* Interrupt handlers */
 

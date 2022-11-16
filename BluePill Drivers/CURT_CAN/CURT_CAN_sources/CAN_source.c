@@ -19,6 +19,7 @@
 #include "../CURT_CAN_headers/CAN_interface.h"
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h"
+#include "../../CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
 
 void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 {
@@ -28,14 +29,15 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 		return;
 
 	/* Enable CAN clock */
-	RCC_voidEnableClock(APB1, 25);
+	RCC_voidEnableClock(APB1, RCC_APB1_CANEN);
 
 	/* Set up GPIO pins as Alternate function mode for CAN pins */
 	GPIO_enablePortClock(GPIOA_ID);
-	GPIO_setupPinMode(GPIOA_ID, PIN11, OUTPUT_SPEED_10MHZ_AFPP);
-	GPIO_setupPinMode(GPIOA_ID, PIN12, OUTPUT_SPEED_10MHZ_AFPP);
+	/*
+	 GPIO_setupPinMode(GPIOA_ID, PIN11, OUTPUT_SPEED_10MHZ_AFPP);
+	 GPIO_setupPinMode(GPIOA_ID, PIN12, OUTPUT_SPEED_10MHZ_AFPP);
 
-	/* Configuration parameters in CAN_MCR register:
+	 /* Configuration parameters in CAN_MCR register:
 	 *
 	 * CANx_RECEIVE_FIFO_LOCKED_MODE
 	 * 	0: Receive FIFO is unlocked & incoming messages will overwrite previous ones.
@@ -87,11 +89,13 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 		/* Disable all CAN interrupts */
 		CANx->IER = 0;
+
 		/* Set the bits for settings we need in configuration 1 */
 		CANx->MCR = ((CAN1_FIFO_PRIORITY << MCR_TXFP) | (CAN1_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM) | (CAN1_NO_AUTOMATIC_RETRANSMISSION << MCR_NART) | (CAN1_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM) | (CAN1_AUTOMATIC_BUS_OFF << MCR_ABOT) | (CAN1_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
 
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
+
 		/* Wait until HW is in initialization  mode, so we can setup timing parameters:
 		 INAK = 1
 		 SLAK = 0
@@ -100,10 +104,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 			;
 
 		/* Set up timing parameters */
-		u32 btr = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-		CANx->BTR = btr;
-		/* Go to normal mode */
-		CLR_BIT(CANx->MCR, MCR_INRQ);
+		CANx->BTR = ((CAN1_MODE << BTR_LBKM) | (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN1_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN1_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN1_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
 		break;
 	case CAN_CONFIG_2:
 
@@ -115,6 +116,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
+
 		/* Wait until HW is in initialization  mode, so we can setup timing parameters:
 		 INAK = 1
 		 SLAK = 0
@@ -124,8 +126,6 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
-		/* Go to normal mode */
-		// CLR_BIT(CANx->MCR, MCR_INRQ);
 		break;
 	default:
 		break;
@@ -163,6 +163,7 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 
 	/* set filter to initialize mode */
 	SET_BIT(CAN1->FMR, FINIT);
+
 	/* de-activate the filter before initialization */
 	CLR_BIT(CAN1->FA1R, PTR_sFilterInit->FilterNumber);
 
@@ -177,8 +178,9 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 																		   << PTR_sFilterInit->FilterNumber);
 
 	/* adjust filter activation mode */
-	CAN1->FA1R = (PTR_sFilterInit->FilterActivation)
-				 << (PTR_sFilterInit->FilterNumber);
+	CAN1->FA1R = (CAN1->FA1R & ~(1 << PTR_sFilterInit->FilterNumber)) | ((PTR_sFilterInit->FilterActivation)
+																		 << (PTR_sFilterInit->FilterNumber));
+
 	/* copy identifier into filter bank */
 	switch (PTR_sFilterInit->FilterScale)
 	{
@@ -193,18 +195,18 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 = 0;
 
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR2 =
-				((PTR_sFilterInit->FilterMaskIdHigh) << 16) | (PTR_sFilterInit->FilterMaskIdLow);
+				(((u32)PTR_sFilterInit->FilterMaskIdHigh) << 16) | (PTR_sFilterInit->FilterMaskIdLow);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterMode].FR1 =
-				((PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
+				(((u32)PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
 		}
 		break;
 
 		case LIST:
 		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				((PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
+				(((u32)PTR_sFilterInit->FilterIdHighR1) << 16) | (PTR_sFilterInit->FilterIdLowR1);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
-				((PTR_sFilterInit->FilterIdHighR2) << 16) | (PTR_sFilterInit->FilterIdLowR2);
+				(((u32)PTR_sFilterInit->FilterIdHighR2) << 16) | (PTR_sFilterInit->FilterIdLowR2);
 		}
 		break;
 		}
@@ -222,18 +224,18 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit)
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 =
 				(PTR_sFilterInit->FilterIdLowR2);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 |=
-				((PTR_sFilterInit->FilterMaskIdLow) << 16);
+				(((u32)PTR_sFilterInit->FilterMaskIdLow) << 16);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR2 |=
-				((PTR_sFilterInit->FilterMaskIdHigh) << 16);
+				(((u32)PTR_sFilterInit->FilterMaskIdHigh) << 16);
 		}
 		break;
 
 		case LIST:
 		{
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				(PTR_sFilterInit->FilterIdLowR1) | ((PTR_sFilterInit->FilterIdHighR1) << 16);
+				(PTR_sFilterInit->FilterIdLowR1) | (((u32)PTR_sFilterInit->FilterIdHighR1) << 16);
 			CAN1->sFilterRegister[PTR_sFilterInit->FilterNumber].FR1 =
-				(PTR_sFilterInit->FilterIdLowR2) | ((PTR_sFilterInit->FilterIdHighR2) << 16);
+				(PTR_sFilterInit->FilterIdLowR2) | (((u32)PTR_sFilterInit->FilterIdHighR2) << 16);
 		}
 		break;
 		}
@@ -292,37 +294,28 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 	 * 				Put the Data
 	 */
 
-	/* Choose Whether Its Standard or Extended Frame */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR,
-			  TIR_IDE, TxMessage->IDE);
-
-	/*Choose Whether Its Remote Frame or No */
-	WRITE_BIT(CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR,
-			  TIR_RTR, TxMessage->RTR);
-
 	/* Setup The Identifier */
 
 	// Standard Identifier is 11 Bits
 	if (TxMessage->IDE == CAN_STANDARD_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |=
-			((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR =
+			(((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS) | TxMessage->RTR);
 	}
 	// Extended Identifier is 29 Bits
 	else if (TxMessage->IDE == CAN_EXTENDED_IDENTIFIER)
 	{
-		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR |=
-			((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS);
+		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR =
+			(((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS) | TxMessage->IDE | TxMessage->RTR);
 	}
 
 	/* Setting The DLC*/
 	/* Choose Data length 8 Bytes */
 
-	u8 Local_u8DLC = 0b1111;
 	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR &=
 		0xFFFFFFF0;
 	CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TDTR |=
-		TxMessage->DLC;
+		(TxMessage->DLC & 0xFUL);
 
 	// Setting the Data in the Message
 
@@ -343,6 +336,29 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 {
 
+	/* Check if the selected mailbox is empty */
+	switch (FIFONumber)
+	{
+	/*If the first FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_1):
+	{
+		if ((CANx->RF0R & 0x3) == 0U)
+		{
+			return;
+		}
+		break;
+	}
+	/*If the second FIFO mailbox is selected*/
+	case (CAN_RX_FIFO_2):
+	{
+		if ((CANx->RF1R & 0x3) == 0U)
+		{
+			return;
+		}
+		break;
+	}
+	}
+
 	/*Getting the identifier type either Standard or Extended from received message*/
 	RxMessage->IDE = (u8)GET_BIT(CANx->sFIFOMailBox[FIFONumber].RIR, RIR_IDE);
 
@@ -353,18 +369,14 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 	case (CAN_STANDARD_IDENTIFIER):
 	{
 		/*Get the value of the Standard Identifier*/
-		RxMessage->StdId = (u16)((CANx->sFIFOMailBox[FIFONumber].RIR
-								  << RIR_STID_11BITS) &
-								 0x000007FF);
+		RxMessage->StdId = (u16)((CANx->sFIFOMailBox[FIFONumber].RIR >> RIR_STID_11BITS) & 0x000007FF);
 		break;
 	}
 		/*Extended Identifier*/
 	case (CAN_EXTENDED_IDENTIFIER):
 	{
 		/*Get the value of the Extended Identifier*/
-		RxMessage->ExtId = (u32)((CANx->sFIFOMailBox[FIFONumber].RIR
-								  << RIR_EXID_17BITS) &
-								 0x1FFFFFFF);
+		RxMessage->ExtId = (u32)((CANx->sFIFOMailBox[FIFONumber].RIR >> RIR_EXID_17BITS) & 0x1FFFFFFF);
 		break;
 	}
 	}
@@ -411,10 +423,70 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 	}
 }
 
-CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID)
+u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID, CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR)
 {
-	if (!IS_CAN_INSTANCE(CANx))
-		return CAN_Status_NullError;
+	u32 FRx_Low, FRx_High, FRx;
+	RTR &= 0x1;
+
+	switch (idType)
+	{
+	case CAN_STANDARD_IDENTIFIER:
+
+		STDID &= 0x7FF;
+		switch (scale)
+		{
+		case SINGLE_32:
+
+			FRx_Low = (RTR << 1);
+
+			FRx_High = (STDID << 5);
+
+			FRx = (FRx_High << 16) | FRx_Low;
+			break;
+		case DOUBLE_16:
+
+			FRx_Low = (STDID << 5) | (RTR << 5);
+
+			FRx_High = (STDID >> 3);
+
+			FRx = (FRx_High << 16) | FRx_Low;
+			break;
+		}
+
+		break;
+	case CAN_EXTENDED_IDENTIFIER:
+
+		STDID &= 0x7FF;
+		EXTID &= 0x3FFFF;
+		switch (scale)
+		{
+		case SINGLE_32:
+
+			FRx_Low = ((EXTID & 0x1FFF) << 3) | (0b10) | (RTR << 1);
+
+			FRx_High = (EXTID >> 13) | (STDID << 5);
+
+			FRx = (FRx_High << 16) | FRx_Low;
+
+			break;
+		case DOUBLE_16:
+
+			FRx_Low = (EXTID >> 15) | (STDID << 5) | (RTR << 5) | (1 << 4);
+
+			FRx_High = (STDID >> 3);
+
+			FRx = (FRx_High << 16) | FRx_Low;
+
+			break;
+		}
+
+		break;
+	}
+	return FRx;
+}
+
+CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idType)
+{
 
 	if (CAN_devicesCount == CAN_MAX_DEVICES_COUNT)
 		return CAN_Status_MaxDevicesReached;
@@ -423,19 +495,33 @@ CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeD
 
 	do
 	{
+		/* Index of the first empty filter found (de-activated filter)*/
 		u8 emptyFilterIdx = 0;
-		/* TODO Choose a new filter bank*/
-		/*
-		 TODO If a filter is used, check if either of its registers are used or not (FR1 or FR2)
-		 TODO How do we know if its used? -> Its value must be non zero if its used
-		 TODO During init we should write them all to have zero value?
-		*/
+		/* Assume FR1 is empty */
+		u8 emptyRegisterIdx = 1;
+
 		for (; emptyFilterIdx < CAN_MAX_DEVICES_COUNT; ++emptyFilterIdx)
 		{
-			/* Find de-activated filter which is unused*/
+			/* Find de-activated filter which is unused OR find FRx registers with zero value*/
 			if (!GET_BIT(CAN1->FA1R, emptyFilterIdx))
+			{
+				/* Both empty as the filter was de-activated */
+				emptyRegisterIdx = 0;
+				++CAN_devicesCount;
 				break;
+			}
+			else if (
+				CAN1->sFilterRegister[emptyFilterIdx].FR1 == 0U ||
+				CAN1->sFilterRegister[emptyFilterIdx].FR2 == 0U)
+			{
+				/* One of them is empty */
+				emptyRegisterIdx =
+					CAN1->sFilterRegister[emptyFilterIdx].FR1 == 0U ? 1 : 2;
+				++CAN_devicesCount;
+				break;
+			}
 		}
+
 		/* No empty filter banks are found, exit*/
 		if (emptyFilterIdx == CAN_MAX_DEVICES_COUNT)
 		{
@@ -446,6 +532,9 @@ CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeD
 		CAN_FilterInitTypeDef localFilterConfig = {0};
 		/**
 		 * Filter mode -> List identifier for multiple ID's
+		 * Filter FIFO assignment = FIFO 1
+		 * Filter Activation = Enabled
+		 * Filter scale = Single 32 bit filter ID
 		 */
 		localFilterConfig.FilterMode = LIST;
 		localFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO_1;
@@ -453,12 +542,40 @@ CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeD
 
 		localFilterConfig.FilterScale = SINGLE_32;
 		localFilterConfig.FilterNumber = emptyFilterIdx;
+		/* Choose an empty register whether both FR1, FR2 or only one of them*/
+		switch (emptyRegisterIdx)
+		{
+		/* Both registers are empty, insert into R1, zero R2 for future insertions*/
+		case 0:
+			localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
+			localFilterConfig.FilterIdHighR1 = (devID >> 13);
 
-		localFilterConfig.FilterIdHighR1 = (devID >> 13);
-		localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
-
-		localFilterConfig.FilterIdHighR2 = 0;
-		localFilterConfig.FilterIdLowR2 = 0;
+			localFilterConfig.FilterIdLowR2 = 0;
+			localFilterConfig.FilterIdHighR2 = 0;
+			break;
+			/* Only FR1 is empty, use FR1  only, keep FR2 old value */
+		case 1:
+			localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
+			localFilterConfig.FilterIdHighR1 = (devID >> 13);
+			/* Get old value of FR2*/
+			localFilterConfig.FilterIdLowR2 =
+				CAN1->sFilterRegister[emptyFilterIdx].FR2 & 0x0000FFFF;
+			localFilterConfig.FilterIdHighR2 =
+				(CAN1->sFilterRegister[emptyFilterIdx].FR2 << 16);
+			break;
+			/* Only FR2 is empty, use FR2  only, keep FR1 old value */
+		case 2:
+			localFilterConfig.FilterIdLowR2 = (((u16)devID) << 3) | (1 << 2);
+			localFilterConfig.FilterIdHighR2 = (devID >> 13);
+			/* Get old value of FR1*/
+			localFilterConfig.FilterIdLowR1 =
+				CAN1->sFilterRegister[emptyFilterIdx].FR1 & 0x0000FFFF;
+			localFilterConfig.FilterIdHighR1 =
+				(CAN1->sFilterRegister[emptyFilterIdx].FR1 << 16);
+			break;
+		default:
+			break;
+		}
 
 		/* Initialize selected filter */
 		CAN_initFilter(&localFilterConfig);
@@ -469,16 +586,82 @@ CAN_Status_Typedef CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeD
 	return localStatus;
 }
 
-CAN_Status_Typedef CAN_removeDeviceFromBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID)
+CAN_Status_Typedef CAN_removeDeviceFromBus(u32 devID)
 {
+
+	CAN_Status_Typedef localStatus = CAN_Status_OK;
+
+	do
+	{
+		/* Index of the filter found which contains this device ID*/
+		u8 deviceFilterIdx = 0;
+		/* Adjust the device ID to be like the mapped format in FRx register*/
+		u32 FRx_checkVal = (((devID >> 13)) << 16) | ((((u16)devID) << 3) | (1 << 2));
+
+		for (; deviceFilterIdx < CAN_MAX_DEVICES_COUNT; ++deviceFilterIdx)
+		{
+			if (GET_BIT(CAN1->FA1R, deviceFilterIdx))
+			{
+
+				if (CAN1->sFilterRegister[deviceFilterIdx].FR1 == FRx_checkVal)
+				{
+
+					/* Deactivate filter to modift FiRx registers*/
+					CLR_BIT(CAN1->FA1R, deviceFilterIdx);
+					/* Set FR1 to zero to know it is unused in the future*/
+					CAN1->sFilterRegister[deviceFilterIdx].FR1 = 0;
+					--CAN_devicesCount;
+					/* If FR2 is also zero, keep the filter deactivated */
+					if (CAN1->sFilterRegister[deviceFilterIdx].FR2 == 0)
+					{
+						break;
+					}
+					else
+					{
+						/* Activate filter if FR2 is non zero*/
+						SET_BIT(CAN1->FA1R, deviceFilterIdx);
+						break;
+					}
+					break;
+				}
+				else if (CAN1->sFilterRegister[deviceFilterIdx].FR2 == FRx_checkVal)
+				{
+					/* Deactivate filter to modift FiRx registers*/
+					CLR_BIT(CAN1->FA1R, deviceFilterIdx);
+					/* Set FR2 to zero to know it is unused in the future*/
+					CAN1->sFilterRegister[deviceFilterIdx].FR2 = 0;
+					--CAN_devicesCount;
+					/* If FR1 is also zero, keep the filter deactivated */
+					if (CAN1->sFilterRegister[deviceFilterIdx].FR1 == 0)
+					{
+						break;
+					}
+					else
+					{
+						/* Activate filter if FR1 is non zero*/
+						SET_BIT(CAN1->FA1R, deviceFilterIdx);
+						break;
+					}
+				}
+			}
+		}
+		/* If device was not found*/
+		if (deviceFilterIdx == CAN_MAX_DEVICES_COUNT)
+		{
+			localStatus |= CAN_Status_DeviceIDInvalid;
+		}
+		break;
+	} while (0);
+
+	return localStatus;
 }
 
-CAN_Status_Typedef CAN_sendMessage_Interrupt(CAN_TypeDef *CANx,
-											 const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID)
+CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len,
+											 CAN_Identifier_TypeDef idType, u32 a_devID)
 {
 
-	/* Instance & null check */
-	if (!IS_CAN_INSTANCE(CANx) || (a_data == NULLPTR))
+	/* null check */
+	if (a_data == NULLPTR)
 		return CAN_Status_NullError;
 
 	/* Status code */
@@ -506,10 +689,10 @@ CAN_Status_Typedef CAN_sendMessage_Interrupt(CAN_TypeDef *CANx,
 		}
 
 		/* Decide identifier type */
+		localTxMsg.ExtId = localTxMsg.StdId = a_devID;
+		localTxMsg.IDE = idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
 
-		///////////////////////////
-		///////////////////////////
-		CAN_Tx_MailBox_TypeDef mailbox_used = CAN_transmit(CANx, &localTxMsg);
+		CAN_Tx_MailBox_TypeDef mailbox_used = CAN_transmit(CAN1, &localTxMsg);
 
 		/* No empty mailboxes, return */
 		if (mailbox_used == CAN_TX_NO_EMPTY_MAILBOX)
@@ -524,44 +707,137 @@ CAN_Status_Typedef CAN_sendMessage_Interrupt(CAN_TypeDef *CANx,
 	return localStatus;
 }
 
-CAN_Status_Typedef CAN_receiveMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID)
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(const u8 *a_data, u8 a_len,
+												u32 a_devID)
 {
 }
 
-CAN_Status_Typedef CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)())
+CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
+									  void (*a_callbackPtr)())
 {
-	if (!IS_CAN_INSTANCE(CANx) || a_callbackPtr == NULLPTR)
+	if (a_callbackPtr == NULLPTR)
 		return CAN_Status_NullError;
 
 	switch (a_interruptType)
 	{
 	case CAN_Interrupt_Transmit:
+
+		/* Set user callback pointer */
 		CAN_transmit_CallbackPtr = a_callbackPtr;
+
 		/* Enable interrupts for transmit event */
-		SET_BIT(CANx->IER, IER_TMEIE);
+		SET_BIT(CAN1->IER, IER_TMEIE);
+
+		/* Enable IRQ in NVIC */
+		NVIC_enableIRQ(IRQ_USB_HP_CAN_TX);
+
 		break;
 	case CAN_Interrupt_FIFO0:
+		/* Set user callback pointer */
 		CAN_FIFO0_CallbackPtr = a_callbackPtr;
-		/* Enable interrupts for transmit event */
-		SET_BIT(CANx->IER, IER_FMPIE0);
+
+		/* Enable interrupts for new message reception event */
+		SET_BIT(CAN1->IER, IER_FMPIE0);
+
+		/* Enable IRQ in NVIC */
+		NVIC_enableIRQ(IRQ_USB_LP_CAN_RX0);
+
 		break;
 	case CAN_Interrupt_FIFO1:
+		/* Set user callback pointer */
 		CAN_FIFO1_CallbackPtr = a_callbackPtr;
-		SET_BIT(CANx->IER, IER_FMPIE1);
+
+		/* Enable interrupts for new message reception event */
+		SET_BIT(CAN1->IER, IER_FMPIE1);
+
+		/* Enable IRQ in NVIC */
+		NVIC_enableIRQ(IRQ_CAN_RX1);
+
 		break;
 	case CAN_Interrupt_Status:
+
+		/* Set user callback pointer */
 		CAN_Status_CallbackPtr = a_callbackPtr;
-		SET_BIT(CANx->IER, IER_ERRIE);
-		SET_BIT(CANx->IER, IER_EWGIE);
-		SET_BIT(CANx->IER, IER_EPVIE);
-		SET_BIT(CANx->IER, IER_BOFIE);
-		SET_BIT(CANx->IER, IER_LECIE);
-		SET_BIT(CANx->IER, IER_WKUIE);
-		SET_BIT(CANx->IER, IER_SLKIE);
+
+		/* Enable interrupts for errors or status changes */
+		SET_BIT(CAN1->IER, IER_ERRIE);
+		SET_BIT(CAN1->IER, IER_EWGIE);
+		SET_BIT(CAN1->IER, IER_EPVIE);
+		SET_BIT(CAN1->IER, IER_BOFIE);
+		SET_BIT(CAN1->IER, IER_LECIE);
+		// SET_BIT(CANx->IER, IER_WKUIE);
+		// SET_BIT(CANx->IER, IER_SLKIE);
+
+		/* Enable IRQ in NVIC */
+		NVIC_enableIRQ(IRQ_CAN_SCE);
+
 		break;
 	default:
-		// TODO change this error, add another error to enum
-		return CAN_Status_NullError;
+		return CAN_Status_Error;
+		break;
+	}
+	/* Return OK on operation success */
+	return CAN_Status_OK;
+}
+CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType)
+{
+
+	switch (a_interruptType)
+	{
+	case CAN_Interrupt_Transmit:
+		/* Disable IRQ in NVIC */
+		NVIC_disableIRQ(IRQ_USB_HP_CAN_TX);
+
+		/* Reset callback pointer to null */
+		CAN_transmit_CallbackPtr = NULLPTR;
+
+		/* Disable interrupts for transmit event */
+		CLR_BIT(CAN1->IER, IER_TMEIE);
+
+		break;
+	case CAN_Interrupt_FIFO0:
+		/* Disable IRQ in NVIC */
+		NVIC_disableIRQ(IRQ_USB_LP_CAN_RX0);
+
+		/* Reset callback pointer to null */
+		CAN_FIFO0_CallbackPtr = NULLPTR;
+
+		/* Disable interrupts for new message reception event */
+		CLR_BIT(CAN1->IER, IER_FMPIE0);
+
+		break;
+
+	case CAN_Interrupt_FIFO1:
+		/* Disable IRQ in NVIC */
+		NVIC_disableIRQ(IRQ_CAN_RX1);
+
+		/* Reset callback pointer to null */
+		CAN_FIFO1_CallbackPtr = NULLPTR;
+
+		/* Disable interrupts for new message reception event */
+		CLR_BIT(CAN1->IER, IER_FMPIE1);
+
+		break;
+
+	case CAN_Interrupt_Status:
+		/* Disable IRQ in NVIC */
+		NVIC_disableIRQ(IRQ_CAN_SCE);
+
+		/* Reset callback pointer to null */
+		CAN_Status_CallbackPtr = NULLPTR;
+
+		/* Disable interrupts for errors or status changes */
+		CLR_BIT(CAN1->IER, IER_ERRIE);
+		CLR_BIT(CAN1->IER, IER_EWGIE);
+		CLR_BIT(CAN1->IER, IER_EPVIE);
+		CLR_BIT(CAN1->IER, IER_BOFIE);
+		CLR_BIT(CAN1->IER, IER_LECIE);
+		// CLR_BIT(CANx->IER, IER_WKUIE);
+		// CLR_BIT(CANx->IER, IER_SLKIE);
+
+		break;
+	default:
+		return CAN_Status_Error;
 		break;
 	}
 	/* Return OK on operation success */
@@ -570,28 +846,28 @@ CAN_Status_Typedef CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a
 
 /* Interrupt handlers */
 
-void USB_HP_CAN_TX_IRQHandler(void)
+volatile void USB_HP_CAN_TX_IRQHandler(void)
 {
 	/* Call user callback function if not null*/
 	if (CAN_transmit_CallbackPtr != NULLPTR)
 		(*CAN_transmit_CallbackPtr)();
 }
 
-void USB_LP_CAN_RX0_IRQHandler(void)
+volatile void USB_LP_CAN_RX0_IRQHandler(void)
 {
 	/* Call user callback function if not null*/
 	if (CAN_FIFO0_CallbackPtr != NULLPTR)
 		(*CAN_FIFO0_CallbackPtr)();
 }
 
-void CAN_RX1_IRQHandler(void)
+volatile void CAN_RX1_IRQHandler(void)
 {
 	/* Call user callback function if not null*/
 	if (CAN_FIFO1_CallbackPtr != NULLPTR)
 		(*CAN_FIFO1_CallbackPtr)();
 }
 
-void CAN_SCE_IRQHandler(void)
+volatile void CAN_SCE_IRQHandler(void)
 {
 	/* Call user callback function if not null*/
 	if (CAN_Status_CallbackPtr != NULLPTR)
