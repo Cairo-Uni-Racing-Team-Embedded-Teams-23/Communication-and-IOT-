@@ -11,8 +11,6 @@
  *	Version			: v1.0
  *
  *******************************************************************************/
-struct CANTxMsg;
-
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
 #include "../CURT_CAN_headers/CAN_config.h"
