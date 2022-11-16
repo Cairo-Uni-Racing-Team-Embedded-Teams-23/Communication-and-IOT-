@@ -36,10 +36,19 @@
 typedef enum
 {
 
-  CAN_STANDARD_IDENTIFIER = 0,/**< CAN_STANDARD_IDENTIFIER */
-  CAN_EXTENDED_IDENTIFIER = 1 /**< CAN_EXTENDED_IDENTIFIER */
+  CAN_STANDARD_IDENTIFIER = 0, /**< CAN_STANDARD_IDENTIFIER */
+  CAN_EXTENDED_IDENTIFIER = 1  /**< CAN_EXTENDED_IDENTIFIER */
 
 } CAN_Identifier_TypeDef;
+
+typedef enum
+{
+  CAN_Interrupt_Transmit,
+  CAN_Interrupt_FIFO0,
+  CAN_Interrupt_FIFO1,
+  CAN_Interrupt_Status
+
+} CAN_Interrupt_TypeDef;
 
 /**
  * @enum
@@ -49,13 +58,13 @@ typedef enum
 typedef enum
 {
 
-  CAN_TX_MAILBOX_1,          /**< CAN_TX_MAILBOX_1 */
+  CAN_TX_MAILBOX_1, /**< CAN_TX_MAILBOX_1 */
 
-  CAN_TX_MAILBOX_2,          /**< CAN_TX_MAILBOX_2 */
+  CAN_TX_MAILBOX_2, /**< CAN_TX_MAILBOX_2 */
 
-  CAN_TX_MAILBOX_3,          /**< CAN_TX_MAILBOX_3 */
+  CAN_TX_MAILBOX_3, /**< CAN_TX_MAILBOX_3 */
 
-  CAN_TX_NO_EMPTY_MAILBOX = 4/**< CAN_TX_NO_EMPTY_MAILBOX */
+  CAN_TX_NO_EMPTY_MAILBOX = 4 /**< CAN_TX_NO_EMPTY_MAILBOX */
 
 } CAN_Tx_MailBox_TypeDef;
 
@@ -67,9 +76,9 @@ typedef enum
 typedef enum
 {
 
-  CAN_RX_FIFO_1,/**< CAN_RX_FIFO_1 */
+  CAN_RX_FIFO_1, /**< CAN_RX_FIFO_1 */
 
-  CAN_RX_FIFO_2,/**< CAN_RX_FIFO_2 */
+  CAN_RX_FIFO_2, /**< CAN_RX_FIFO_2 */
 
 } CAN_Rx_FIFO_TypeDef;
 
@@ -137,14 +146,24 @@ typedef struct
  */
 typedef struct
 {
-  u16 FilterIdHigh;
-  u16 FilterIdLow;
+  u16 FilterIdLowR1;
+  u16 FilterIdHighR1;
+
+  u16 FilterIdLowR2;
+  u16 FilterIdHighR2;
+
+  /* for mask mode */
   u16 FilterMaskIdHigh;
   u16 FilterMaskIdLow;
+
   u16 FilterFIFOAssignment;
+
   u8 FilterNumber;
+
   u8 FilterMode;
+
   u8 FilterScale;
+
   u8 FilterActivation;
 } CAN_FilterInitTypeDef;
 
@@ -156,11 +175,24 @@ typedef struct
 typedef enum
 {
 
-  CAN_CONFIG_1,/**< CAN_CONFIG_1 */
+  CAN_CONFIG_1, /**< CAN_CONFIG_1 */
 
   CAN_CONFIG_2 /**< CAN_CONFIG_2 */
 
 } CAN_TypeDef_Config;
+
+/*CAN filter configuration */
+typedef enum
+{
+  MASK,
+  LIST
+} CAN_FilterMode;
+
+typedef enum
+{
+  DOUBLE_16,
+  SINGLE_32
+} CAN_FilterScale;
 
 /*******************************************************************************
  *                       Public functions prototypes                           *
@@ -206,7 +238,6 @@ void CAN_initFilter(CAN_FilterInitTypeDef *PTR_u8FilterNumber);
  */
 void CAN_setSlaveStartBank(u8 Copy_u8CANBankNumber);
 
-
 // Yousery
 /**
  * @fn CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef*, CanTxMsg*)
@@ -229,4 +260,31 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage);
  */
 void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber, CanRxMsg *RxMessage);
 
+/* High level CAN wrapper functions */
+
+void CAN_appendDeviceToBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
+void CAN_removeDeviceFromBus(CAN_TypeDef *CANx, CAN_Identifier_TypeDef ID_Type, u32 devID);
+
+// void CAN_sendMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
+// void CAN_receiveMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
+
+void CAN_sendMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
+void CAN_receiveMessage_Interrupt(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID);
+
+void CAN_attachCallback(CAN_TypeDef *CANx, CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
+
+/* Interrupt handlers */
+
+void USB_HP_CAN_TX_IRQHandler(void);
+void USB_LP_CAN_RX0_IRQHandler(void);
+void CAN_RX1_IRQHandler(void);
+void CAN_SCE_IRQHandler(void);
+
+// #ifdef STM32F10x_CL
+// #ifdef STM32F10x_HD
+// #ifdef STM32F10x_MD
+// #ifdef STM32F10x_LD
+// #elif CAN_VECTORS == CAN_NEW_VECTORS
+
+// #endif
 #endif

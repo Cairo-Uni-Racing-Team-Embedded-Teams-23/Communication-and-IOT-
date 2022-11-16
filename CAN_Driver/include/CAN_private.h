@@ -112,7 +112,6 @@ typedef struct
  *******************************************************************************/
 
 // CAN Master Control Register (MCR) Important Bits
-// Initialization Mode Request
 #define MCR_INRQ 0
 // Sleep Mode Request
 #define MCR_SLEEP 1
@@ -130,8 +129,30 @@ typedef struct
 #define MCR_TTCM 7
 // Software master reset, CAN returns to sleep mode
 #define MCR_RESET 15
-//*****************************************************
+/* CAN master control register bits definition */
+/* CAN filter master register bits definition */
+typedef enum
+{
+    FINIT = 0,
+    CAN2SB = 8,
+} CAN_FMR;
 
+/* CAN master control register bits definition */
+typedef enum
+{
+    INRQ,
+    SLEEP,
+    TXFP,
+    RFLM,
+    NART,
+    AWUM,
+    ABOM,
+    TTCM,
+    RESET = 15,
+    DBF
+} CAN_MCR;
+
+//*****************************************************
 
 // CAN Master Status Register (MSR) Important Bits
 

@@ -16,6 +16,22 @@
  *                                Definitions                                  *
  *******************************************************************************/
 
+#define ENABLE  1
+#define DISABLE 0
+
+#define TX_INTERRUPT                               0x00000001
+#define TX_RQCPX_BITS                              0x00010101
+#define FIFO0_MESSAGE_PENDING_INTERRUPT            0x00000002
+#define FIFO0_FULL_INTERRUPT                       0x00000004
+#define FIFO0_OVERRUN_INTERRUPT                    0x00000008
+#define FIFO1_MESSAGE_PENDING_INTERRUPT            0x00000010
+#define FIFO1_FULL_INTERRUPT                       0x00000040
+#define FIFO1_OVERRUN_INTERRUPT                    0x00000020
+#define FIFO_MESSAGE_PENDING_RFXR                  0x00000003
+#define FIFO_FULL_RFXR                             0x00000008
+#define FIFO_OVERRUN_RFXR                          0x00000010
+
+
 #define CAN_NORMAL_MODE 0b00
 #define CAN_LOOP_BACK_MODE 0b01
 #define CAN_SILENT_MODE 0b10
