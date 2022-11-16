@@ -19,20 +19,7 @@
  *******************************************************************************/
 
 #include "../../LIB/STD_TYPES.h"
-#include "../../LIB/STD_TYPES.h"
-
-/*******************************************************************************
- *                           Private global variables                          *
- *******************************************************************************/
-
-/* Number of devices whose ID is currently allowed to be received*/
-static volatile u8 CAN_devicesCount = 0;
-
-/* Callback functions pointers*/
-static volatile void (*CAN_transmit_CallbackPtr)(void) = NULLPTR;
-static volatile void (*CAN_FIFO0_CallbackPtr)(void) = NULLPTR;
-static volatile void (*CAN_FIFO1_CallbackPtr)(void) = NULLPTR;
-static volatile void (*CAN_Status_CallbackPtr)(void) = NULLPTR;
+#include "../CURT_CAN_headers/CAN_interface.h"
 
 /*******************************************************************************
  *                                Definitions                                  *
@@ -272,33 +259,33 @@ typedef enum
 #define FMR_FINIT 0
 
 // CAN interrupt enable
-//Transmit mailbox empty interrupt enable
-#define IER_TMEIE  (0U)
+// Transmit mailbox empty interrupt enable
+#define IER_TMEIE (0U)
 // FIFO message pending interrupt enable
-#define IER_FMPIE0  (1U)
+#define IER_FMPIE0 (1U)
 //  FIFO full interrupt enable
-#define IER_FFIE0   (2U)
+#define IER_FFIE0 (2U)
 // FIFO overrun interrupt enable
-#define IER_FOVIE0  (3U)
+#define IER_FOVIE0 (3U)
 // FIFO message pending interrupt enable
-#define IER_FMPIE1  (4U)
+#define IER_FMPIE1 (4U)
 // FIFO full interrupt enable
-#define IER_FFIE1   (5U)
+#define IER_FFIE1 (5U)
 // FIFO overrun interrupt enable
-#define IER_FOVIE1  (6U)
+#define IER_FOVIE1 (6U)
 // Error warning interrupt enable
-#define IER_EWGIE   (8U)
+#define IER_EWGIE (8U)
 // Error passive interrupt enable
-#define IER_EPVIE   (9U)
+#define IER_EPVIE (9U)
 // Bus-off interrupt enable
-#define IER_BOFIE   (10U)
+#define IER_BOFIE (10U)
 // Last error code interrupt enable
-#define IER_LECIE   (11U)
+#define IER_LECIE (11U)
 // Error interrupt enable
-#define IER_ERRIE   (15U)
+#define IER_ERRIE (15U)
 // Wakeup interrupt enable
-#define IER_WKUIE   (16U)
+#define IER_WKUIE (16U)
 // Sleep interrupt enable
-#define IER_SLKIE   (17U)
+#define IER_SLKIE (17U)
 
 #endif
