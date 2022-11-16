@@ -11,15 +11,39 @@
  *	Version			: v1.0
  *
  *******************************************************************************/
+struct CANTxMsg;
 
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
-#include "../CURT_CAN_headers/CAN_private.h"
 #include "../CURT_CAN_headers/CAN_config.h"
 #include "../CURT_CAN_headers/CAN_interface.h"
+#include "../CURT_CAN_headers/CAN_private.h"
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h"
 #include "../../CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
+
+/*******************************************************************************
+ *                           Private global variables                          *
+ *******************************************************************************/
+
+/* Number of devices whose ID is currently allowed to be received*/
+static volatile u8 CAN_devicesCount = 0;
+struct CanTxMsg;
+
+static volatile CanTxMsg p_CANTxMsg = {0};
+static volatile u8 *CAN_RxBuffer = NULLPTR;
+static volatile u8 *CAN_RxSize = NULLPTR;
+static volatile u32 *CAN_RxID = NULLPTR;
+
+/* Callback functions pointers*/
+static volatile void (*CAN_transmit_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_FIFO0_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_FIFO1_CallbackPtr)(void) = NULLPTR;
+static volatile void (*CAN_Status_CallbackPtr)(void) = NULLPTR;
+
+/*******************************************************************************
+ *                       Public functions definitions                          *
+ *******************************************************************************/
 
 void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 {
@@ -33,11 +57,12 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 
 	/* Set up GPIO pins as Alternate function mode for CAN pins */
 	GPIO_enablePortClock(GPIOA_ID);
-	/*
-	 GPIO_setupPinMode(GPIOA_ID, PIN11, OUTPUT_SPEED_10MHZ_AFPP);
-	 GPIO_setupPinMode(GPIOA_ID, PIN12, OUTPUT_SPEED_10MHZ_AFPP);
+	/* Setup CAN Rx (PIN11) as input */
+	GPIO_setupPinMode(GPIOA_ID, PIN11, INPUT_FLOATING);
+	/* Setup CAN Tx (PIN12) as output alternate function*/
+	GPIO_setupPinMode(GPIOA_ID, PIN12, OUTPUT_SPEED_50MHZ_AFPP);
 
-	 /* Configuration parameters in CAN_MCR register:
+	/* Configuration parameters in CAN_MCR register:
 	 *
 	 * CANx_RECEIVE_FIFO_LOCKED_MODE
 	 * 	0: Receive FIFO is unlocked & incoming messages will overwrite previous ones.
@@ -348,7 +373,7 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 		}
 		break;
 	}
-	/*If the second FIFO mailbox is selected*/
+		/*If the second FIFO mailbox is selected*/
 	case (CAN_RX_FIFO_2):
 	{
 		if ((CANx->RF1R & 0x3) == 0U)
@@ -423,7 +448,8 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 	}
 }
 
-u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID, CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR)
+u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID,
+								CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR)
 {
 	u32 FRx_Low, FRx_High, FRx;
 	RTR &= 0x1;
@@ -485,13 +511,17 @@ u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID, CAN_Identifier_TypeDef idT
 	return FRx;
 }
 
-CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idType)
+CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID,
+										 CAN_Identifier_TypeDef idType)
 {
 
 	if (CAN_devicesCount == CAN_MAX_DEVICES_COUNT)
 		return CAN_Status_MaxDevicesReached;
 
 	CAN_Status_Typedef localStatus = CAN_Status_OK;
+
+	u32 FRx_val = CAN_formatIdentifierIntoFRx(devID >> 18, devID & 0x3FFFF,
+											  idType, SINGLE_32, 0);
 
 	do
 	{
@@ -537,6 +567,7 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idTyp
 		 * Filter scale = Single 32 bit filter ID
 		 */
 		localFilterConfig.FilterMode = LIST;
+		// TODO alternate bet. fifo 1 & 2?
 		localFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO_1;
 		localFilterConfig.FilterActivation = ENABLE;
 
@@ -547,16 +578,17 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idTyp
 		{
 		/* Both registers are empty, insert into R1, zero R2 for future insertions*/
 		case 0:
-			localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
-			localFilterConfig.FilterIdHighR1 = (devID >> 13);
+
+			localFilterConfig.FilterIdLowR1 = FRx_val & 0xFFFF;
+			localFilterConfig.FilterIdHighR1 = FRx_val >> 16;
 
 			localFilterConfig.FilterIdLowR2 = 0;
 			localFilterConfig.FilterIdHighR2 = 0;
 			break;
 			/* Only FR1 is empty, use FR1  only, keep FR2 old value */
 		case 1:
-			localFilterConfig.FilterIdLowR1 = (((u16)devID) << 3) | (1 << 2);
-			localFilterConfig.FilterIdHighR1 = (devID >> 13);
+			localFilterConfig.FilterIdLowR1 = FRx_val & 0xFFFF;
+			localFilterConfig.FilterIdHighR1 = FRx_val & 0xFFFF;
 			/* Get old value of FR2*/
 			localFilterConfig.FilterIdLowR2 =
 				CAN1->sFilterRegister[emptyFilterIdx].FR2 & 0x0000FFFF;
@@ -565,8 +597,8 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idTyp
 			break;
 			/* Only FR2 is empty, use FR2  only, keep FR1 old value */
 		case 2:
-			localFilterConfig.FilterIdLowR2 = (((u16)devID) << 3) | (1 << 2);
-			localFilterConfig.FilterIdHighR2 = (devID >> 13);
+			localFilterConfig.FilterIdLowR2 = FRx_val & 0xFFFF;
+			localFilterConfig.FilterIdHighR2 = FRx_val & 0xFFFF;
 			/* Get old value of FR1*/
 			localFilterConfig.FilterIdLowR1 =
 				CAN1->sFilterRegister[emptyFilterIdx].FR1 & 0x0000FFFF;
@@ -586,7 +618,8 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idTyp
 	return localStatus;
 }
 
-CAN_Status_Typedef CAN_removeDeviceFromBus(u32 devID)
+CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID,
+										   CAN_Identifier_TypeDef a_idType)
 {
 
 	CAN_Status_Typedef localStatus = CAN_Status_OK;
@@ -596,7 +629,9 @@ CAN_Status_Typedef CAN_removeDeviceFromBus(u32 devID)
 		/* Index of the filter found which contains this device ID*/
 		u8 deviceFilterIdx = 0;
 		/* Adjust the device ID to be like the mapped format in FRx register*/
-		u32 FRx_checkVal = (((devID >> 13)) << 16) | ((((u16)devID) << 3) | (1 << 2));
+		// u32 FRx_checkVal = (((devID >> 13)) << 16) | ((((u16)devID) << 3) | (1 << 2));
+		u32 FRx_checkVal = CAN_formatIdentifierIntoFRx(a_devID >> 18,
+													   a_devID & 0x3FFFF, a_idType, SINGLE_32, 0);
 
 		for (; deviceFilterIdx < CAN_MAX_DEVICES_COUNT; ++deviceFilterIdx)
 		{
@@ -664,6 +699,60 @@ CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len,
 	if (a_data == NULLPTR)
 		return CAN_Status_NullError;
 
+	/* Return if data length is greater than max CAN data bytes */
+	if (a_len > 8)
+	{
+		return CAN_Status_OverMaxLength;
+	}
+
+	p_CANTxMsg.DLC = a_len;
+
+	for (u8 i = 0; i < a_len; i++)
+	{
+		p_CANTxMsg.Data[i] = a_data[i];
+	}
+	// TODO check if dev id exists
+
+	/* Decide identifier type */
+	p_CANTxMsg.ExtId = p_CANTxMsg.StdId = a_devID;
+	p_CANTxMsg.IDE = idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
+
+	p_CANTxMsg.RTR = 0;
+
+	/* Enable interrupts for transmit event */
+	SET_BIT(CAN1->IER, IER_TMEIE);
+
+	return CAN_Status_OK;
+}
+
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8 *a_data, u8 *a_len,
+												u32 *a_devID)
+{
+
+	/* null check */
+	if (a_data == NULLPTR || a_len == NULLPTR)
+		return CAN_Status_NullError;
+
+	CAN_RxSize = a_len;
+	CAN_RxBuffer = a_data;
+	CAN_RxID = a_devID;
+
+	/* Enable interrupts for new message reception event */
+	SET_BIT(CAN1->IER, IER_FMPIE0);
+	SET_BIT(CAN1->IER, IER_FMPIE1);
+
+	/* Return status code */
+	return CAN_Status_OK;
+}
+
+CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len,
+								   CAN_Identifier_TypeDef idType, u32 a_devID)
+{
+
+	/* null check */
+	if (a_data == NULLPTR)
+		return CAN_Status_NullError;
+
 	/* Status code */
 	CAN_Status_Typedef localStatus = CAN_Status_OK;
 
@@ -707,9 +796,46 @@ CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len,
 	return localStatus;
 }
 
-CAN_Status_Typedef CAN_receiveMessage_Interrupt(const u8 *a_data, u8 a_len,
-												u32 a_devID)
+CAN_Status_Typedef CAN_receiveMessage(u8 *a_data, u8 *a_len, u32 a_devID)
 {
+
+	/* null check */
+	if (a_data == NULLPTR || a_len == NULLPTR)
+		return CAN_Status_NullError;
+
+	/* Status code */
+	CAN_Status_Typedef localStatus = CAN_Status_OK;
+
+	do
+	{
+
+		CanRxMsg localRxMsg = {0};
+		/* Check if there are new messages on either FIFO's, if not break */
+		if ((CAN1->RF0R & 0x3) == 0)
+		{
+			CAN_receive(CAN1, CAN_RX_FIFO_1, &localRxMsg);
+		}
+		else if ((CAN1->RF1R & 0x3) == 0)
+		{
+			CAN_receive(CAN1, CAN_RX_FIFO_2, &localRxMsg);
+		}
+		else
+		{
+			localStatus |= CAN_Status_Error;
+			break;
+		}
+		/* Set the received message length*/
+		*a_len = localRxMsg.DLC;
+		/* Copy data into buffer array */
+		for (u8 i = 0; i < localRxMsg.DLC; ++i)
+		{
+			a_data[i] = localRxMsg.Data[i];
+		}
+
+	} while (0);
+
+	/* Return status code */
+	return localStatus;
 }
 
 CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
@@ -725,9 +851,6 @@ CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
 		/* Set user callback pointer */
 		CAN_transmit_CallbackPtr = a_callbackPtr;
 
-		/* Enable interrupts for transmit event */
-		SET_BIT(CAN1->IER, IER_TMEIE);
-
 		/* Enable IRQ in NVIC */
 		NVIC_enableIRQ(IRQ_USB_HP_CAN_TX);
 
@@ -736,9 +859,6 @@ CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
 		/* Set user callback pointer */
 		CAN_FIFO0_CallbackPtr = a_callbackPtr;
 
-		/* Enable interrupts for new message reception event */
-		SET_BIT(CAN1->IER, IER_FMPIE0);
-
 		/* Enable IRQ in NVIC */
 		NVIC_enableIRQ(IRQ_USB_LP_CAN_RX0);
 
@@ -746,9 +866,6 @@ CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
 	case CAN_Interrupt_FIFO1:
 		/* Set user callback pointer */
 		CAN_FIFO1_CallbackPtr = a_callbackPtr;
-
-		/* Enable interrupts for new message reception event */
-		SET_BIT(CAN1->IER, IER_FMPIE1);
 
 		/* Enable IRQ in NVIC */
 		NVIC_enableIRQ(IRQ_CAN_RX1);
@@ -779,6 +896,7 @@ CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType,
 	/* Return OK on operation success */
 	return CAN_Status_OK;
 }
+
 CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType)
 {
 
@@ -848,6 +966,12 @@ CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType)
 
 volatile void USB_HP_CAN_TX_IRQHandler(void)
 {
+	/* A mailbox is empty, transmit now */
+	CAN_transmit(CAN1, (CanTxMsg *)&p_CANTxMsg);
+
+	/* Disable interrupts for transmit event */
+	CLR_BIT(CAN1->IER, IER_TMEIE);
+
 	/* Call user callback function if not null*/
 	if (CAN_transmit_CallbackPtr != NULLPTR)
 		(*CAN_transmit_CallbackPtr)();
@@ -855,6 +979,24 @@ volatile void USB_HP_CAN_TX_IRQHandler(void)
 
 volatile void USB_LP_CAN_RX0_IRQHandler(void)
 {
+	CanRxMsg localRxMsg = {0};
+
+	CAN_receive(CAN1, CAN_RX_FIFO_1, &localRxMsg);
+	*CAN_RxSize = localRxMsg.DLC;
+
+	/* Copy data into buffer array */
+	for (u8 i = 0; i < localRxMsg.DLC; i++)
+	{
+		CAN_RxBuffer[i] = localRxMsg.Data[i];
+	}
+
+	/* Decide identifier type to save the ID */
+	*CAN_RxID =
+		localRxMsg.IDE == CAN_EXTENDED_IDENTIFIER ? localRxMsg.ExtId : localRxMsg.StdId;
+
+	/* Disable interrupts for new message reception event */
+	CLR_BIT(CAN1->IER, IER_FMPIE0);
+
 	/* Call user callback function if not null*/
 	if (CAN_FIFO0_CallbackPtr != NULLPTR)
 		(*CAN_FIFO0_CallbackPtr)();
@@ -862,6 +1004,24 @@ volatile void USB_LP_CAN_RX0_IRQHandler(void)
 
 volatile void CAN_RX1_IRQHandler(void)
 {
+	CanRxMsg localRxMsg = {0};
+
+	CAN_receive(CAN1, CAN_RX_FIFO_2, &localRxMsg);
+	*CAN_RxSize = localRxMsg.DLC;
+
+	/* Copy data into buffer array */
+	for (u8 i = 0; i < localRxMsg.DLC; i++)
+	{
+		CAN_RxBuffer[i] = localRxMsg.Data[i];
+	}
+
+	/* Decide identifier type to save the ID */
+	*CAN_RxID =
+		localRxMsg.IDE == CAN_EXTENDED_IDENTIFIER ? localRxMsg.ExtId : localRxMsg.StdId;
+
+	/* Disable interrupts for new message reception event */
+	CLR_BIT(CAN1->IER, IER_FMPIE1);
+
 	/* Call user callback function if not null*/
 	if (CAN_FIFO1_CallbackPtr != NULLPTR)
 		(*CAN_FIFO1_CallbackPtr)();

@@ -50,6 +50,7 @@ typedef enum
   CAN_Status_MaxDevicesReached = 1 << 3,
   CAN_Status_DeviceIDInvalid = 1 << 4,
   CAN_Status_Error = 1 << 5,
+  
 } CAN_Status_Typedef;
 
 typedef enum
@@ -98,7 +99,7 @@ typedef enum
  * @brief
  *
  */
-typedef struct
+typedef struct 
 {
   // Standard Identifier Value between 0 to 0x7FF.
   u32 StdId;
@@ -273,16 +274,16 @@ void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber, CanRxMsg *Rx
 
 /* High level CAN wrapper functions */
 
-u32 CAN_formatIdentifierIntoFRx(u32 ID, CAN_Identifier_TypeDef idType, u8 RTR);
+u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID, CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR);
 
-CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID);
-CAN_Status_Typedef CAN_removeDeviceFromBus(u32 devID);
-
-// void CAN_sendMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
-// void CAN_receiveMessage_Polling(CAN_TypeDef *CANx, const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_devID, u32 a_timeout);
+CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idType);
+CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID, CAN_Identifier_TypeDef a_idType);
 
 CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef idType, u32 a_devID);
-CAN_Status_Typedef CAN_receiveMessage_Interrupt(const u8 *a_data, u8 a_len, u32 a_devID);
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8 *a_data, u8 *a_len, u32* a_devID);
+
+CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef idType, u32 a_devID);
+CAN_Status_Typedef CAN_receiveMessage(u8 *a_data, u8 *a_len, u32 a_devID);
 
 CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
 CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType);
