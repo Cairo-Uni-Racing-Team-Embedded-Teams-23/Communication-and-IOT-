@@ -41,26 +41,49 @@ typedef enum
 
 } CAN_Identifier_TypeDef;
 
+/**
+ * @enum
+ * @brief
+ *
+ */
 typedef enum
 {
-  CAN_Status_OK = 0,
-  CAN_Status_OverMaxLength = 1 << 0,
-  CAN_Status_FullMailboxes = 1 << 1,
-  CAN_Status_NullError = 1 << 2,
-  CAN_Status_MaxDevicesReached = 1 << 3,
-  CAN_Status_DeviceIDInvalid = 1 << 4,
-  CAN_Status_Error = 1 << 5,
-  
+  CAN_Status_OK = 0,                     /**< CAN_Status_OK */
+  CAN_Status_OverMaxLength = 1 << 0,     /**< CAN_Status_OverMaxLength */
+  CAN_Status_FullMailboxes = 1 << 1,     /**< CAN_Status_FullMailboxes */
+  CAN_Status_NullError = 1 << 2,         /**< CAN_Status_NullError */
+  CAN_Status_MaxDevicesReached = 1 << 3, /**< CAN_Status_MaxDevicesReached */
+  CAN_Status_DeviceIDInvalid = 1 << 4,   /**< CAN_Status_DeviceIDInvalid */
+  CAN_Status_Error = 1 << 5,             /**< CAN_Status_Error */
+
 } CAN_Status_Typedef;
 
+/**
+ * @enum
+ * @brief Defines the interrupt types available for CAN interface
+ *
+ */
 typedef enum
 {
-  CAN_Interrupt_Transmit,
-  CAN_Interrupt_FIFO0,
-  CAN_Interrupt_FIFO1,
-  CAN_Interrupt_Status
+  CAN_Interrupt_Transmit, /**< CAN_Interrupt_Transmit */
+  CAN_Interrupt_FIFO0,    /**< CAN_Interrupt_FIFO0 */
+  CAN_Interrupt_FIFO1,    /**< CAN_Interrupt_FIFO1 */
+  CAN_Interrupt_Status    /**< CAN_Interrupt_Status */
 
 } CAN_Interrupt_TypeDef;
+
+/**
+ * @enum
+ * @brief Defines CAN operational modes
+ *
+ */
+typedef enum
+{
+  CAN_Mode_Normal, /**< CAN_Mode_Normal */
+  CAN_Mode_Sleep,  /**< CAN_Mode_Sleep */
+  CAN_Mode_Init    /**< CAN_Mode_Init */
+
+} CAN_Mode;
 
 /**
  * @enum
@@ -99,7 +122,7 @@ typedef enum
  * @brief
  *
  */
-typedef struct 
+typedef struct
 {
   // Standard Identifier Value between 0 to 0x7FF.
   u32 StdId;
@@ -194,16 +217,26 @@ typedef enum
 } CAN_TypeDef_Config;
 
 /*CAN filter configuration */
+/**
+ * @enum
+ * @brief
+ *
+ */
 typedef enum
 {
-  MASK,
-  LIST
+  MASK, /**< MASK */
+  LIST  /**< LIST */
 } CAN_FilterMode;
 
+/**
+ * @enum
+ * @brief
+ *
+ */
 typedef enum
 {
-  DOUBLE_16,
-  SINGLE_32
+  DOUBLE_16, /**< DOUBLE_16 */
+  SINGLE_32  /**< SINGLE_32 */
 } CAN_FilterScale;
 
 /*******************************************************************************
@@ -233,6 +266,16 @@ typedef enum
  * @param Copy_enuCANConfig CAN configuration to use while initializing
  */
 void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig);
+
+/**
+ * @fn void CAN_setMode(CAN_TypeDef*, CAN_Mode)
+ * @brief   Sets the mode for the given CAN interface.
+ * @note    Busy-waits until the mode is set
+ *
+ * @param CANx    CAN instance
+ * @param a_mode  Mode to set the CAN
+ */
+void CAN_setMode(CAN_TypeDef *CANx, CAN_Mode a_mode);
 
 // Yasmine
 /**
@@ -274,32 +317,156 @@ void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber, CanRxMsg *Rx
 
 /* High level CAN wrapper functions */
 
-u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID, CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR);
+/**
+ * @fn u32 CAN_formatIdentifierIntoFRx(u32, u32, CAN_Identifier_TypeDef, CAN_FilterScale, u8)
+ * @brief
+ *
+ * @param a_STDID   Standard identifier 11 bits
+ * @param a_EXTID   Extended identifier 18 bits
+ * @param a_idType  Identifier type passed, whether standard or extended
+ * @param a_scale   Scale to format the identifiers as, single 32 bit or double 16 bit
+ * @param a_RTR     a_RTR bit: Decides to filter a_RTR frames or not
+ * @return        FRx value aligned correectly to be set in the register directly
+ */
+u32 CAN_formatIdentifierIntoFRx(u32 a_STDID, u32 a_EXTID, CAN_Identifier_TypeDef a_idType, CAN_FilterScale a_scale, u8 a_RTR);
 
-CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID, CAN_Identifier_TypeDef idType);
+/**
+ * @fn CAN_Status_Typedef CAN_appendDeviceToBus(u32, CAN_Identifier_TypeDef)
+ * @brief
+ *
+ * @param a_devID   Device Identifier (11 bits a_STDID (MSb)   + 18 bits a_EXTID (LSb))
+ * @param a_idType  Identifier type
+ * @note  Identifiers are masked according to the type to be no greater than 11 or 29 bits.
+ * @return  @ref CAN_Status_MaxDevicesReached if there are not available slots
+ * @return  @ref CAN_Status_OK Device ID appended to filters correctly
+ */
+CAN_Status_Typedef CAN_appendDeviceToBus(u32 a_devID, CAN_Identifier_TypeDef a_idType);
+
+/**
+ * @fn CAN_Status_Typedef CAN_removeDeviceFromBus(u32, CAN_Identifier_TypeDef)
+ * @brief   Removes the given ID from the filter.
+ * @note    Must provide the same identifier type that the ID was appended with, otherwise the
+ *        ID will not be removed.
+ * @param a_devID   Device ID to remove
+ *      Ex. STID = 0x1FC -> a_devID = 0x1FC
+ *      Ex. STID = 0x1FC, a_EXTID = 0xA39 -> a_devID = (0x1FC<<11)| (0xA39)
+ * @param a_idType  Identifier type
+ * @return  @ref CAN_Status_DeviceIDInvalid if the ID is not present in the filters
+ * @return  @ref CAN_Status_OK Device ID removed from filters successfully
+ */
 CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID, CAN_Identifier_TypeDef a_idType);
 
-CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef idType, u32 a_devID);
-CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8 *a_data, u8 *a_len, u32* a_devID);
+/**
+ * @fn CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8*, u8, CAN_Identifier_TypeDef, u32)
+ * @brief   Sends a CAN frame containing a_data of length a_len bytes to the specified ID as soon
+ *      as a transmit mailbox is empty. (Does not send immediately.)
+ *
+ * @param a_data  Array which contains the data, minimum size MUST be a_len
+ * @param a_len   Number of bytes to send from a_data array.
+ * @param a_idType  Identifier type
+ * @param a_devID Device ID
+ * @return  @ref CAN_Status_NullError     a_data was null pointer
+ * @return  @ref CAN_Status_OverMaxLength a_len was greater than 8
+ * @return  @ref CAN_Status_OK            Success
+ */
+CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_idType, u32 a_devID);
 
-CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef idType, u32 a_devID);
+/**
+ * @fn CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8*, u8*, u32*)
+ * @brief Receives a CAN frame into a_data, receieved bytes length is stored into a_len,
+ *      and identifier into a_devID as soon as a message is received into one of the FIFO's
+ *      (Does not receive immediately.)
+ *
+ * @param a_data Array which will contain the data, minimum size MUST be a_len
+ * @param a_len  Number of bytes received into a_data array.
+ * @param a_devID Frame identifier.
+ * @return  @ref CAN_Status_NullError     a_data was null pointer
+ * @return  @ref CAN_Status_OK            Success
+ */
+CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8 *a_data, u8 *a_len, u32 *a_devID);
+
+/**
+ * @fn CAN_Status_Typedef CAN_sendMessage(const u8*, u8, CAN_Identifier_TypeDef, u32)
+ * @brief   Sends a CAN frame containing a_data of length a_len bytes to the specified ID.
+ *
+ * @param a_data  Array which contains the data, minimum size MUST be a_len
+ * @param a_len   Number of bytes to send from a_data array.
+ * @param a_idType  Identifier type
+ * @param a_devID Device ID
+ * @return  @ref CAN_Status_NullError     a_data was null pointer
+ * @return  @ref CAN_Status_OverMaxLength a_len was greater than 8
+ * @return  @ref CAN_Status_FullMailboxes No mailbox available in CAN to transmit from
+ * @return  @ref CAN_Status_OK            Success
+ */
+CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len, CAN_Identifier_TypeDef a_idType, u32 a_devID);
+
+/**
+ * @fn CAN_Status_Typedef CAN_receiveMessage(u8*, u8*, u32)
+ * @brief   Receives a CAN frame into a_data, receieved bytes length is stored into a_len,
+ *      and identifier into a_devID if there is a pending message in a mailbox.
+ *
+ * @param a_data Array which will contain the data, minimum size MUST be a_len
+ * @param a_len  Number of bytes received into a_data array.
+ * @param a_devID Frame identifier
+ * @return  @ref CAN_Status_NullError     a_data was null pointer
+ * @return  @ref CAN_Status_Error         No pending messages to receive
+ * @return  @ref CAN_Status_OK            Success
+ */
 CAN_Status_Typedef CAN_receiveMessage(u8 *a_data, u8 *a_len, u32 a_devID);
 
+/**
+ * @fn CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef, void(*)())
+ * @brief   Attaches a callback function to the given interrupt. Should be used before
+ *      calling CAN_receiveMessage_Interrupt or CAN_sendMessage_Interrupt.
+ *
+ * @param a_interruptType   Interrupt type to attach the function to.
+ * @param a_callbackPtr     Function pointer for the callback
+ * @return @ref CAN_Status_Error   Interrupt type given is invalid
+ * @return @ref CAN_Status_OK      Success
+ */
 CAN_Status_Typedef CAN_attachCallback(CAN_Interrupt_TypeDef a_interruptType, void (*a_callbackPtr)());
+
+/**
+ * @fn CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef)
+ * @brief   Detaches a callback from the interrupt time given.
+ * @note    This disables the NVIC IRQ for the given interrupt as well
+ *
+ * @param a_interruptType   Interrupt type to detach.
+ * @return @ref CAN_Status_Error   Interrupt type given is invalid
+ * @return @ref CAN_Status_OK      Success
+ */
 CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType);
 
 /* Interrupt handlers */
 
+/**
+ * @fn void USB_HP_CAN_TX_IRQHandler(void)
+ * @brief   Interrupt handler for transmit event on CAN
+ * @note    Called when a transmit mailbox is empty.
+ *
+ */
 void USB_HP_CAN_TX_IRQHandler(void);
+
+/**
+ * @fn void USB_LP_CAN_RX0_IRQHandler(void)
+ * @brief   Interrupt handler for reception event on CAN
+ * @note    Called when FIFO0 contains a new message
+ *
+ */
 void USB_LP_CAN_RX0_IRQHandler(void);
+
+/**
+ * @fn void CAN_RX1_IRQHandler(void)
+ * @brief   Interrupt handler for reception event on CAN
+ * @note    Called when FIFO1 contains a new message *
+ */
 void CAN_RX1_IRQHandler(void);
+
+/**
+ * @fn void CAN_SCE_IRQHandler(void)
+ * @brief   Interrupt handler for status change event on CAN
+ * @note    Called when CAN status changes (errors, mode change, etc...)
+ */
 void CAN_SCE_IRQHandler(void);
 
-// #ifdef STM32F10x_CL
-// #ifdef STM32F10x_HD
-// #ifdef STM32F10x_MD
-// #ifdef STM32F10x_LD
-// #elif CAN_VECTORS == CAN_NEW_VECTORS
-
-// #endif
 #endif

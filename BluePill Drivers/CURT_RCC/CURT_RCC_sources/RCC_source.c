@@ -66,7 +66,7 @@ void RCC_voidInitSysClock(void) {
 	SET_BIT(RCC->CR, RCC_CR_HSEON);
 
 	SET_BIT(RCC->CFGR, 0);
-	//while (!GET_BIT(RCC->CR, 17))
+	while (!GET_BIT(RCC->CR, 17))
 					;
 	/* Set SWS[1] for HSE */
 	SET_BIT(RCC->CFGR,0);

@@ -65,6 +65,47 @@ typedef struct
 } CAN_FilterRegister_TypeDef;
 
 /**
+ * @union
+ * @brief   Union structure which aids in setting filter registers
+ *       of single 32 bit scale
+ *
+ */
+typedef union
+{
+    u32 FRx;
+    struct
+    {
+        u32 bit_0 : 1;
+        u32 RTR : 1;
+        u32 IDE : 1;
+        u32 EXID_0_12 : 13;
+        u32 EXID_13_17 : 5;
+        u32 STID : 11;
+    } Bits;
+
+} CAN_FilterRegisterUnion_Single32;
+
+/**
+ * @union
+ * @brief Union structure which aids in setting filter registers
+ *       of double 16 bit scale
+ *
+ */
+typedef union
+{
+    u16 FRx;
+    struct
+    {
+        u16 EXID_15_17 : 3;
+        u16 IDE : 1;
+        u16 RTR : 1;
+        u16 STID_0_2 : 3;
+        u16 STID_3_10 : 8;
+    } Bits;
+
+} CAN_FilterRegisterUnion_Double16;
+
+/**
  * @struct
  * @brief
  *

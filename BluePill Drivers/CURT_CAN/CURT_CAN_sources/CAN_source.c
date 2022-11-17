@@ -26,7 +26,6 @@
 
 /* Number of devices whose ID is currently allowed to be received*/
 static volatile u8 CAN_devicesCount = 0;
-struct CanTxMsg;
 
 static volatile CanTxMsg p_CANTxMsg = {0};
 static volatile u8 *CAN_RxBuffer = NULLPTR;
@@ -151,6 +150,48 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig)
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM) | (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS) | (CAN2_TIME_SEGMENT_1 << BTR_TS1_4BITS) | (CAN2_TIME_SEGMENT_2 << BTR_TS2_3BITS) | (CAN2_BAUD_RATE_PRESCALER << BTR_BRP_10BITS));
 		break;
 	default:
+		break;
+	}
+}
+
+void CAN_setMode(CAN_TypeDef *CANx, CAN_Mode a_mode)
+{
+	/* Instance check */
+	if (!IS_CAN_INSTANCE(CANx))
+		return;
+
+	switch (a_mode)
+	{
+	case CAN_Mode_Sleep:
+		SET_BIT(CANx->MCR, SLEEP);
+		CLR_BIT(CANx->MCR, INRQ);
+		/* Wait until HW is in sleep  mode
+				 INAK = 0
+				 SLAK = 1
+				 */
+		while (GET_BIT(CANx->MSR, MSR_SLAK) == 0U)
+			;
+
+		break;
+	case CAN_Mode_Init:
+		SET_BIT(CANx->MCR, INRQ);
+		CLR_BIT(CANx->MCR, SLEEP);
+		/* Wait until HW is in sleep  mode
+				 INAK = 0
+				 SLAK = 1
+				 */
+		while (GET_BIT(CANx->MSR, MSR_INAK) == 0U)
+			;
+		break;
+	case CAN_Mode_Normal:
+		CLR_BIT(CANx->MCR, INRQ);
+		CLR_BIT(CANx->MCR, SLEEP);
+		/* Wait until HW is in sleep  mode
+				 INAK = 0
+				 SLAK = 1
+				 */
+		while (GET_BIT(CANx->MSR, MSR_INAK) != 0U && GET_BIT(CANx->MSR, MSR_SLAK) != 0U)
+			;
 		break;
 	}
 }
@@ -323,13 +364,13 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage)
 	if (TxMessage->IDE == CAN_STANDARD_IDENTIFIER)
 	{
 		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR =
-			(((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS) | TxMessage->RTR);
+			(((TxMessage->StdId & 0x7FF) << TIR_STID_11BITS) | (TxMessage->RTR << TIR_RTR));
 	}
 	// Extended Identifier is 29 Bits
 	else if (TxMessage->IDE == CAN_EXTENDED_IDENTIFIER)
 	{
 		CANx->sTxMailBox[Local_CAN_TxMailBox_TypeDef_CurrentMailBox].TIR =
-			(((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS) | TxMessage->IDE | TxMessage->RTR);
+			(((TxMessage->ExtId & 0x1FFFFFFF) << TIR_EXID_17BITS) | (TxMessage->IDE << TIR_IDE) | (TxMessage->RTR << TIR_RTR));
 	}
 
 	/* Setting The DLC*/
@@ -447,80 +488,132 @@ void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage)
 }
 
 u32 CAN_formatIdentifierIntoFRx(u32 STDID, u32 EXTID,
-								CAN_Identifier_TypeDef idType, CAN_FilterScale scale, u8 RTR)
+								CAN_Identifier_TypeDef a_idType, CAN_FilterScale scale, u8 RTR)
 {
-	u32 FRx_Low, FRx_High, FRx;
-	RTR &= 0x1;
 
-	switch (idType)
+	CAN_FilterRegisterUnion_Single32 FRx_union32 = {0};
+
+	CAN_FilterRegisterUnion_Double16 FRx_union16 = {0};
+
+	RTR &= 0x1;
+	/* Union used to set the identifier bits as the mapping in actual FRx register */
+
+	switch (a_idType)
 	{
 	case CAN_STANDARD_IDENTIFIER:
 
+		/* Sanitize input: Mask the first 11 bits */
 		STDID &= 0x7FF;
 		switch (scale)
 		{
 		case SINGLE_32:
 
-			FRx_Low = (RTR << 1);
+			/* Set IDE bit */
+			FRx_union32.Bits.IDE = a_idType;
+			/* Set RTR bit */
+			FRx_union32.Bits.RTR = RTR;
+			/* Set all 11 bits of STID */
+			FRx_union32.Bits.STID = STDID;
 
-			FRx_High = (STDID << 5);
+			return FRx_union32.FRx;
 
-			FRx = (FRx_High << 16) | FRx_Low;
+			// FRx_Low = (RTR << 1);
+			// FRx_High = (STDID << 5);
+			// FRx = (FRx_High << 16) | FRx_Low;
 			break;
+
 		case DOUBLE_16:
 
-			FRx_Low = (STDID << 5) | (RTR << 5);
+			/* Set IDE bit */
+			FRx_union32.Bits.IDE = a_idType;
+			/* Set RTR bit */
+			FRx_union32.Bits.RTR = RTR;
+			/* Set 1st 3 bits of STID */
+			FRx_union16.Bits.STID_0_2 = STDID & 0x7UL;
+			/* Set rest of the bits of STID */
+			FRx_union16.Bits.STID_3_10 = ((STDID >> 3) & 0xFFUL);
 
-			FRx_High = (STDID >> 3);
+			return FRx_union16.FRx;
 
-			FRx = (FRx_High << 16) | FRx_Low;
+			// FRx_Low = (STDID << 5) | (RTR << 5);
+			// FRx_High = (STDID >> 3);
+			// FRx = (FRx_High << 16) | FRx_Low;
 			break;
 		}
 
 		break;
 	case CAN_EXTENDED_IDENTIFIER:
 
+		/* Sanitize input: Mask the first 11 bits */
 		STDID &= 0x7FF;
+		/* Sanitize input: Mask the first 18 bits */
 		EXTID &= 0x3FFFF;
+
 		switch (scale)
 		{
 		case SINGLE_32:
 
-			FRx_Low = ((EXTID & 0x1FFF) << 3) | (0b10) | (RTR << 1);
+			/* Set IDE bit */
+			FRx_union32.Bits.IDE = a_idType;
+			/* Set RTR bit */
+			FRx_union32.Bits.RTR = RTR;
+			/* Set all 11 bits of STID */
+			FRx_union32.Bits.STID = STDID;
+			/* Get 1st 13 bits from EXTID */
+			FRx_union32.Bits.EXID_0_12 = (EXTID & 0x1FFF);
+			/* Get last 5 bits from EXTID */
+			FRx_union32.Bits.EXID_13_17 = (EXTID >> 13) & 0x1FULL;
 
-			FRx_High = (EXTID >> 13) | (STDID << 5);
-
-			FRx = (FRx_High << 16) | FRx_Low;
+			return FRx_union32.FRx;
+			// FRx_Low = ((EXTID & 0x1FFF) << 3) | (0b100) | (RTR << 1);
+			// FRx_High = (EXTID >> 13) | (STDID << 5);
+			// FRx = (FRx_High << 16) | FRx_Low;
 
 			break;
 		case DOUBLE_16:
 
-			FRx_Low = (EXTID >> 15) | (STDID << 5) | (RTR << 5) | (1 << 4);
+			/* Set IDE bit */
+			FRx_union16.Bits.IDE = a_idType;
+			/* Set RTR bit */
+			FRx_union16.Bits.RTR = RTR;
+			/* Set 1st 3 bits of STID */
+			FRx_union16.Bits.STID_0_2 = STDID & 0x7UL;
+			/* Set rest of the bits of STID */
+			FRx_union16.Bits.STID_3_10 = ((STDID >> 3) & 0xFFUL);
+			/* Get last 3 bits from EXTID */
+			FRx_union16.Bits.EXID_15_17 = ((EXTID >> 15) & 0x7UL);
 
-			FRx_High = (STDID >> 3);
+			return FRx_union16.FRx;
 
-			FRx = (FRx_High << 16) | FRx_Low;
-
+			// FRx_Low = (EXTID >> 15) | (STDID << 5) | (RTR << 5) | (1 << 4);
+			// FRx_High = (STDID >> 3);
+			// FRx = (FRx_High << 16) | FRx_Low;
 			break;
 		}
-
 		break;
 	}
-	return FRx;
 }
 
 CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID,
-										 CAN_Identifier_TypeDef idType)
+										 CAN_Identifier_TypeDef a_idType)
 {
 
 	if (CAN_devicesCount == CAN_MAX_DEVICES_COUNT)
 		return CAN_Status_MaxDevicesReached;
 
 	CAN_Status_Typedef localStatus = CAN_Status_OK;
-
-	u32 FRx_val = CAN_formatIdentifierIntoFRx(devID >> 18, devID & 0x3FFFF,
-											  idType, SINGLE_32, 0);
-
+	u32 FRx_val = 0;
+	switch (a_idType)
+	{
+	case CAN_STANDARD_IDENTIFIER:
+		FRx_val = CAN_formatIdentifierIntoFRx(devID, 0,
+											  a_idType, SINGLE_32, 0);
+		break;
+	case CAN_EXTENDED_IDENTIFIER:
+		FRx_val = CAN_formatIdentifierIntoFRx(devID >> 18, devID & 0x3FFFF,
+											  a_idType, SINGLE_32, 0);
+		break;
+	}
 	do
 	{
 		/* Index of the first empty filter found (de-activated filter)*/
@@ -586,7 +679,7 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID,
 			/* Only FR1 is empty, use FR1  only, keep FR2 old value */
 		case 1:
 			localFilterConfig.FilterIdLowR1 = FRx_val & 0xFFFF;
-			localFilterConfig.FilterIdHighR1 = FRx_val & 0xFFFF;
+			localFilterConfig.FilterIdHighR1 = FRx_val >> 16;
 			/* Get old value of FR2*/
 			localFilterConfig.FilterIdLowR2 =
 				CAN1->sFilterRegister[emptyFilterIdx].FR2 & 0x0000FFFF;
@@ -596,7 +689,7 @@ CAN_Status_Typedef CAN_appendDeviceToBus(u32 devID,
 			/* Only FR2 is empty, use FR2  only, keep FR1 old value */
 		case 2:
 			localFilterConfig.FilterIdLowR2 = FRx_val & 0xFFFF;
-			localFilterConfig.FilterIdHighR2 = FRx_val & 0xFFFF;
+			localFilterConfig.FilterIdHighR2 = FRx_val >> 16;
 			/* Get old value of FR1*/
 			localFilterConfig.FilterIdLowR1 =
 				CAN1->sFilterRegister[emptyFilterIdx].FR1 & 0x0000FFFF;
@@ -628,9 +721,18 @@ CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID,
 		u8 deviceFilterIdx = 0;
 		/* Adjust the device ID to be like the mapped format in FRx register*/
 		// u32 FRx_checkVal = (((devID >> 13)) << 16) | ((((u16)devID) << 3) | (1 << 2));
-		u32 FRx_checkVal = CAN_formatIdentifierIntoFRx(a_devID >> 18,
-													   a_devID & 0x3FFFF, a_idType, SINGLE_32, 0);
-
+		u32 FRx_checkVal = 0;
+		switch (a_idType)
+		{
+		case CAN_STANDARD_IDENTIFIER:
+			FRx_checkVal = CAN_formatIdentifierIntoFRx(a_devID, 0,
+													   a_idType, SINGLE_32, 0);
+			break;
+		case CAN_EXTENDED_IDENTIFIER:
+			FRx_checkVal = CAN_formatIdentifierIntoFRx(a_devID >> 18, a_devID & 0x3FFFF,
+													   a_idType, SINGLE_32, 0);
+			break;
+		}
 		for (; deviceFilterIdx < CAN_MAX_DEVICES_COUNT; ++deviceFilterIdx)
 		{
 			if (GET_BIT(CAN1->FA1R, deviceFilterIdx))
@@ -690,7 +792,7 @@ CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID,
 }
 
 CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len,
-											 CAN_Identifier_TypeDef idType, u32 a_devID)
+											 CAN_Identifier_TypeDef a_idType, u32 a_devID)
 {
 
 	/* null check */
@@ -709,11 +811,10 @@ CAN_Status_Typedef CAN_sendMessage_Interrupt(const u8 *a_data, u8 a_len,
 	{
 		p_CANTxMsg.Data[i] = a_data[i];
 	}
-	// TODO check if dev id exists
 
 	/* Decide identifier type */
 	p_CANTxMsg.ExtId = p_CANTxMsg.StdId = a_devID;
-	p_CANTxMsg.IDE = idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
+	p_CANTxMsg.IDE = a_idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
 
 	p_CANTxMsg.RTR = 0;
 
@@ -744,7 +845,7 @@ CAN_Status_Typedef CAN_receiveMessage_Interrupt(u8 *a_data, u8 *a_len,
 }
 
 CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len,
-								   CAN_Identifier_TypeDef idType, u32 a_devID)
+								   CAN_Identifier_TypeDef a_idType, u32 a_devID)
 {
 
 	/* null check */
@@ -777,7 +878,7 @@ CAN_Status_Typedef CAN_sendMessage(const u8 *a_data, u8 a_len,
 
 		/* Decide identifier type */
 		localTxMsg.ExtId = localTxMsg.StdId = a_devID;
-		localTxMsg.IDE = idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
+		localTxMsg.IDE = a_idType == CAN_STANDARD_IDENTIFIER ? 0 : 1;
 
 		CAN_Tx_MailBox_TypeDef mailbox_used = CAN_transmit(CAN1, &localTxMsg);
 
@@ -809,11 +910,11 @@ CAN_Status_Typedef CAN_receiveMessage(u8 *a_data, u8 *a_len, u32 a_devID)
 
 		CanRxMsg localRxMsg = {0};
 		/* Check if there are new messages on either FIFO's, if not break */
-		if ((CAN1->RF0R & 0x3) == 0)
+		if ((CAN1->RF0R & 0x3) != 0)
 		{
 			CAN_receive(CAN1, CAN_RX_FIFO_1, &localRxMsg);
 		}
-		else if ((CAN1->RF1R & 0x3) == 0)
+		else if ((CAN1->RF1R & 0x3) != 0)
 		{
 			CAN_receive(CAN1, CAN_RX_FIFO_2, &localRxMsg);
 		}
