@@ -33,7 +33,7 @@ This is a CAN driver implementation for the STM32F103C8 based on ARM Cortex-M3. 
 
 	- Select the mode to be normal mode.
 	```c
-		#define CAN1_MODE CAN_NORMAL_MODE
+	#define CAN1_MODE CAN_NORMAL_MODE
 	```
 
 	- Set bit timings. It must be noted that these values are from calculations not literal values. For example to get time segment 1  = 6000ns and time segment 2 = 5500ns : 
@@ -56,10 +56,10 @@ RJW = \frac{500ns}{500ns} -1 = 0
 $$
 
 ```c
-	#define CAN1_RESYNC_JUMP_WIDTH 0x00
-	#define CAN1_TIME_SEGMENT_1 0x0B
-	#define CAN1_TIME_SEGMENT_2 0x0A
-	#define CAN1_BAUD_RATE_PRESCALER (17UL)
+#define CAN1_RESYNC_JUMP_WIDTH 0x00
+#define CAN1_TIME_SEGMENT_1 0x0B
+#define CAN1_TIME_SEGMENT_2 0x0A
+#define CAN1_BAUD_RATE_PRESCALER (17UL)
 ```
 
 These settings yield a baud rate of 125kbit/s.
@@ -150,17 +150,19 @@ CAN_setMode(CAN1, CAN_Mode_Normal);
 	msg.ExtId = 0xABCD;
 	/* Transmit message, return is the mailbox in which the message was put in*/
 	msg_mailbox = CAN_transmit(CAN1, &msg);
-```
+	```
+
 	2. Using API functions:
-```c
-/* Sends msg1 of length = 4 bytes with extended ID = 0xFCD and standard ID = 0x03F */
+	```c
+	/* Sends msg1 of length = 4 bytes with extended ID = 0xFCD and standard ID = 0x03F */
 	u8 msg1[4] = { 0xAC, 0xF4, 0x22, 0x31 };
 	CAN_sendMessage(msg1, 4, CAN_EXTENDED_IDENTIFIER, 0xFCD);
 	CAN_sendMessage(msg1, 4, CAN_STANDARD_IDENTIFIER, 0x03F);
-```
+	```
 
 5. Receive a message on CAN bus
 	1. Using basic functions:
+	
 	```c
 	CanRxMsg new_msg = {0};
 	/* Receive a message from FIFO 1 */
@@ -178,10 +180,10 @@ CAN_setMode(CAN1, CAN_Mode_Normal);
 	for(u8 i = 0; i < msg.DLC ; i++){
 		buffer[i]=new_msg.Data[i];
 	}
-```
-
+	```
 	2. Using API functions:
-```c
+	
+	```c
 	u8 CAN_Status_Typedef result = 0;
 	u8 buffer[8] = 0;
 	u8 msg_len = 0;
@@ -197,28 +199,31 @@ CAN_setMode(CAN1, CAN_Mode_Normal);
 	}else{
 		/* Process message */
 	}
-```
+	```
 
 #### Notes
 1. In low and medium density devices, where there is only CAN1, there are only 14 filter banks, so setting the slave start bank to 14 assigns all filter banks to CAN1.
 2. There is a helper function to format the required ID into the filter registers:
-```c 
-u32 CAN_formatIdentifierIntoFRx(u32 a_STDID, u32 a_EXTID, CAN_Identifier_TypeDef a_idType, CAN_FilterScale a_scale, u8 a_RTR);
-```
+	```c 
+	u32 CAN_formatIdentifierIntoFRx(u32 a_STDID, u32 a_EXTID, CAN_Identifier_TypeDef a_idType, CAN_FilterScale a_scale, u8 a_RTR);
+	```
+
 	- Usage:
-```c
-CAN_FilterInitTypeDef filter_config = { 0 };
-/* If using EXTID: */
-u32 my_id = 0xABCD;
-u32 FRx_val = CAN_formatIdentifierIntoFRx(my_id>>18,my_id&0x3FFFF,CAN_EXTENDED_IDENTIFIER, SINGLE_32, 0);
 
-/* If using STID: */
-u32 my_id = 0x7A;
-u32 FRx_val = CAN_formatIdentifierIntoFRx(my_id,0,CAN_STANDARD_IDENTIFIER, SINGLE_32, 0);
+	```c
+	CAN_FilterInitTypeDef filter_config = { 0 };
+	/* If using EXTID: */
+	u32 my_id = 0xABCD;
+	u32 FRx_val = CAN_formatIdentifierIntoFRx(my_id>>18,my_id&0x3FFFF,CAN_EXTENDED_IDENTIFIER, SINGLE_32, 0);
 
-filter_config.FilterIdHighR1 = FRx_val>>16;
-filter_config.FilterIdLowR1 = FRx_val&0x0000FFFF;
-```
+	/* If using STID: */
+	u32 my_id = 0x7A;
+	u32 FRx_val = CAN_formatIdentifierIntoFRx(my_id,0,CAN_STANDARD_IDENTIFIER, SINGLE_32, 0);
+
+	filter_config.FilterIdHighR1 = FRx_val>>16;
+	filter_config.FilterIdLowR1 = FRx_val&0x0000FFFF;
+	```
+	
 *Note: For the masking of specific bits of the ID, please refer to the datasheet.*
 
 
