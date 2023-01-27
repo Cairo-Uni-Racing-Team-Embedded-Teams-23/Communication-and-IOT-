@@ -21,7 +21,7 @@ This is a CAN driver implementation for the STM32F103C8 based on ARM Cortex-M3. 
 #### Steps
 
 0. Setting up pre-build configuration:
-	- In CAN_config.h, the bit timings should be set accordingly. In these definitions we define this configuration for CAN_CONFIG_1. Everything is disabled except automatic bus off.
+	- In CAN_config.h, the bit timings should be set accordingly. In these definitions, we define this configuration for CAN_CONFIG_1. Everything is disabled except automatic bus off.
 	```c
 	#define CAN1_FIFO_PRIORITY DISABLE
 	#define CAN1_RECEIVE_FIFO_LOCKED_MODE DISABLE
@@ -36,7 +36,8 @@ This is a CAN driver implementation for the STM32F103C8 based on ARM Cortex-M3. 
 	#define CAN1_MODE CAN_NORMAL_MODE
 	```
 
-	- Set bit timings. It must be noted that these values are from calculations not literal values. For example to get time segment 1  = 6000ns and time segment 2 = 5500ns : 
+	- Set bit timings. It must be noted that these values are from calculations, not literal values. For example to get time segment 1  = 6000ns and time segment 2 = 5500ns :
+	
 			Assume BRP = 17
 			PCLK freq = 36MHz, PCLK period = 27.77 ns
 			Sync jump width = 500 ns
@@ -69,7 +70,9 @@ These settings yield a baud rate of 125kbit/s.
 1. Initialize the required CAN (1 or 2) with the desired settings. There are 2 configurations available to pre-select when initializing which should be set-up as desired in CAN_config.h:
 	- CAN_CONFIG_1
 	- CAN_CONFIG_2
-	*Note: After initialization, the CAN is in initialization mode.
+
+	*Note: After initialization, the CAN is in initialization mode.*
+
 ```c
 /* Initialize CAN1 with config 1 */
 CAN_init(CAN1, CAN_CONFIG_1);
@@ -104,7 +107,7 @@ CAN_init(CAN1, CAN_CONFIG_1);
 	CAN_setSlaveStartBank(14);
 	```
 	
-	*Note: The ID's and Masks assigned to the registers do not exactly map to the required device ID. For example, assigning FilterIdLowR1 and FilterIdHighR1 to 0x33 and 0x4A respectively does NOT mean that the CAN filter an ID of 0x4A33 because the mapping of these registers are not 1-1 to the bits of the ID. Therefore, it is highly recommended to use the API functions to filter for specific ID's.
+	*Note: The ID's and Masks assigned to the registers do not exactly map to the required device ID. For example, assigning FilterIdLowR1 and FilterIdHighR1 to 0x33 and 0x4A respectively does NOT mean that the CAN filter an ID of 0x4A33 because the mapping of these registers are not 1-1 to the bits of the ID. Therefore, it is highly recommended to use the API functions to filter for specific ID's.*
 	
 	2. Using API functions to filter specific ID's:
 
@@ -121,7 +124,9 @@ CAN_init(CAN1, CAN_CONFIG_1);
 	/* Set slave(CAN2) filters to start from #14, and filters 0-13 belong to CAN1 */
 	CAN_setSlaveStartBank(14);
 ```
-*Note: Slave start bank MUST be set to use filters. *
+
+	
+*Note: Slave start bank MUST be set to use filters.*
 
 3. Start CAN in normal mode to start reception and transmitting. The CAN needs to sense an idle state on the bus to synchronize with it before participating in it. CAN needs to see exactly 11 recessive bits on the bus.
 ```c
