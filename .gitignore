@@ -5,6 +5,9 @@
 # To add more folders, add rules like this below:
 #/  ! {FOLDER or FILE_NAME}
 !/BluePill Drivers/
-!/Example Projects/
+!/Example Projects/CAN_Test_Receiver
+!/Example Projects/CAN_Test_Sender
+!/Example Projects/CAN_Test_Sender_Interrupt
+!/Example Projects/CAN_Test_Receiver_Interrupt
 !/Notes
 /BluePill Drivers/.obsidian
