@@ -27,7 +27,7 @@
 				 RCC_PLL             	;Phase Lock Loop
 	*/
 
-#define RCC_CLOCK_TYPE RCC_HSE_CRYSTAL
+#define RCC_CLOCK_TYPE RCC_PLL
 
 /* Options :
 
@@ -40,7 +40,7 @@
 	*/
 
 #if RCC_CLOCK_TYPE == RCC_PLL
-#define RCC_PLL_INPUT RCC_PLL_IN_HSI_DIV_2
+#define RCC_PLL_INPUT RCC_PLL_IN_HSE_DIV_2
 #endif
 
 /* Options :
@@ -56,7 +56,7 @@
 */
 
 #if RCC_CLOCK_TYPE == RCC_PLL
-#define RCC_PLL_MUL_VAL RCC_PLLMUL_4
+#define RCC_PLL_MUL_VAL RCC_PLLMUL_9
 #endif
 
 #endif

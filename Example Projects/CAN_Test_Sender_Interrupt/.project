@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>CAN_Test_Sender_Interrupt</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>com.st.stm32cube.ide.mcu.MCUProjectNature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUCubeIdeServicesRevAev2ProjectNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUManagedMakefileProjectNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUSingleCpuProjectNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCURootProjectNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>BluePill Drivers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/LIB</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_source</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/README.md</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_CAN/README.md</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/README.md</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_RCC/README.md</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_headers</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_sources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/README.md</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_Systick/README.md</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/LIB/BIT_MATH.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/LIB/BIT_MATH.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/LIB/STD_TYPES.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/LIB/STD_TYPES.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_CONFIG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_CONFIG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_INTERFACE.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_INTERFACE.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_PRIVATE.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_PRIVATE.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_REG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/CURT_AFIO_headers/AFIO_REG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_AFIO/CURT_AFIO_source/AFIO.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_AFIO/CURT_AFIO_source/AFIO.c</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_headers/CAN_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_CAN/CURT_CAN_headers/CAN_config.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_headers/CAN_private.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_CAN/CURT_CAN_headers/CAN_private.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_CAN/CURT_CAN_sources/CAN_source.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_CAN/CURT_CAN_sources/CAN_source.c</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_CONFIG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_CONFIG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_INTERFACE.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_PRIVATE.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_PRIVATE.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_REG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_headers/GPIO_REG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_headers/std_types.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_headers/std_types.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_GPIO/CURT_GPIO_sources/GPIO_SOURCE.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_GPIO/CURT_GPIO_sources/GPIO_SOURCE.c</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_config.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_private.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_private.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_reg.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_reg.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_NVIC/CURT_NVIC_sources/NVIC_source.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_NVIC/CURT_NVIC_sources/NVIC_source.c</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_config.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_RCC/CURT_RCC_headers/RCC_config.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_interface.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_RCC/CURT_RCC_headers/RCC_interface.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_private.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_RCC/CURT_RCC_headers/RCC_private.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_CONFIG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_CONFIG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_REG.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_REG.h</locationURI>
+		</link>
+		<link>
+			<name>BluePill Drivers/CURT_Systick/CURT_Systick_sources/SYSTICK.c</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/BluePill%20Drivers/CURT_Systick/CURT_Systick_sources/SYSTICK.c</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
