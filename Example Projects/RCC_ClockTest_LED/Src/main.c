@@ -24,21 +24,21 @@
 int main() {
 
 	RCC_voidInitSysClock();
-	GPIO_enablePortClock(GPIO_PortA);
-	GPIO_setupPinMode(GPIO_PortA, PIN6, OUTPUT_SPEED_2MHZ_PP);
-
+	GPIO_enablePortClock(GPIO_PortC);
+	GPIO_setupPinMode(GPIO_PortC, PIN13, OUTPUT_SPEED_2MHZ_PP);
+	GPIO_setPinValue(GPIO_PortC, PIN13, 0);
 	STK_init();
 	// Infinite loop
 	while (1) {
 
-		GPIO_togglePinValue(GPIO_PortA, PIN6);
+//		GPIO_togglePinValue(GPIO_PortC, PIN13);
 		/**
 		 * Assuming FCPU  = 8MHz
 		 * Fsystick = FCPU/8 = 1MHz
 		 * Ttick = 1/1Mhz = 1us
 		 * Ttimer = Max Value * Ttick = 2^24 * 10^-6 = 16.7s
 		 */
-		STK_setBusyWait(1);
+//		STK_setBusyWait(1);
 
 	}
 }

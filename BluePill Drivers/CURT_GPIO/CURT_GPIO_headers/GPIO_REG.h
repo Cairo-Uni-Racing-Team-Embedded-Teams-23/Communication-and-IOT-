@@ -9,16 +9,16 @@
  ************************************************************************************************/
 #ifndef GPIO_REG_H_
 #define GPIO_REG_H_
-#include "std_types.h"
+#include "../../LIB/STD_TYPES.h"
 typedef struct{
 
-	volatile uint32 CRL  ;
-	volatile uint32 CRH  ;
-	volatile uint32 IDR  ;
-	volatile uint32 ODR  ;
-	volatile uint32 BSRR ;
-	volatile uint32 BRR  ;
-	volatile uint32 LCKR ;
+	volatile u32 CRL  ;
+	volatile u32 CRH  ;
+	volatile u32 IDR  ;
+	volatile u32 ODR  ;
+	volatile u32 BSRR ;
+	volatile u32 BRR  ;
+	volatile u32 LCKR ;
 
 }GPIO;
 

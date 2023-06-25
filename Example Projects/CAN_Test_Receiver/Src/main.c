@@ -16,7 +16,7 @@
 #include "../BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h"
 
-// extern void initialise_monitor_handles(void);
+extern void initialise_monitor_handles(void);
 
 void dumb_delay() {
 	for (int i = 0; i < 300000; i++)
@@ -36,7 +36,7 @@ int main(void) {
 	/* Init GPIO Port A pin6 for output push-pull (2mhz)*/
 	GPIO_enablePortClock(GPIO_PortC);
 	GPIO_setupPinMode(GPIO_PortC, PIN13, OUTPUT_SPEED_2MHZ_PP);
-	GPIO_setPinValue(GPIO_PortC, PIN13, LOGIC_HIGH);
+	GPIO_setPinValue(GPIO_PortC, PIN13, 1);
 
 	/* Init systick */
 	STK_init();
@@ -44,7 +44,7 @@ int main(void) {
 	/* Init CAN & filter */
 	CAN_init(CAN1, CAN_CONFIG_1);
 
-	CAN_appendDeviceToBus(0x7BD, CAN_STANDARD_IDENTIFIER);
+	CAN_appendDeviceToBus(0x6AC, CAN_STANDARD_IDENTIFIER);
 	CAN_appendDeviceToBus(0x7CD, CAN_STANDARD_IDENTIFIER);
 	CAN_appendDeviceToBus(0x792, CAN_STANDARD_IDENTIFIER);
 	CAN_appendDeviceToBus(0x3C7A2, CAN_EXTENDED_IDENTIFIER);
@@ -58,14 +58,15 @@ int main(void) {
 	u32 devid = 0;
 
 	CAN_setMode(CAN1, CAN_Mode_Normal);
-	//	initialise_monitor_handles();
-	//	printf("[Receiver] Entering main loop...\n");
+	initialise_monitor_handles();
+	printf("[Receiver] Entering main loop...\n");
 	for (;;) {
 
 		while (CAN_receiveMessage(buff, &len, &devid) != CAN_Status_OK)
 			;
 		buff[len] = '\0';
-		//	printf("[Receiver] Received [%d] bytes, ID = %x: %s\n", len, devid, buff);
+		printf("[Receiver] Received [%d] bytes, ID = %x: %s\n", len, devid,
+				buff);
 		toggle_led();
 	}
 }

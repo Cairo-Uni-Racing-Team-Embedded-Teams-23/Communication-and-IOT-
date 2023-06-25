@@ -26,7 +26,7 @@
 
 /* Number of devices whose ID is currently allowed to be received*/
 static volatile u8 CAN_devicesCount = 0;
-static volatile CAN_TypeDef* CAN_in_use = CAN1;
+static volatile CAN_TypeDef *CAN_in_use = CAN1;
 static volatile CanTxMsg p_CANTxMsg = { 0 };
 static volatile u8 *CAN_RxBuffer = NULLPTR;
 static volatile u8 *CAN_RxSize = NULLPTR;
@@ -87,7 +87,7 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 	 *
 	 *	Configuration parameters in CAN_BTR:
 	 *	CAN1_RESYNC_JUMP_WIDTH
-	 *		Maximum time quanta that CAN can lengthen/shorten a bitto resynchronize
+	 *		Maximum time quanta that CAN can lengthen/shorten a bit to resynchronize
 	 *		with the bus
 	 *		tRJW = tq x (SJW[1:0] + 1)
 	 *
@@ -106,18 +106,6 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 	 * */
 	switch (Copy_enuCANConfig) {
 	case CAN_CONFIG_1:
-
-		/* Disable all CAN interrupts */
-		CANx->IER = 0;
-
-		/* Set the bits for settings we need in configuration 1 */
-		CANx->MCR = ((CAN1_FIFO_PRIORITY << MCR_TXFP)
-				| (CAN1_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM)
-				| (CAN1_NO_AUTOMATIC_RETRANSMISSION << MCR_NART)
-				| (CAN1_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM)
-				| (CAN1_AUTOMATIC_BUS_OFF << MCR_ABOT)
-				| (CAN1_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
-
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
 
@@ -125,13 +113,23 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 		 INAK = 1
 		 SLAK = 0
 		 */
-		while (GET_BIT(CANx->MSR, MSR_INAK) == 0)
+		while (GET_BIT(CANx->MSR, MSR_INAK) == 0U)
 			;
 
 		CLR_BIT(CANx->MCR, MCR_SLEEP);
-		while (GET_BIT(CANx->MSR, MSR_SLAK) != 0)
+		while (GET_BIT(CANx->MSR, MSR_SLAK) != 0U)
 			;
-//		CANx->BTR=6750225;
+		/* Disable all CAN interrupts */
+		CANx->IER = 0;
+
+		/* Set the bits for settings we need in configuration 1 */
+		WRITE_BIT(CANx->MCR, MCR_TXFP, CAN1_FIFO_PRIORITY);
+		WRITE_BIT(CANx->MCR, MCR_RFLM, CAN1_RECEIVE_FIFO_LOCKED_MODE);
+		WRITE_BIT(CANx->MCR, MCR_NART, CAN1_NO_AUTOMATIC_RETRANSMISSION);
+		WRITE_BIT(CANx->MCR, MCR_AWUM, CAN1_AUTOMATIC_WAKE_UP_MODE);
+		WRITE_BIT(CANx->MCR, MCR_ABOT, CAN1_AUTOMATIC_BUS_OFF);
+		WRITE_BIT(CANx->MCR, MCR_TTCM, CAN1_TIME_TRIGGERED_COMMUNICATION_MODE);
+
 		/* Set up timing parameters */
 		CANx->BTR = (u32) ((CAN1_MODE << BTR_LBKM)
 				| (CAN1_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS)
@@ -141,17 +139,6 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 		break;
 	case CAN_CONFIG_2:
 
-		/* Disable all CAN interrupts */
-		CANx->IER = 0;
-
-		/* Set the bits for settings we need in configuration 1*/
-		CANx->MCR = ((CAN2_FIFO_PRIORITY << MCR_TXFP)
-				| (CAN2_RECEIVE_FIFO_LOCKED_MODE << MCR_RFLM)
-				| (CAN2_NO_AUTOMATIC_RETRANSMISSION << MCR_NART)
-				| (CAN2_AUTOMATIC_WAKE_UP_MODE << MCR_AWUM)
-				| (CAN2_AUTOMATIC_BUS_OFF << MCR_ABOT)
-				| (CAN2_TIME_TRIGGERED_COMMUNICATION_MODE << MCR_TTCM));
-
 		/* Exit sleep mode to init mode */
 		SET_BIT(CANx->MCR, MCR_INRQ);
 
@@ -159,11 +146,24 @@ void CAN_init(CAN_TypeDef *CANx, CAN_TypeDef_Config Copy_enuCANConfig) {
 		 INAK = 1
 		 SLAK = 0
 		 */
-		while (GET_BIT(CANx->MSR, MSR_INAK) == 0)
+		while (GET_BIT(CANx->MSR, MSR_INAK) == 0U)
 			;
+
 		CLR_BIT(CANx->MCR, MCR_SLEEP);
-		while (GET_BIT(CANx->MSR, MSR_SLAK) != 0)
+		while (GET_BIT(CANx->MSR, MSR_SLAK) != 0U)
 			;
+
+		/* Disable all CAN interrupts */
+		CANx->IER = 0;
+
+		/* Set the bits for settings we need in configuration 2*/
+		WRITE_BIT(CANx->MCR, MCR_TXFP, CAN2_FIFO_PRIORITY);
+		WRITE_BIT(CANx->MCR, MCR_RFLM, CAN2_RECEIVE_FIFO_LOCKED_MODE);
+		WRITE_BIT(CANx->MCR, MCR_NART, CAN2_NO_AUTOMATIC_RETRANSMISSION);
+		WRITE_BIT(CANx->MCR, MCR_AWUM, CAN2_AUTOMATIC_WAKE_UP_MODE);
+		WRITE_BIT(CANx->MCR, MCR_ABOT, CAN2_AUTOMATIC_BUS_OFF);
+		WRITE_BIT(CANx->MCR, MCR_TTCM, CAN2_TIME_TRIGGERED_COMMUNICATION_MODE);
+
 		/* Set up timing parameters */
 		CANx->BTR = ((CAN2_MODE << BTR_LBKM)
 				| (CAN2_RESYNC_JUMP_WIDTH << BTR_SJW_2BITS)
@@ -212,36 +212,36 @@ void CAN_setMode(CAN_TypeDef *CANx, CAN_Mode a_mode) {
 		 INAK = 0
 		 SLAK = 1
 		 */
-		while (GET_BIT(CANx->MSR, MSR_INAK) != 0U)
+		while (GET_BIT(CANx->MSR, MSR_INAK) == 0U)
 			;
 		break;
 	}
 }
 
 void CAN_initFilter(CAN_FilterInitTypeDef *PTR_sFilterInit) {
-	/* the initialization of the filter values  is independent from initialization Mode,
+	/* The initialization of the filter values  is independent from initialization mode,
 	 * but must be done when the filter is not active (corresponding FACTx bit in CAN_FAR cleared).
-	 * the filter scale and mode of configuration must be done before entering the
+	 * The filter scale and mode of configuration must be done before entering the
 	 * normal mode.
 	 */
 
-	/*  28 filter banks (0 --> 27),
-	 * each filter bank x consists of two 32-bit registers, CAN_FxR0 , CAN_FxR1*/
+	/* 28 filter banks (0 --> 27),
+	 * Each filter bank x consists of two 32-bit registers, CAN_FxR0 , CAN_FxR1*/
 
-	/*********SACLE*********/
-	/* each filter bank can be scaled independently:
+	/*********SCALE*********/
+	/* Each filter bank can be scaled independently:
 	 *   one 32-bit  filter, for STDID[10:0], EXTID[17:0], IDE and RTR bits
 	 *   two  16-bit filter, for STDID[10:0], EXTID[17:15], IDE and RTR bits
 	 *
-	 *   scale is configured using FSCx bit in CAN_FSxR
+	 *   Scale is configured using FSCx bit in CAN_FSxR
 	 */
 
 	/**********MODE***********/
 	/* MASK mode       --> specify which bit is "must match" or "don't care"
-	 * mask mode can be used to specify a range of IDs
+	 * Mask mode can be used to specify a range of IDs
 	 *
 	 * IDENTIFIER mode --> all bits of the incoming identifier must match the bits specified in the filter registers
-	 * identifier mode is used when we to receive a specific ID rather than the whole range
+	 * IDENTIFIER mode is used when we want to receive a specific ID rather than the whole range
 	 *
 	 * Mask/identifier mode is configured in FBMxbits in CAN_FMxR
 	 */
@@ -415,7 +415,8 @@ CAN_Tx_MailBox_TypeDef CAN_transmit(CAN_TypeDef *CANx, CanTxMsg *TxMessage) {
 	return Local_CAN_TxMailBox_TypeDef_CurrentMailBox;
 }
 
-void CAN_receive(CAN_TypeDef *CANx, u8 FIFONumber, CanRxMsg *RxMessage) {
+void CAN_receive(CAN_TypeDef *CANx, CAN_Rx_FIFO_TypeDef FIFONumber,
+		CanRxMsg *RxMessage) {
 
 	/* Check if the selected mailbox is empty */
 	switch (FIFONumber) {
@@ -996,7 +997,8 @@ CAN_Status_Typedef CAN_detachCallback(CAN_Interrupt_TypeDef a_interruptType) {
 	return CAN_Status_OK;
 }
 
-CAN_Status_Typedef CAN_activateInterrupt(CAN_TypeDef* CANx,CAN_Interrupt_TypeDef a_interruptType) {
+CAN_Status_Typedef CAN_activateInterrupt(CAN_TypeDef *CANx,
+		CAN_Interrupt_TypeDef a_interruptType) {
 	switch (a_interruptType) {
 	case CAN_Interrupt_Transmit:
 		/* Enable interrupts for transmit event */
@@ -1028,7 +1030,8 @@ CAN_Status_Typedef CAN_activateInterrupt(CAN_TypeDef* CANx,CAN_Interrupt_TypeDef
 	return CAN_Status_OK;
 }
 
-CAN_Status_Typedef CAN_deactivateInterrupt(CAN_TypeDef* CANx,CAN_Interrupt_TypeDef a_interruptType) {
+CAN_Status_Typedef CAN_deactivateInterrupt(CAN_TypeDef *CANx,
+		CAN_Interrupt_TypeDef a_interruptType) {
 	switch (a_interruptType) {
 	case CAN_Interrupt_Transmit:
 		/* Disable interrupts for transmit event */

@@ -21,4 +21,12 @@
 #define GPIOD_BUS_ID             (5U)
 #define GPIOE_BUS_ID             (6U)
 
+#ifndef LOGIC_HIGH
+#define LOGIC_HIGH (1U)
+#endif
+
+#ifndef LOGIC_LOW
+#define LOGIC_LOW (0U)
+#endif
+
 #endif

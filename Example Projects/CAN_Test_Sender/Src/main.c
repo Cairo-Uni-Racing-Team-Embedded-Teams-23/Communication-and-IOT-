@@ -31,7 +31,7 @@ int main(void) {
 	/* Init GPIO Port A pin6 for output push-pull (2mhz)*/
 	GPIO_enablePortClock(GPIO_PortC);
 	GPIO_setupPinMode(GPIO_PortC, PIN13, OUTPUT_SPEED_2MHZ_PP);
-	GPIO_setPinValue(GPIO_PortC, PIN13, LOGIC_HIGH);
+	GPIO_setPinValue(GPIO_PortC, PIN13, 1);
 
 	/* Init systick */
 	STK_init();

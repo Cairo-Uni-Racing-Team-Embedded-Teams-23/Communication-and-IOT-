@@ -21,7 +21,7 @@
  *                           Public functions definitions                      *
  *******************************************************************************/
 
-void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode) {
+void GPIO_setupPinMode(u8 port_num, u8 pin_num, u8 mode) {
 
 	switch (port_num) {
 	case GPIO_PortA:
@@ -74,7 +74,7 @@ void GPIO_setupPinMode(uint8 port_num, uint8 pin_num, uint8 mode) {
 	}
 }
 
-void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value) {
+void GPIO_setPinValue(u8 port_num, u8 pin_num, u8 value) {
 	/* Invalid pin number input */
 	if (pin_num > NUM_OF_PINS_PER_PORT)
 		return;
@@ -106,7 +106,7 @@ void GPIO_setPinValue(uint8 port_num, uint8 pin_num, uint8 value) {
 	}
 }
 
-uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num) {
+u8 GPIO_getPinValue(u8 port_num, u8 pin_num) {
 	/* Invalid pin number input */
 	if (pin_num > NUM_OF_PINS_PER_PORT)
 		return LOGIC_LOW;
@@ -137,9 +137,9 @@ uint8 GPIO_getPinValue(uint8 port_num, uint8 pin_num) {
 	return GPIO_PIN_RESET;
 }
 
-void GPIO_setupPortMode(uint8 port_num, uint8 mode) {
+void GPIO_setupPortMode(u8 port_num, u8 mode) {
 	/* Copy the mode into all bits of the register for each pin */
-	uint32 reg_val = (mode | (mode << 4) | (mode << 8) | (mode << 12)
+	u32 reg_val = (mode | (mode << 4) | (mode << 8) | (mode << 12)
 			| (mode << 16) | (mode << 20) | (mode << 24) | (mode << 28));
 	switch (port_num) {
 	case GPIO_PortA:
@@ -157,7 +157,7 @@ void GPIO_setupPortMode(uint8 port_num, uint8 mode) {
 	}
 }
 
-void GPIO_writePort(uint8 port_num, uint16 value) {
+void GPIO_writePort(u8 port_num, u16 value) {
 
 	switch (port_num) {
 	case GPIO_PortA:
@@ -174,21 +174,21 @@ void GPIO_writePort(uint8 port_num, uint16 value) {
 	}
 }
 
-uint16 GPIO_getPort(uint8 port_num) {
+u16 GPIO_getPort(u8 port_num) {
 	switch (port_num) {
 	case GPIO_PortA:
 		/* Clear last 16 bits as they are reserved */
-		return (uint16) (GPIOA->IDR & 0x00FF);
+		return (u16) (GPIOA->IDR & 0x00FF);
 
 		break;
 	case GPIO_PortB:
 		/* Clear last 16 bits as they are reserved */
-		return (uint16) (GPIOB->IDR & 0x00FF);
+		return (u16) (GPIOB->IDR & 0x00FF);
 
 		break;
 	case GPIO_PortC:
 		/* Clear last 16 bits as they are reserved */
-		return (uint16) (GPIOC->IDR & 0x00FF);
+		return (u16) (GPIOC->IDR & 0x00FF);
 
 		break;
 	default:
@@ -198,7 +198,7 @@ uint16 GPIO_getPort(uint8 port_num) {
 	return 0;
 }
 
-void GPIO_togglePinValue(uint8 port_num, uint8 pin_num) {
+void GPIO_togglePinValue(u8 port_num, u8 pin_num) {
 	/* Invalid pin number input */
 	if (pin_num > NUM_OF_PINS_PER_PORT)
 		return;
@@ -217,7 +217,7 @@ void GPIO_togglePinValue(uint8 port_num, uint8 pin_num) {
 	}
 }
 
-void GPIO_enablePortClock(uint8 port_num) {
+void GPIO_enablePortClock(u8 port_num) {
 	/* Determine the port, and start its clock using GPIO bus and the port ID on the bus */
 	switch (port_num) {
 	case GPIO_PortA:
@@ -234,9 +234,9 @@ void GPIO_enablePortClock(uint8 port_num) {
 	}
 }
 
-void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode) {
+void GPIO_setPortDirection_H_L(u8 port_num, u8 position, u8 mode) {
 	/* Copy the mode into all bits of the register for each pin */
-	uint32 reg_val = (mode | (mode << 4) | (mode << 8) | (mode << 12)
+	u32 reg_val = (mode | (mode << 4) | (mode << 8) | (mode << 12)
 			| (mode << 16) | (mode << 20) | (mode << 24) | (mode << 28));
 	/* Determine port and set the high or low part based on position argument*/
 	switch (port_num) {
@@ -267,7 +267,7 @@ void GPIO_setPortDirection_H_L(uint8 port_num, uint8 position, uint8 mode) {
 	}
 }
 
-void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value) {
+void GPIO_setPortValue_H_L(u8 port_num, u8 position, u16 value) {
 
 	/* Determine port and set the high or low part based on position argument*/
 	switch (port_num) {
@@ -275,24 +275,24 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value) {
 		if (position == GPIO_LOW_PORT)
 			GPIOA->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOA->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit u then shift 16 bits left to align it to the higher part of the port*/
+			GPIOA->ODR |= (((u32) value) << 16);
 		break;
 
 	case GPIO_PortB:
 		if (position == GPIO_LOW_PORT)
 			GPIOB->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOB->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit u then shift 16 bits left to align it to the higher part of the port*/
+			GPIOB->ODR |= (((u32) value) << 16);
 		break;
 
 	case GPIO_PortC:
 		if (position == GPIO_LOW_PORT)
 			GPIOC->ODR |= (value & 0x00FF);
 		else
-			/* Cast first to 32bit uint then shift 16 bits left to align it to the higher part of the port*/
-			GPIOC->ODR |= (((uint32) value) << 16);
+			/* Cast first to 32bit u then shift 16 bits left to align it to the higher part of the port*/
+			GPIOC->ODR |= (((u32) value) << 16);
 		break;
 
 	default:
@@ -300,8 +300,8 @@ void GPIO_setPortValue_H_L(uint8 port_num, uint8 position, uint16 value) {
 	}
 }
 
-void GPIO_lockPin(uint8 port_num, uint16 pins) {
-	uint32 lock_val = (1 << 16) | pins;
+void GPIO_lockPin(u8 port_num, u16 pins) {
+	u32 lock_val = (1 << 16) | pins;
 	switch (port_num) {
 	case GPIO_PortA:
 		WRITE_PORT(GPIOA->LCKR, lock_val);
@@ -332,9 +332,9 @@ void GPIO_lockPin(uint8 port_num, uint16 pins) {
 	}
 }
 
-void GPIO_lockPort(uint8 port_num) {
+void GPIO_lockPort(u8 port_num) {
 
-	uint32 lock_val = 0x0001FFFF;
+	u32 lock_val = 0x0001FFFF;
 	switch (port_num) {
 	case GPIO_PortA:
 		WRITE_PORT(GPIOA->LCKR, lock_val);
