@@ -737,7 +737,7 @@ CAN_Status_Typedef CAN_removeDeviceFromBus(u32 a_devID,
 				if (CAN1->sFilterRegister[deviceFilterIdx].FR1
 						== FRx_checkVal) {
 
-					/* Deactivate filter to modift FiRx registers*/
+					/* Deactivate filter to modify FiRx registers*/
 					CLR_BIT(CAN1->FA1R, deviceFilterIdx);
 					/* Set FR1 to zero to know it is unused in the future*/
 					CAN1->sFilterRegister[deviceFilterIdx].FR1 = 0;
