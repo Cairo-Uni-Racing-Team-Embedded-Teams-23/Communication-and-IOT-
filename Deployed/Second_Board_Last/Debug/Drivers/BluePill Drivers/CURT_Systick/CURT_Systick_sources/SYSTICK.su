@@ -1,8 +1,0 @@
-SYSTICK.c:35:6:STK_init	4	static
-SYSTICK.c:69:6:STK_stopInterval	4	static
-SYSTICK.c:85:5:STK_getElapsedTime	4	static
-SYSTICK.c:90:5:STK_getRemainingTime	4	static
-SYSTICK.c:95:6:STK_setBusyWait	24	static
-SYSTICK.c:115:6:STK_setIntervalSingle	16	static
-SYSTICK.c:141:6:STK_setIntervalPeriodic	16	static
-SYSTICK.c:166:6:SysTick_Handler	8	static
