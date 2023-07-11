@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;BMS_CAN/BluePill Drivers/CURT_USART/CURT_USART_headers/USART_ptivate.h&apos; to &apos;USART_private.h&apos;" description="Rename resource &apos;USART_ptivate.h&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="BluePill Drivers/CURT_USART/CURT_USART_headers/USART_ptivate.h" name="USART_private.h" stamp="1687708154283" updateReferences="true"/>
+</session>

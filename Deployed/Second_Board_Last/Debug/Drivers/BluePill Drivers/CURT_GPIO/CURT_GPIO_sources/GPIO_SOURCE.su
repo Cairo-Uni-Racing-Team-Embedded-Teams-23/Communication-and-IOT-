@@ -1,0 +1,12 @@
+GPIO_SOURCE.c:24:6:GPIO_setupPinMode	16	static
+GPIO_SOURCE.c:77:6:GPIO_setPinValue	16	static
+GPIO_SOURCE.c:109:4:GPIO_getPinValue	16	static
+GPIO_SOURCE.c:140:6:GPIO_setupPortMode	24	static
+GPIO_SOURCE.c:160:6:GPIO_writePort	16	static
+GPIO_SOURCE.c:177:5:GPIO_getPort	16	static
+GPIO_SOURCE.c:201:6:GPIO_togglePinValue	16	static
+GPIO_SOURCE.c:220:6:GPIO_enablePortClock	16	static
+GPIO_SOURCE.c:237:6:GPIO_setPortDirection_H_L	24	static
+GPIO_SOURCE.c:270:6:GPIO_setPortValue_H_L	16	static
+GPIO_SOURCE.c:303:6:GPIO_lockPin	24	static
+GPIO_SOURCE.c:335:6:GPIO_lockPort	24	static

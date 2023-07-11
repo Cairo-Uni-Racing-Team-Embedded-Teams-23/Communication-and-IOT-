@@ -1,0 +1,6 @@
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:15:6:MUSART_voidInit	24	static
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:92:6:MUSART_voidSendChar	16	static
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:99:4:MUSART_voidReceiveChar	16	static
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:106:6:MUSART_voidSendString	24	static
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:114:6:MUSART_voidReceiveString	32	static
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/CURT_USART/CURT_USART_sources/USART_source.c:125:5:MUSART_u32ReceiveInteger	24	static

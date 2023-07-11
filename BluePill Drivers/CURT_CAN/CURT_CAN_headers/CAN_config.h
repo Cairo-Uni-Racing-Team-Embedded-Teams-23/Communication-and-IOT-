@@ -61,9 +61,9 @@
 #define CAN1_MODE CAN_NORMAL_MODE
 
 #define CAN1_RESYNC_JUMP_WIDTH 0x01
-#define CAN1_TIME_SEGMENT_1 0x01
-#define CAN1_TIME_SEGMENT_2 0x00
-#define CAN1_BAUD_RATE_PRESCALER (8UL)
+#define CAN1_TIME_SEGMENT_1 0x03
+#define CAN1_TIME_SEGMENT_2 0x03
+#define CAN1_BAUD_RATE_PRESCALER (16UL)
 
 /*
 	_________ CAN 2 Configurations _______________

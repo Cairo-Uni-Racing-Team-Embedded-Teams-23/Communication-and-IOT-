@@ -59,47 +59,47 @@ int main(void) {
 
 		/*--------------------Standard identifier messages------------------*/
 
-		CAN_sendMessage(msg1, 4, CAN_STANDARD_IDENTIFIER, 0x7CD);
-		dumb_delay();
-
-		CAN_sendMessage(msg2, 5, CAN_STANDARD_IDENTIFIER, 0x7BD);
-		dumb_delay();
-
-		//---------Invalid: Expected to fail
-		CAN_sendMessage(invalid_msg, 8, CAN_STANDARD_IDENTIFIER, 0xabc);
-		dumb_delay();
-
-		CAN_sendMessage(msg3, 5, CAN_STANDARD_IDENTIFIER, 0x792);
-		dumb_delay();
-
-		CAN_sendMessage(msg4, 2, CAN_STANDARD_IDENTIFIER, 0x792);
-		dumb_delay();
-
-		//---------Invalid: Expected to fail
-		CAN_sendMessage(invalid_msg, 8, CAN_STANDARD_IDENTIFIER, 0xFAC);
-		dumb_delay();
-
-		/*--------------------Extended identifier messages------------------*/
-
-		//---------Invalid: Expected to fail
-		CAN_sendMessage(invalid_msg, 8, CAN_EXTENDED_IDENTIFIER, 0xAFFC7B2);
-		dumb_delay();
-
-		CAN_sendMessage(msg1, 4, CAN_EXTENDED_IDENTIFIER, 0x3C7A2);
-		dumb_delay();
-
-		CAN_sendMessage(msg2, 5, CAN_EXTENDED_IDENTIFIER, 0x3C7A2);
-		dumb_delay();
-
-		CAN_sendMessage(msg3, 5, CAN_EXTENDED_IDENTIFIER, 0x299A2);
-		dumb_delay();
-
-		//---------Invalid: Expected to fail
-		CAN_sendMessage(invalid_msg, 8, CAN_EXTENDED_IDENTIFIER, 0xAFF);
-		dumb_delay();
-
-		CAN_sendMessage(msg4, 2, CAN_EXTENDED_IDENTIFIER, 0x299A2);
-		dumb_delay();
+		CAN_sendMessage(msg1, 4, CAN_STANDARD_IDENTIFIER, 0x6AC);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg2, 5, CAN_STANDARD_IDENTIFIER, 0x7BD);
+//		dumb_delay();
+//
+//		//---------Invalid: Expected to fail
+//		CAN_sendMessage(invalid_msg, 8, CAN_STANDARD_IDENTIFIER, 0xabc);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg3, 5, CAN_STANDARD_IDENTIFIER, 0x792);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg4, 2, CAN_STANDARD_IDENTIFIER, 0x792);
+//		dumb_delay();
+//
+//		//---------Invalid: Expected to fail
+//		CAN_sendMessage(invalid_msg, 8, CAN_STANDARD_IDENTIFIER, 0xFAC);
+//		dumb_delay();
+//
+//		/*--------------------Extended identifier messages------------------*/
+//
+//		//---------Invalid: Expected to fail
+//		CAN_sendMessage(invalid_msg, 8, CAN_EXTENDED_IDENTIFIER, 0xAFFC7B2);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg1, 4, CAN_EXTENDED_IDENTIFIER, 0x3C7A2);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg2, 5, CAN_EXTENDED_IDENTIFIER, 0x3C7A2);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg3, 5, CAN_EXTENDED_IDENTIFIER, 0x299A2);
+//		dumb_delay();
+//
+//		//---------Invalid: Expected to fail
+//		CAN_sendMessage(invalid_msg, 8, CAN_EXTENDED_IDENTIFIER, 0xAFF);
+//		dumb_delay();
+//
+//		CAN_sendMessage(msg4, 2, CAN_EXTENDED_IDENTIFIER, 0x299A2);
+//		dumb_delay();
 
 		while (1)
 			;

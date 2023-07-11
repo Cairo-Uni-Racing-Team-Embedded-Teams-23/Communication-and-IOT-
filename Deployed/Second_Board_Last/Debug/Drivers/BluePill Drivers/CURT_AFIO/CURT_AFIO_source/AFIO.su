@@ -1,0 +1,2 @@
+AFIO.c:23:6:AFIO_setEXTIConfiguration	16	static
+AFIO.c:64:6:AFIO_enableClock	8	static

@@ -20,7 +20,7 @@
 
 #include "../../LIB/STD_TYPES.h"
 #include "../CURT_CAN_headers/CAN_interface.h"
-
+#include "stm32f103xb.h"
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
@@ -32,37 +32,37 @@
  * @brief
  *
  */
-typedef struct
-{
-    volatile u32 TIR;
-    volatile u32 TDTR;
-    volatile u32 TDLR;
-    volatile u32 TDHR;
-} CAN_TxMailBox_TypeDef;
+//typedef struct
+//{
+//    volatile u32 TIR;
+//    volatile u32 TDTR;
+//    volatile u32 TDLR;
+//    volatile u32 TDHR;
+//} CAN_TxMailBox_TypeDef;
 
 /**
  * @struct
  * @brief
  *
  */
-typedef struct
-{
-    volatile u32 RIR;
-    volatile u32 RDTR;
-    volatile u32 RDLR;
-    volatile u32 RDHR;
-} CAN_FIFOMailBox_TypeDef;
+//typedef struct
+//{
+//    volatile u32 RIR;
+//    volatile u32 RDTR;
+//    volatile u32 RDLR;
+//    volatile u32 RDHR;
+//} CAN_FIFOMailBox_TypeDef;
 
 /**
  * @struct
  * @brief
  *
  */
-typedef struct
-{
-    volatile u32 FR1;
-    volatile u32 FR2;
-} CAN_FilterRegister_TypeDef;
+//typedef struct
+//{
+//    volatile u32 FR1;
+//    volatile u32 FR2;
+//} CAN_FilterRegister_TypeDef;
 
 /**
  * @union
@@ -110,34 +110,34 @@ typedef union
  * @brief
  *
  */
-typedef struct
-{
-    volatile u32 MCR;
-    volatile u32 MSR;
-    volatile u32 TSR;
-    volatile u32 RF0R;
-    volatile u32 RF1R;
-    volatile u32 IER;
-    volatile u32 ESR;
-    volatile u32 BTR;
-    u32 RESERVED0[88];
-    CAN_TxMailBox_TypeDef sTxMailBox[3];
-    CAN_FIFOMailBox_TypeDef sFIFOMailBox[2];
-    u32 RESERVED1[12];
-    volatile u32 FMR;
-    volatile u32 FM1R;
-    u32 RESERVED2;
-    volatile u32 FS1R;
-    u32 RESERVED3;
-    volatile u32 FFA1R;
-    u32 RESERVED4;
-    volatile u32 FA1R;
-    u32 RESERVED5[8];
-    CAN_FilterRegister_TypeDef sFilterRegister[28];
+//typedef struct
+//{
+//    volatile u32 MCR;
+//    volatile u32 MSR;
+//    volatile u32 TSR;
+//    volatile u32 RF0R;
+//    volatile u32 RF1R;
+//    volatile u32 IER;
+//    volatile u32 ESR;
+//    volatile u32 BTR;
+//    u32 RESERVED0[88];
+//    CAN_TxMailBox_TypeDef sTxMailBox[3];
+//    CAN_FIFOMailBox_TypeDef sFIFOMailBox[2];
+//    u32 RESERVED1[12];
+//    volatile u32 FMR;
+//    volatile u32 FM1R;
+//    u32 RESERVED2;
+//    volatile u32 FS1R;
+//    u32 RESERVED3;
+//    volatile u32 FFA1R;
+//    u32 RESERVED4;
+//    volatile u32 FA1R;
+//    u32 RESERVED5[8];
+//    CAN_FilterRegister_TypeDef sFilterRegister[28];
+//
+//} CAN_TypeDef;
 
-} CAN_TypeDef;
-
-#define CAN1 ((CAN_TypeDef *)(CAN1_BASE_ADDRESS))
+//#define CAN1 ((CAN_TypeDef *)(CAN1_BASE_ADDRESS))
 #define CAN2 ((CAN_TypeDef *)(CAN2_BASE_ADDRESS))
 
 /**
@@ -190,7 +190,7 @@ typedef enum
     AWUM,
     ABOM,
     TTCM,
-    RESET = 15,
+    RST = 15,
     DBF
 } CAN_MCR;
 

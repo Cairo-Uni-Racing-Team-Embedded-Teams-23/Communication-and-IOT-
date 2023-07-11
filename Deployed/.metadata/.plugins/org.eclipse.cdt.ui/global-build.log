@@ -1,0 +1,7 @@
+09:57:14 **** Incremental Build of configuration Debug for project EVMS_CubeMX ****
+make -j16 all 
+arm-none-eabi-size   EVMS_CubeMX.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10808	     20	   1692	  12520	   30e8	EVMS_CubeMX.elf
+Finished building: default.size.stdout
+ 

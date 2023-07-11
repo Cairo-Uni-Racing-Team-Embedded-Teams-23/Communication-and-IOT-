@@ -1,0 +1,6 @@
+USART_source.c:15:6:MUSART_voidInit	1
+USART_source.c:92:6:MUSART_voidSendChar	2
+USART_source.c:99:4:MUSART_voidReceiveChar	2
+USART_source.c:106:6:MUSART_voidSendString	2
+USART_source.c:114:6:MUSART_voidReceiveString	2
+USART_source.c:125:5:MUSART_u32ReceiveInteger	2

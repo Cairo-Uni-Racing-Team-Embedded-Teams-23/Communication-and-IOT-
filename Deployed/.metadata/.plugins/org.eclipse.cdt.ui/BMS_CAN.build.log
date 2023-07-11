@@ -1,0 +1,49 @@
+19:52:46 **** Incremental Build of configuration Debug for project BMS_CAN ****
+make -j16 all 
+arm-none-eabi-gcc "../Src/main.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DSTM32 -DSTM32F1 -DSTM32F103C8Tx -c -I../Inc -I"C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers" -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Src/main.d" -MT"Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Src/main.o"
+In file included from c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\usart_interface.h:4,
+                 from ../Src/main.c:17:
+../Src/main.c: In function 'initUSART':
+c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\USART_private.h:22:16: warning: passing argument 1 of 'MUSART_voidInit' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+   22 | #define USART3 ((volatile USART_Regs*)USART3_BASE_ADDRESS)
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Src/main.c:62:18: note: in expansion of macro 'USART3'
+   62 |  MUSART_voidInit(USART3);
+      |                  ^~~~~~
+In file included from ../Src/main.c:17:
+c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\usart_interface.h:21:34: note: expected 'USART_Regs *' but argument is of type 'volatile USART_Regs *'
+   21 | void MUSART_voidInit(USART_Regs *USARTx);
+      |                      ~~~~~~~~~~~~^~~~~~
+In file included from c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\usart_interface.h:4,
+                 from ../Src/main.c:17:
+../Src/main.c: In function 'main':
+c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\USART_private.h:22:16: warning: passing argument 1 of 'MUSART_voidSendChar' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+   22 | #define USART3 ((volatile USART_Regs*)USART3_BASE_ADDRESS)
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../Src/main.c:85:24: note: in expansion of macro 'USART3'
+   85 |    MUSART_voidSendChar(USART3, buff[i]);
+      |                        ^~~~~~
+In file included from ../Src/main.c:17:
+c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill drivers\curt_usart\curt_usart_headers\usart_interface.h:24:38: note: expected 'USART_Regs *' but argument is of type 'volatile USART_Regs *'
+   24 | void MUSART_voidSendChar(USART_Regs *USARTx, u8 copy_u8Char);
+      |                          ~~~~~~~~~~~~^~~~~~
+arm-none-eabi-gcc -o "BMS_CAN.elf" @"objects.list"  -lrdimon -mcpu=cortex-m3 -T"C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\BMS_CAN\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BMS_CAN.map" -Wl,--gc-sections -static -specs=rdimon.specs --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: BMS_CAN.elf
+ 
+arm-none-eabi-size   BMS_CAN.elf 
+arm-none-eabi-objdump -h -S  BMS_CAN.elf  > "BMS_CAN.list"
+arm-none-eabi-objcopy  -O ihex  BMS_CAN.elf  "BMS_CAN.hex"
+   text	   data	    bss	    dec	    hex	filename
+   5932	      8	   1632	   7572	   1d94	BMS_CAN.elf
+arm-none-eabi-objcopy  -O binary  BMS_CAN.elf  "BMS_CAN.bin"
+Finished building: default.size.stdout
+ 
+Finished building: BMS_CAN.hex
+Finished building: BMS_CAN.list
+Finished building: BMS_CAN.bin
+ 
+ 
+ 
+
+19:52:46 Build Finished. 0 errors, 2 warnings. (took 438ms)
+

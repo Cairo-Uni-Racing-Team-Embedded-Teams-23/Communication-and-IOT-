@@ -1,0 +1,4 @@
+RCC_source.c:30:6:RCC_voidInitSysClock	2
+RCC_source.c:102:6:RCC_voidEnableClock	6
+RCC_source.c:133:6:RCC_voidDisableClock	6
+RCC_source.c:156:6:RCC_configMCO	2
