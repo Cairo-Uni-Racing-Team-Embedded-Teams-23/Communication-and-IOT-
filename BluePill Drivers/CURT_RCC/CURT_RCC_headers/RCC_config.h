@@ -23,11 +23,11 @@
 
 				 RCC_HSE_CRYSTAL     	;High speed Crystal on the external Pin
 				 RCC_HSE_RC				;High speed RC oscillator on the External pin
-				 RCC_HSI				;High speed RC oscillator Interanl
+				 RCC_HSI				;High speed RC oscillator Internal
 				 RCC_PLL             	;Phase Lock Loop
 	*/
 
-#define RCC_CLOCK_TYPE RCC_HSE_CRYSTAL
+#define RCC_CLOCK_TYPE RCC_PLL
 
 /* Options :
 
@@ -46,17 +46,27 @@
 /* Options :
 
 	RCC PLL values:
-		RCC_PLLMUL_4	; PLL input clock x4;
-		RCC_PLLMUL_5	; PLL input clock x5
-		RCC_PLLMUL_6	; PLL input clock x6
-		RCC_PLLMUL_6_5	; PLL input clock x6.5
-		RCC_PLLMUL_7  	; PLL input clock x7
-		RCC_PLLMUL_8  	; PLL input clock x8
-		RCC_PLLMUL_9  	; PLL input clock x9
+
+	0000: RCC_PLLMULValue_2
+	0001: RCC_PLLMULValue_3
+	0010: RCC_PLLMULValue_4
+	0011: RCC_PLLMULValue_5
+	0100: RCC_PLLMULValue_6
+	0101: RCC_PLLMULValue_7
+	0110: RCC_PLLMULValue_8
+	0111: RCC_PLLMULValue_9
+	1000: RCC_PLLMULValue_10
+	1001: RCC_PLLMULValue_11
+	1010: RCC_PLLMULValue_12
+	1011: RCC_PLLMULValue_13
+	1100: RCC_PLLMULValue_14
+	1101: RCC_PLLMULValue_15
+	1110: RCC_PLLMULValue_16
+	1111: RCC_PLLMULValue_16_
 */
 
 #if RCC_CLOCK_TYPE == RCC_PLL
-#define RCC_PLL_MUL_VAL RCC_PLLMUL_9
+#define RCC_PLL_MUL_VAL RCC_PLLMULValue_3
 #endif
 
 #endif

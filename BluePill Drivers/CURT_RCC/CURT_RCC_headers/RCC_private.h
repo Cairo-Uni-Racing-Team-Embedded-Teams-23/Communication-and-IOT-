@@ -35,6 +35,8 @@ typedef struct
 
 #define RCC ((RCC_TypeDef *)(RCC_BASE_ADDRESS))
 
+#define RCC_HSI_VALUE (8000000UL)
+#define RCC_HSE_VALUE (16000000UL)
 /* RCC Control Register bit positions*/
 #define RCC_CR_PLL (24)
 #define RCC_CR_HSEBYP (18)
@@ -45,6 +47,7 @@ typedef struct
 #define RCC_CFGR_PLLMUL (18)
 #define RCC_CFGR_PLLSRC (16)
 #define RCC_CFGR_PLLXTPRE (17)
+#define RCC_CFGR_SWS (2)
 
 /*
 
@@ -64,13 +67,22 @@ typedef struct
  */
 typedef enum
 {
-  RCC_PLLMUL_4 = 0b0010,   /*< PLL Input clock x4*/
-  RCC_PLLMUL_5 = 0b0011,   /*< PLL Input clock x5*/
-  RCC_PLLMUL_6 = 0b0100,   /*< PLL Input clock x6*/
-  RCC_PLLMUL_6_5 = 0b1101, /*< PLL Input clock x6.5*/
-  RCC_PLLMUL_7 = 0b0101,   /*< PLL Input clock x7*/
-  RCC_PLLMUL_8 = 0b0110,   /*< PLL Input clock x8*/
-  RCC_PLLMUL_9 = 0b0111,   /*< PLL Input clock x9*/
+  RCC_PLLMULValue_2 = 0000,
+  RCC_PLLMULValue_3 = 0001,
+  RCC_PLLMULValue_4 = 0010,
+  RCC_PLLMULValue_5 = 0011,
+  RCC_PLLMULValue_6 = 0100,
+  RCC_PLLMULValue_7 = 0101,
+  RCC_PLLMULValue_8 = 0110,
+  RCC_PLLMULValue_9 = 0111,
+  RCC_PLLMULValue_10 = 1000,
+  RCC_PLLMULValue_11 = 1001,
+  RCC_PLLMULValue_12 = 1010,
+  RCC_PLLMULValue_13 = 1011,
+  RCC_PLLMULValue_14 = 1100,
+  RCC_PLLMULValue_15 = 1101,
+  RCC_PLLMULValue_16 = 1110,
+  RCC_PLLMULValue_16_ = 1111
 } RCC_PLLMULValueType;
 
 // ---------------- Clock Type -----------------------------------------------
@@ -87,5 +99,4 @@ typedef enum
 #define RCC_PLL_IN_HSE 2
 
 // ------------------------------------------------------------------------------
-
 #endif
