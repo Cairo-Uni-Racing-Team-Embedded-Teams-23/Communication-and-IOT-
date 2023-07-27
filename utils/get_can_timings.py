@@ -32,8 +32,6 @@ Author: Hazem Montasser
 Date: July 12, 2023
 """
 
-# Rest of the module code goes here...
-
 ERROR_THRESHOLD: float = 0.0001
 PCLK: int = 0
 BAUDRATE: int = 0

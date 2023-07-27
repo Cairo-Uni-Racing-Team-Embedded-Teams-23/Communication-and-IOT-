@@ -6,7 +6,6 @@ from numpy.random import MT19937
 from numpy.random import RandomState, SeedSequence
 import numpy as np
 from logger import setup_logger
-import logging
 
 
 class LocalSearch:

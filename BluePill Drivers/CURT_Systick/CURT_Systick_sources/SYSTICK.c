@@ -13,11 +13,11 @@
  *                              Includes                                       *
  *******************************************************************************/
 
+#include "../../LIB/BIT_MATH.h"
+#include "../../LIB/STD_TYPES.h"
+#include "../CURT_Systick_headers/SYSTICK_CONFIG.h"
 #include "../CURT_Systick_headers/SYSTICK_INTERFACE.h"
 #include "../CURT_Systick_headers/SYSTICK_REG.h"
-#include "../CURT_Systick_headers/SYSTICK_CONFIG.h"
-#include "../../LIB/STD_TYPES.h"
-#include "../../LIB/BIT_MATH.h"
 
 /*******************************************************************************
  *                        Private global variables                             *
@@ -29,7 +29,7 @@ static volatile u32 STK_ticksGoal = 0;
 static volatile u32 STK_ticks = 0;
 
 /*******************************************************************************
- *                         Private functions definitions                       *
+ *                         Public functions definitions                        *
  *******************************************************************************/
 
 void STK_init(void)

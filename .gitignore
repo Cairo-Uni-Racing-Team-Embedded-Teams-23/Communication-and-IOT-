@@ -1,6 +1,7 @@
 # Ignore everything
 /*
-
+.metadata
+__pycache__
 # Ignore EVERYTHING except bluepill drivers folder
 # To add more folders, add rules like this below:
 #/  ! {FOLDER or FILE_NAME}
@@ -10,6 +11,6 @@
 !/Example Projects/CAN_Test_Sender_Interrupt
 !/Example Projects/CAN_Test_Receiver_Interrupt
 !/Notes
-!/Deployed
+!/Deployed/
 !/utils
 /BluePill Drivers/.obsidian
