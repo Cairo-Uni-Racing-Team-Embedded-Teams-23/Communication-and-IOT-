@@ -1,7 +1,0 @@
-10:36:15 **** Build of configuration Debug for project EVMS_Second_Board_CubeMX ****
-make -j16 all 
-arm-none-eabi-size   EVMS_Second_Board_CubeMX.elf 
-   text	   data	    bss	    dec	    hex	filename
-  13748	     20	   1716	  15484	   3c7c	EVMS_Second_Board_CubeMX.elf
-Finished building: default.size.stdout
- 
