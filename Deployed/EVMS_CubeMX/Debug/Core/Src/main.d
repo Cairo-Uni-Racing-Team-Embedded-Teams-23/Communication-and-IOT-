@@ -24,10 +24,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h \
+ ../Core/Inc/EVMS2.h ../Core/Inc/main.h \
+ ../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h \
+ ../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../../LIB/STD_TYPES.h \
+ ../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/CAN_private.h \
+ ../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/../../LIB/STD_TYPES.h \
+ ../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/../CURT_CAN_headers/CAN_interface.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
@@ -55,8 +57,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h:
+../Core/Inc/EVMS2.h:
+../Core/Inc/main.h:
+../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h:
+../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../../LIB/STD_TYPES.h:
+../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/CAN_private.h:
+../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/../../LIB/STD_TYPES.h:
+../BluePill\ Drivers/../BluePill\ Drivers/CURT_CAN/CURT_CAN_headers/../CURT_CAN_headers/../CURT_CAN_headers/CAN_interface.h:
 ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h:

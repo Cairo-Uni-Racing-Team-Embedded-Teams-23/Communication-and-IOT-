@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
-	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="-specs=rdimon.specs"/>
 	<item key="LastUsedHeaderTemplate" value="Default C header template"/>
+	<item key="org.eclipse.cdt.utils.ui.controls.FileListControl" value="C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\BluePill Drivers\LIB"/>
 	<section name="completion_proposal_size">
 	</section>
 	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration">
 	</section>
 	<section name="OptionalMessageDialog.hide.">
-		<item key="askReindex" value="false"/>
+		<item key="askReindex" value="true"/>
 		<item key="askReindex.detail" value="0"/>
 	</section>
 	<section name="CResourceRenameRefactoringInputPage">
 		<item key="updateReferences" value="true"/>
+	</section>
+	<section name="RenameInformationPopup">
+	</section>
+	<section name="CRenameRefactoringInputPage">
+	</section>
+	<section name="PDOMSearchPage">
+		<item key="caseSensitive" value="false"/>
+		<item key="searchFlags" value="39"/>
+		<list key="previousPatterns">
+			<item value="EVMS_RELAY_Pin"/>
+			<item value="FLASH_ACR"/>
+			<item value="FLASH_ACR_LATENCY"/>
+			<item value="*FLASH_ACR_PRFTEN*"/>
+			<item value="FLASH_ACR_PRFTEN*"/>
+			<item value="FLASH_ACR_PRFTEN"/>
+			<item value="USBD_CDC_TxCpltCallback*"/>
+			<item value="*CDC_Transmit_FS*"/>
+			<item value="CDC_Transmit_FS*"/>
+			<item value="CDC_Transmit_FS"/>
+			<item value="*USB_EPStartXfer*"/>
+			<item value="USB_EPStartXfer*"/>
+			<item value="*USBD_CDC_TxCpltCallback*"/>
+			<item value="*CDC_Init_FS*"/>
+			<item value="CDC_Init_FS*"/>
+			<item value="CDC_Init_FS"/>
+			<item value="USBD_CDC_TxCpltCallback"/>
+			<item value="HAL_UART_IRQHandler"/>
+			<item value="userayxlsp_signaturenvim"/>
+			<item value="__HAL_AFIO_REMAP_CAN1_2"/>
+		</list>
+	</section>
+	<section name="org.eclipse.cdt.ui.text.hover.CMacroExpansionExploration.internal">
+		<item key="size.width" value="1116"/>
+		<item key="size.height" value="337"/>
 	</section>
 </section>

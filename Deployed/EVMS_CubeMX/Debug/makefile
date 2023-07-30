@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -38,34 +38,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := EVMS_CubeMX
+BUILD_ARTIFACT_NAME := EVMS_Second_Board_CubeMX
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-EVMS_CubeMX.elf \
+EVMS_Second_Board_CubeMX.elf \
 
 MAP_FILES += \
-EVMS_CubeMX.map \
+EVMS_Second_Board_CubeMX.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-EVMS_CubeMX.list \
+EVMS_Second_Board_CubeMX.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: EVMS_CubeMX.elf secondary-outputs
+main-build: EVMS_Second_Board_CubeMX.elf secondary-outputs
 
 # Tool invocations
-EVMS_CubeMX.elf EVMS_CubeMX.map: $(OBJS) $(USER_OBJS) C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_CubeMX\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "EVMS_CubeMX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_CubeMX\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EVMS_CubeMX.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+EVMS_Second_Board_CubeMX.elf EVMS_Second_Board_CubeMX.map: $(OBJS) $(USER_OBJS) C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_CubeMX\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "EVMS_Second_Board_CubeMX.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_CubeMX\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EVMS_Second_Board_CubeMX.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -74,14 +74,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-EVMS_CubeMX.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "EVMS_CubeMX.list"
+EVMS_Second_Board_CubeMX.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "EVMS_Second_Board_CubeMX.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) EVMS_CubeMX.elf EVMS_CubeMX.list EVMS_CubeMX.map default.size.stdout
+	-$(RM) EVMS_Second_Board_CubeMX.elf EVMS_Second_Board_CubeMX.list EVMS_Second_Board_CubeMX.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)

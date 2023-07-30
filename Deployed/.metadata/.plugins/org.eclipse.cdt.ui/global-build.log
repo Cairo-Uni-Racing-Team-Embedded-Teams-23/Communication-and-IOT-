@@ -1,7 +1,91 @@
-09:57:14 **** Incremental Build of configuration Debug for project EVMS_CubeMX ****
+01:37:01 **** Incremental Build of configuration Debug for project EVMS_First_board ****
 make -j16 all 
-arm-none-eabi-size   EVMS_CubeMX.elf 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m3 -std=gnu18 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I"C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB" -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -Os -ffunction-sections -fdata-sections -Wall -Wextra -pedantic -v -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/main.o"
+Using built-in specs.
+Reading specs from C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/nano.specs
+rename spec link to nano_link
+rename spec link_gcc_c_sequence to nano_link_gcc_c_sequence
+rename spec cpp_unique_options to nano_cpp_unique_options
+COLLECT_GCC=arm-none-eabi-gcc
+Target: arm-none-eabi
+Configured with: /build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/src/gcc/configure --build=x86_64-linux-gnu --host=x86_64-w64-mingw32 --target=arm-none-eabi --prefix=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw --libexecdir=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/lib --infodir=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/share/doc/gcc-arm-none-eabi/info --mandir=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/share/doc/gcc-arm-none-eabi/man --htmldir=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/share/doc/gcc-arm-none-eabi/html --pdfdir=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/share/doc/gcc-arm-none-eabi/pdf --enable-languages=c,c++ --enable-mingw-wildcard --disable-decimal-float --disable-libffi --disable-libgomp --disable-libmudflap --disable-libquadmath --disable-libssp --disable-libstdcxx-pch --disable-nls --disable-shared --disable-threads --disable-tls --with-gnu-as --with-gnu-ld --with-headers=yes --with-newlib --with-python-dir=share/gcc-arm-none-eabi --with-sysroot=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/arm-none-eabi --with-libiconv-prefix=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/build-mingw/host-libs/usr --with-gmp=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/build-mingw/host-libs/usr --with-mpfr=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/build-mingw/host-libs/usr --with-mpc=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/build-mingw/host-libs/usr --with-isl=/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/build-mingw/host-libs/usr --with-host-libstdcxx='-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm' --with-pkgversion='GNU Tools for STM32 11.3.rel1.20230519-1941' --with-multilib-list=rmprofile,aprofile
+Thread model: single
+Supported LTO compression algorithms: zlib
+gcc version 11.3.1 20220712 (GNU Tools for STM32 11.3.rel1.20230519-1941) 
+COLLECT_GCC_OPTIONS='-mcpu=cortex-m3' '-std=gnu17' '-g3' '-D' 'DEBUG' '-D' 'USE_HAL_DRIVER' '-D' 'STM32F103xB' '-c' '-I' '../Core/Inc' '-I' 'C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc' '-I' '../Drivers/CMSIS/Device/ST/STM32F1xx/Include' '-I' '../Drivers/CMSIS/Include' '-I' '../USB_DEVICE/App' '-I' '../USB_DEVICE/Target' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Core/Inc' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc' '-Os' '-ffunction-sections' '-fdata-sections' '-Wall' '-Wextra' '-Wpedantic' '-v' '-fstack-usage' '-fcyclomatic-complexity' '-MMD' '-MP' '-MF' 'Core/Src/main.d' '-MT' 'Core/Src/main.o' '-specs=nano.specs' '-mfloat-abi=soft' '-mthumb' '-o' 'Core/Src/main.o' '-mlibarch=armv7-m' '-march=armv7-m' '-dumpdir' 'Core/Src/'
+ C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/cc1.exe -isystem =/include/newlib-nano -quiet -v -I ../Core/Inc -I C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -imultilib thumb/v7-m/nofp -iprefix C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../lib/gcc/arm-none-eabi/11.3.1/ -isysroot C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../arm-none-eabi -MMD Core/Src/main.d -MF Core/Src/main.d -MP -MT Core/Src/main.o -dD -D__USES_INITFINI__ -D DEBUG -D USE_HAL_DRIVER -D STM32F103xB ../Core/Src/main.c -quiet -dumpdir Core/Src/ -dumpbase main.c -dumpbase-ext .c -mcpu=cortex-m3 -mfloat-abi=soft -mthumb -mlibarch=armv7-m -march=armv7-m -g3 -Os -Wall -Wextra -Wpedantic -std=gnu17 -version -ffunction-sections -fdata-sections -fstack-usage -fcyclomatic-complexity -o C:\Users\h4z3m\AppData\Local\Temp\ccTiKGEC.s
+GNU C17 (GNU Tools for STM32 11.3.rel1.20230519-1941) version 11.3.1 20220712 (arm-none-eabi)
+	compiled by GNU C version 7.3-win32 20180312, GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../arm-none-eabi/build/gnu-tools-for-stm32_11.3.rel1.20230519-1941/install-mingw/lib/gcc/arm-none-eabi/11.3.1/../../../../include"
+ignoring nonexistent directory "C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../arm-none-eabi/usr/include"
+ignoring nonexistent directory "../USB_DEVICE/App"
+ignoring nonexistent directory "../USB_DEVICE/Target"
+ignoring nonexistent directory "../Middlewares/ST/STM32_USB_Device_Library/Core/Inc"
+ignoring nonexistent directory "../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc"
+#include "..." search starts here:
+#include <...> search starts here:
+ ../Core/Inc
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
+ ../Drivers/STM32F1xx_HAL_Driver/Inc
+ ../Drivers/CMSIS/Device/ST/STM32F1xx/Include
+ ../Drivers/CMSIS/Include
+ C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../arm-none-eabi/include/newlib-nano
+ C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../lib/gcc/arm-none-eabi/11.3.1/include
+ C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../lib/gcc/arm-none-eabi/11.3.1/include-fixed
+ C:\ST\STM32CubeIDE_1.10.1\STM32CubeIDE\plugins\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506\tools\bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/include
+ C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/lib/gcc/../../lib/gcc/arm-none-eabi/11.3.1/include
+ C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/lib/gcc/../../lib/gcc/arm-none-eabi/11.3.1/include-fixed
+ C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/lib/gcc/../../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/include
+End of search list.
+GNU C17 (GNU Tools for STM32 11.3.rel1.20230519-1941) version 11.3.1 20220712 (arm-none-eabi)
+	compiled by GNU C version 7.3-win32 20180312, GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: bb7af03544c92f4e52aff0e366d0d072
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:101:35: warning: passing argument 2 of 'HAL_ADC_Start_DMA' from incompatible pointer type [-Wincompatible-pointer-types]
+  101 |         HAL_ADC_Start_DMA(&hadc1, ADC_values, 3);
+      |                                   ^~~~~~~~~~
+      |                                   |
+      |                                   uint16_t * {aka short unsigned int *}
+In file included from ../Core/Inc/stm32f1xx_hal_conf.h:274,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:29,
+                 from ../Core/Inc/main.h:30,
+                 from ../Core/Src/main.c:20:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_adc.h:928:78: note: expected 'uint32_t *' {aka 'long unsigned int *'} but argument is of type 'uint16_t *' {aka 'short unsigned int *'}
+  928 | HAL_StatusTypeDef       HAL_ADC_Start_DMA(ADC_HandleTypeDef* hadc, uint32_t* pData, uint32_t Length);
+      |                                                                    ~~~~~~~~~~^~~~~
+COLLECT_GCC_OPTIONS='-mcpu=cortex-m3' '-std=gnu17' '-g3' '-D' 'DEBUG' '-D' 'USE_HAL_DRIVER' '-D' 'STM32F103xB' '-c' '-I' '../Core/Inc' '-I' 'C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc' '-I' '../Drivers/CMSIS/Device/ST/STM32F1xx/Include' '-I' '../Drivers/CMSIS/Include' '-I' '../USB_DEVICE/App' '-I' '../USB_DEVICE/Target' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Core/Inc' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc' '-Os' '-ffunction-sections' '-fdata-sections' '-Wall' '-Wextra' '-Wpedantic' '-v' '-fstack-usage' '-fcyclomatic-complexity' '-MMD' '-MP' '-MF' 'Core/Src/main.d' '-MT' 'Core/Src/main.o' '-specs=nano.specs' '-mfloat-abi=soft' '-mthumb' '-o' 'Core/Src/main.o' '-mlibarch=armv7-m' '-march=armv7-m' '-dumpdir' 'Core/Src/'
+ C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/as.exe -v -I ../Core/Inc -I C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB -I ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I ../Drivers/STM32F1xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I ../Drivers/CMSIS/Include -I ../USB_DEVICE/App -I ../USB_DEVICE/Target -I ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -march=armv7-m -mfloat-abi=soft -meabi=5 -o Core/Src/main.o C:\Users\h4z3m\AppData\Local\Temp\ccTiKGEC.s
+GNU assembler version 2.38 (arm-none-eabi) using BFD version (GNU Tools for STM32 11.3.rel1.20230519-1941) 2.38.20220708
+MAKEFLAGS= -j16 
+COMPILER_PATH=C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/bin/
+LIBRARY_PATH=C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/thumb/v7-m/nofp/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../arm-none-eabi/lib/thumb/v7-m/nofp/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/;C:/ST/STM32CubeIDE_1.10.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.0.202305231506/tools/bin/../arm-none-eabi/lib/
+COLLECT_GCC_OPTIONS='-mcpu=cortex-m3' '-std=gnu17' '-g3' '-D' 'DEBUG' '-D' 'USE_HAL_DRIVER' '-D' 'STM32F103xB' '-c' '-I' '../Core/Inc' '-I' 'C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill Drivers/LIB' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy' '-I' '../Drivers/STM32F1xx_HAL_Driver/Inc' '-I' '../Drivers/CMSIS/Device/ST/STM32F1xx/Include' '-I' '../Drivers/CMSIS/Include' '-I' '../USB_DEVICE/App' '-I' '../USB_DEVICE/Target' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Core/Inc' '-I' '../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc' '-Os' '-ffunction-sections' '-fdata-sections' '-Wall' '-Wextra' '-Wpedantic' '-v' '-fstack-usage' '-fcyclomatic-complexity' '-MMD' '-MP' '-MF' 'Core/Src/main.d' '-MT' 'Core/Src/main.o' '-specs=nano.specs' '-mfloat-abi=soft' '-mthumb' '-o' 'Core/Src/main.o' '-mlibarch=armv7-m' '-march=armv7-m' '-dumpdir' 'Core/Src/main.'
+arm-none-eabi-gcc -o "EVMS_First_board.elf" @"objects.list"  -lrdimon -mcpu=cortex-m3 -T"C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_First_board\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EVMS_First_board.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: EVMS_First_board.elf
+ 
+arm-none-eabi-size   EVMS_First_board.elf 
+arm-none-eabi-objdump -h -S  EVMS_First_board.elf  > "EVMS_First_board.list"
    text	   data	    bss	    dec	    hex	filename
-  10808	     20	   1692	  12520	   30e8	EVMS_CubeMX.elf
+  13188	    104	   2344	  15636	   3d14	EVMS_First_board.elf
 Finished building: default.size.stdout
+ 
+Finished building: EVMS_First_board.list
+ 
+01:37:14 **** Incremental Build of configuration Debug for project EVMS_First_board ****
+make -j16 all 
+arm-none-eabi-gcc -o "EVMS_First_board.elf" @"objects.list"  -lrdimon -mcpu=cortex-m3 -T"C:\Users\h4z3m\Desktop\Files\College\CURT\STM32F103C8_Drivers\CURT23_Comm_iot\Deployed\EVMS_First_board\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="EVMS_First_board.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: EVMS_First_board.elf
+ 
+arm-none-eabi-size   EVMS_First_board.elf 
+arm-none-eabi-objdump -h -S  EVMS_First_board.elf  > "EVMS_First_board.list"
+   text	   data	    bss	    dec	    hex	filename
+  13188	    104	   2344	  15636	   3d14	EVMS_First_board.elf
+Finished building: default.size.stdout
+ 
+Finished building: EVMS_First_board.list
  

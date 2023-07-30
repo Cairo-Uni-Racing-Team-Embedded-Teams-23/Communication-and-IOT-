@@ -1,30 +1,32 @@
 BluePill Drivers/CURT_CAN/CURT_CAN_sources/CAN_source.o: \
  C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/CAN_source.c \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\bit_math.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_config.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_rcc\curt_rcc_headers\rcc_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_gpio\curt_gpio_headers\gpio_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_nvic\curt_nvic_headers\nvic_interface.h \
- c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\bit_math.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_config.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_can\curt_can_headers\can_private.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_rcc\curt_rcc_headers\rcc_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_gpio\curt_gpio_headers\gpio_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\curt_nvic\curt_nvic_headers\nvic_interface.h:
-c:\users\h4z3m\desktop\files\college\curt\stm32f103c8_drivers\curt23_comm_iot\bluepill\ drivers\lib\std_types.h:
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_GPIO/CURT_GPIO_headers/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_NVIC/CURT_NVIC_headers/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_RCC/CURT_RCC_headers/RCC_interface.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_RCC/CURT_RCC_headers/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../LIB/BIT_MATH.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_config.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_interface.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/CAN_private.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/../../LIB/STD_TYPES.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/../CURT_CAN_headers/CAN_interface.h \
+ C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_private.h
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_GPIO/CURT_GPIO_headers/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_NVIC/CURT_NVIC_headers/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_RCC/CURT_RCC_headers/RCC_interface.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../CURT_RCC/CURT_RCC_headers/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../LIB/BIT_MATH.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_config.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_interface.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/CAN_private.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/../../LIB/STD_TYPES.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/../CURT_CAN_headers/../CURT_CAN_headers/CAN_interface.h:
+C:/Users/h4z3m/Desktop/Files/College/CURT/STM32F103C8_Drivers/CURT23_Comm_iot/BluePill\ Drivers/CURT_CAN/CURT_CAN_sources/../CURT_CAN_headers/CAN_private.h:

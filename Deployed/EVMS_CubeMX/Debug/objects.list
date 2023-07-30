@@ -2,6 +2,7 @@
 "./BluePill Drivers/CURT_GPIO/CURT_GPIO_sources/GPIO_SOURCE.o"
 "./BluePill Drivers/CURT_NVIC/CURT_NVIC_sources/NVIC_source.o"
 "./BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.o"
+"./Core/Src/EVMS2.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f1xx_hal_msp.o"
 "./Core/Src/stm32f1xx_it.o"

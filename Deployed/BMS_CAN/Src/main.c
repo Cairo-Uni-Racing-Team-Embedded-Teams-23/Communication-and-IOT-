@@ -15,7 +15,6 @@
 #include "../BluePill Drivers/CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
 #include "../BluePill Drivers/CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../BluePill Drivers/CURT_Systick/CURT_Systick_headers/SYSTICK_INTERFACE.h"
-#include "../BluePill Drivers/CURT_USART/CURT_USART_headers/USART_interface.h"
 
 #define CAN_BUFF_SIZE (10UL)
 
@@ -56,11 +55,7 @@ void initCANPeriph() {
 }
 
 void initUSART() {
-  RCC_voidEnableClock(APB1, RCC_APB1_USART3EN);
-  GPIO_enablePortClock(GPIO_PortB);
-  GPIO_setupPinMode(GPIO_PortB, PIN10, OUTPUT_SPEED_50MHZ_AFPP);
-  GPIO_setupPinMode(GPIO_PortB, PIN11, INPUT_PULLUP_PULLDOWN);
-  MUSART_voidInit(USART3);
+
 }
 
 int main(void) {
@@ -84,7 +79,6 @@ int main(void) {
 
     toggle_led();
     for (int i = 0; i < 8; ++i) {
-      MUSART_voidSendChar(USART3, buff[i]);
     }
     dumb_delay();
   }

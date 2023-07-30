@@ -11,6 +11,7 @@ __pycache__
 !/Example Projects/CAN_Test_Sender_Interrupt
 !/Example Projects/CAN_Test_Receiver_Interrupt
 !/Notes
-!/Deployed/
+!/Deployed/EVMS_CubeMX
+!/Deployed/EVMS_First_board
 !/utils
 /BluePill Drivers/.obsidian

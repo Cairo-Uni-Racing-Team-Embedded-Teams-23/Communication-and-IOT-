@@ -21,6 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "EVMS2.h"
 #include "../BluePill Drivers/CURT_CAN/CURT_CAN_headers/CAN_interface.h"
 /* USER CODE END Includes */
 
@@ -45,7 +46,9 @@ ADC_HandleTypeDef hadc1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+u8 can_rx_data[8] = { 0 };
+u8 can_rx_len = 0; /* Should be 8 bytes */
+u32 can_rx_id = 0; /* Should be 0x6AC */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -53,9 +56,8 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_USART2_UART_Init(void);
-static void CAN_InitPeriph(void);
 /* USER CODE BEGIN PFP */
-
+void CAN_InitPeriph(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -99,22 +101,34 @@ int main(void) {
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	CAN_InitPeriph();
-	uint8_t bms_data[8] = { 0 };
-	uint8_t bms_frame_len = 0; /* Should be 8 bytes */
-	u32 bms_frame_id = 0; /* Should be 0x6AC */
-	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);
+	HAL_ADCEx_Calibration_Start(&hadc1);
+	// Start ADC Conversion
+	HAL_ADC_Start(&hadc1);
+
+	HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(BRAKE_LIGHT_RELAY_GPIO_Port, BRAKE_LIGHT_RELAY_Pin,
+			GPIO_PIN_SET);
 	while (1) {
-		if (CAN_receiveMessage(bms_data, &bms_frame_len, &bms_frame_id)
+		EVMS2_init();
+		LOGIC_voidControlBrakeLight();
+		LOGIC_uint8CheckBMS();
+		LOGIC_uint8CheckIMD();
+		LOGIC_uint8CheckBSPD();
+		LOGIC_voidControlPump();
+
+		if (CAN_receiveMessage(can_rx_data, &can_rx_len, &can_rx_id)
 				== CAN_Status_OK) {
+			HAL_UART_Transmit(&huart2, can_rx_data, can_rx_len, 20);
 			HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-			/* Delay */
-			for (int x = 0; x < 50000; ++x) {
-
-			}
+			HAL_Delay(100);
 			HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
-
 		}
 
+		if (isError() == ERROR) {
+			Error_Action();
+		} else {
+			// No action
+		}
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
@@ -184,12 +198,12 @@ static void MX_ADC1_Init(void) {
 	/** Common config
 	 */
 	hadc1.Instance = ADC1;
-	hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
-	hadc1.Init.ContinuousConvMode = DISABLE;
+	hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
+	hadc1.Init.ContinuousConvMode = ENABLE;
 	hadc1.Init.DiscontinuousConvMode = DISABLE;
 	hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
 	hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-	hadc1.Init.NbrOfConversion = 1;
+	hadc1.Init.NbrOfConversion = 2;
 	if (HAL_ADC_Init(&hadc1) != HAL_OK) {
 		Error_Handler();
 	}
@@ -198,7 +212,14 @@ static void MX_ADC1_Init(void) {
 	 */
 	sConfig.Channel = ADC_CHANNEL_0;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_71CYCLES_5;
+	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
+		Error_Handler();
+	}
+
+	/** Configure Regular Channel
+	 */
+	sConfig.Rank = ADC_REGULAR_RANK_2;
 	if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK) {
 		Error_Handler();
 	}
