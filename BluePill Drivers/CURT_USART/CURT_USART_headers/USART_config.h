@@ -1,22 +1,32 @@
-#ifndef USART_CONFIG_H_
-#define USART_CONFIG_H_
-#define F_CPU (8000000UL)
+/**
+ * @file USART_config.h
+ * @author Hazem Montasser (h4z3m.private@gmail.com)
+ * @brief
+ * @version 0.1
+ * @date 2023-07-26
+ *
+ * @copyright Copyright (c) 2023
+ *
+ */
 
-#define USARTX_BAUD_RATE 9600
+#ifndef USART_CONFIG_H
+#define USART_CONFIG_H
 
-/* Options: PARITY_DISABLE
- EVEN_PARITY
- ODD_PARITY */
-#define USARTX_PARITY PARITY_DISABLE
+/*******************************************************************************
+ *                              Includes                                       *
+ *******************************************************************************/
 
-/* Options: DATA_8_BITS
- DATA_9_BITS */
-#define DATA_LENGTH DATA_8_BITS
+#include "../../LIB/STD_TYPES.h"
 
-/* Options: ONE_STOP_BIT
- HALF_STOP_BIT
- TWO_STOP_BIT
- ONE_AND_HALF_STOP_BIT */
-#define STOP_BITS ONE_STOP_BIT
+/*******************************************************************************
+ *                              Includes                                       *
+ *******************************************************************************/
 
-#endif /* USART_CONFIG_H_ */
+#ifdef USE_HAL_DRIVER
+extern u32 SystemCoreClock;
+#define F_CPU (SystemCoreClock)
+#else
+#include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
+#define F_CPU (RCC_getSystemCoreClock())
+#endif
+#endif
