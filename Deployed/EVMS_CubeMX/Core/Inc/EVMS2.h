@@ -29,6 +29,7 @@ uint16_t ADC_uint16ReadBrakes(void);
 
 void Error_action(void);
 uint8_t GPIO_uint8CheckIMD();
+uint8_t LOGIC_uint8CheckIMD();
 uint8_t LOGIC_uint8CheckBSPD();
 uint8_t LOGIC_uint8CheckBMS();
 void LOGIC_voidControlBrakeLight();

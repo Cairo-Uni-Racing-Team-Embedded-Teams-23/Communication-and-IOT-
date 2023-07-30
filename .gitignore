@@ -1,5 +1,7 @@
 */.metadata
 __pycache__
+./**/Debug/
 *Debug/
+**/Debug/
 *.o
 .vscode
