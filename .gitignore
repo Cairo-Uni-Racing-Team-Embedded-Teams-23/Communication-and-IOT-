@@ -1,17 +1,5 @@
-# Ignore everything
-/*
-.metadata
+*/.metadata
 __pycache__
-# Ignore EVERYTHING except bluepill drivers folder
-# To add more folders, add rules like this below:
-#/  ! {FOLDER or FILE_NAME}
-!/BluePill Drivers/
-!/Example Projects/CAN_Test_Receiver
-!/Example Projects/CAN_Test_Sender
-!/Example Projects/CAN_Test_Sender_Interrupt
-!/Example Projects/CAN_Test_Receiver_Interrupt
-!/Notes
-!/Deployed/EVMS_CubeMX
-!/Deployed/EVMS_First_board
-!/utils
-/BluePill Drivers/.obsidian
+*Debug/
+*.o
+.vscode
