@@ -1,4 +1,0 @@
-../BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c:30:6:RCC_voidInitSysClock	4	static
-../BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c:102:6:RCC_voidEnableClock	16	static
-../BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c:133:6:RCC_voidDisableClock	16	static
-../BluePill Drivers/CURT_RCC/CURT_RCC_sources/RCC_source.c:156:6:RCC_configMCO	16	static
