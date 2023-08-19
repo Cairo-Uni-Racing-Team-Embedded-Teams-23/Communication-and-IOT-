@@ -96,7 +96,7 @@ void Check_APPS()
 	/* handle the error if the difference is greater than 10% */
 	if(difference> 0.1* apps2_read || difference> 0.1* apps1_read){
 		errorType = ERROR_CheckAPPS;
-		//ErrorAction();
+		ErrorAction();
 	}
 }
 
@@ -117,13 +117,16 @@ void Check_Activasion_Logic()
 	 * pedal is released before 3 seconds */
 
 	//value of angle brakes might be change
+	/*
 	while( (time_difference<3000) && (HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin)) &&  (ADC_values[BRAKE_ANGLE]>VAL_BRAKE_ANGLE_RTD) )
 	{
 		time_difference=HAL_GetTick()-time_on_press;
 	}
+	*/
 
 	/* check if the RTD button is pressed with the brakes for 3 seconds to enter the drive mode */
-	if(time_difference>=3000)
+	//if(time_difference>=3000)
+	//if(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin))
 	{
 		/* make the RTD sound for 2 seconds */
 		HAL_GPIO_WritePin(RTDS_GPIO_Port,RTDS_Pin,1);
@@ -131,7 +134,7 @@ void Check_Activasion_Logic()
 		HAL_GPIO_WritePin(RTDS_GPIO_Port,RTDS_Pin,0);
 
 		/* wait until the RTD button is released to enter the drive mode */
-		while(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin));
+		//ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin));
 
 		HAL_Delay(50);
 
@@ -162,7 +165,7 @@ void IDLE_Func()
 	/* Put 0 volts on the other side of the relay to complete the shutdown circuit
 	 * It is normally open and the 0 closes it
 	*/
-	HAL_GPIO_WritePin(EVMS_RELAY_GPIO_Port,EVMS_RELAY_Pin, 0);
+	HAL_GPIO_WritePin(EVMS_RELAY_GPIO_Port,EVMS_RELAY_Pin, 1); // changed to 1 for testing
 
 	/*if the start button is not pressed then the next state is still IDLE state */
 	if(! HAL_GPIO_ReadPin(START_BTN_GPIO_Port,START_BTN_Pin))
@@ -201,12 +204,12 @@ void PRECHARGE_Func()
 	HAL_Delay(50);
 
 	/*read the feedback from the precharge relay to see if it is closed or not  */
-	if(HAL_GPIO_ReadPin(PRE_CHARGE_FB_GPIO_Port,PRE_CHARGE_FB_Pin)== 0)
+	if(HAL_GPIO_ReadPin(PRE_CHARGE_FB_GPIO_Port,PRE_CHARGE_FB_Pin)== 1)
 	{
 		/* if the pre-charge relay is not closed then the relay or its connection has a problem
 		 * so call the ERROR function */
 		errorType = ERROR_PrechargeFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* Check for the DC90 from bamocar. so that, if it is high then the inverter is pre-charged
@@ -258,21 +261,21 @@ void NEUTRAL_Func()
 	if(HAL_GPIO_ReadPin(PRE_CHARGE_FB_GPIO_Port,PRE_CHARGE_FB_Pin)== 1)
 	{
 		errorType = ERROR_PrechargeFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* if the AIR positive relay is disabled then there is a a problem in the relay or its connection. So, call ERROR function. */
 	if(HAL_GPIO_ReadPin(AIR_POSITIVE_FB_GPIO_Port,AIR_POSITIVE_FB_Pin)==0)
 	{
 		errorType = ERROR_AIRposFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* if the AIR negative relay is disabled then there is a a problem in the relay or its connection. So, call ERROR function. */
 	if(HAL_GPIO_ReadPin(AIR_NEGATIVE_FB_GPIO_Port,AIR_NEGATIVE_FB_Pin)==0)
 	{
 		errorType = ERROR_AIRnegFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* check the difference between the reading of the two pedals that is less than 10% to avoid any error*/
@@ -292,11 +295,18 @@ void NEUTRAL_Func()
 	}
 
 	/* if the RTD button is pressed and the brake angle is more than the required value then go to the activation logic */
-	if(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin) && ADC_values[BRAKE_ANGLE]>VAL_BRAKE_ANGLE_RTD) 										/* w hna hzwd else if */
+	else if(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin) && ADC_values[BRAKE_ANGLE]<VAL_BRAKE_ANGLE_RTD)
+	//if(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin))
+	//if(ADC_values[BRAKE_ANGLE]<VAL_BRAKE_ANGLE_RTD)
+		/* w hna hzwd else if */
 	{	
+		HAL_Delay(3000);
 		/* go check the RTD button pressed time and the brake angle to enter the drive mode */
-		Check_Activasion_Logic();
-
+		if(HAL_GPIO_ReadPin(RTD_BTN_GPIO_Port,RTD_BTN_Pin) && ADC_values[BRAKE_ANGLE]<VAL_BRAKE_ANGLE_RTD)
+		{
+			Check_Activasion_Logic();
+			nextStateM=DRIVE;
+		}
 	}
 	else
 	{
@@ -317,63 +327,73 @@ void NEUTRAL_Func()
  */
 void DRIVE_Func()
 {
-	/* Enables the motor inverter by enabling the RFE and Drive pins */
+	/* Enables the motor inverter by enabling the RFE pin */
 	HAL_GPIO_WritePin(RFE_ENABLE_GPIO_Port,RFE_ENABLE_Pin,1);
+	/*Delay for half a second*/
+	HAL_Delay(500);
+	/* Enables the motor inverter by enabling Drive pin */
 	HAL_GPIO_WritePin(DRIVE_ENABLE_GPIO_Port,DRIVE_ENABLE_Pin,1);
 
-	/* check the difference between the reading of the two pedals that is less than 10% to avoid any error */
-	Check_APPS();
-
-	/* variable to store the average of the first pedal reading */
-	uint16_t APPS_READ=uint16_t_Read_APPS1();
-
-	//MAPS The ADC READ TO PWM OUTPUT VALUE
-	APPS_READ = map(APPS_READ, APPS_MIN, APPS_MAX, 0, PWM_MAX_OUTPUT);
-
-
-	/* Output the torque command as PWM
-	 * where value in ARR register = 5000*/
-	TIM3->CCR3 = APPS_READ;
-
-	/* Store the updated ADC values of the two pedals in a string */
-	sprintf(UART_massage, "%c \n", "D");
-	/* Transmit the message by the UART*/
-	HAL_UART_Transmit(&huart3, UART_massage, sizeof(UART_massage), 1);
-
-	HAL_UART_Transmit(&huart3, APPS_READ, sizeof(APPS_READ), 1);
-
-	/* if the AIR negative relay is disabled then there is a a problem in the relay or its connection. So, call ERROR function. */
-	if(HAL_GPIO_ReadPin(AIR_NEGATIVE_FB_GPIO_Port,AIR_NEGATIVE_FB_Pin)==0)
+	while(1)
 	{
-		errorType = ERROR_AIRnegFB;
-		//ErrorAction();
+		/* check the difference between the reading of the two pedals that is less than 10% to avoid any error */
+		Check_APPS();
+
+		/* variable to store the average of the first pedal reading */
+		uint16_t APPS_READ=uint16_t_Read_APPS1();
+
+		//MAPS The ADC READ TO PWM OUTPUT VALUE
+		APPS_READ = map(APPS_READ, APPS_MIN, APPS_MAX, 0, PWM_MAX_OUTPUT);
+
+
+		/* Output the torque command as PWM
+		 * where value in ARR register = 5000*/
+		TIM3->CCR3 = APPS_READ;
+
+		/* Store the updated ADC values of the two pedals in a string */
+		sprintf(UART_massage, "%c \n", "D");
+		/* Transmit the message by the UART*/
+		HAL_UART_Transmit(&huart3, UART_massage, sizeof(UART_massage), 1);
+
+		HAL_UART_Transmit(&huart3, APPS_READ, sizeof(APPS_READ), 1);
+
+		/* if the AIR negative relay is disabled then there is a a problem in the relay or its connection. So, call ERROR function. */
+		if(HAL_GPIO_ReadPin(AIR_NEGATIVE_FB_GPIO_Port,AIR_NEGATIVE_FB_Pin)==0)
+		{
+			errorType = ERROR_AIRnegFB;
+			ErrorAction();
+		}
+
+		/* if the start button is pressed go to discharge state */
+		if(HAL_GPIO_ReadPin(START_BTN_GPIO_Port,START_BTN_Pin))
+		{
+			/* wait until the driver release the button */
+			while(HAL_GPIO_ReadPin(START_BTN_GPIO_Port,START_BTN_Pin));
+
+			/* delay for button de-bouncing */
+			HAL_Delay(50);
+
+			/* stop the PWM */
+			TIM3->CCR3 = 0;
+
+			/* enter the discharge state */
+			nextStateM=DISCHARGE;
+
+		}
+
+		else
+		{
+			/* still in the drive state */
+			nextStateM=DRIVE;
+		}
+
+		/* store the new state to set the required state in the loop */
+		currStateM=nextStateM;
+		if(nextStateM == DISCHARGE)
+		{
+			break;
+		}
 	}
-
-	/* if the start button is pressed go to discharge state */
-	if(HAL_GPIO_ReadPin(START_BTN_GPIO_Port,START_BTN_Pin))
-	{
-		/* wait until the driver release the button */
-		while(HAL_GPIO_ReadPin(START_BTN_GPIO_Port,START_BTN_Pin));
-
-		/* delay for button de-bouncing */
-		HAL_Delay(50);
-
-		/* stop the PWM */
-		TIM3->CCR3 = 0;
-
-		/* enter the discharge state */
-		nextStateM=DISCHARGE;
-
-	}
-
-	else
-	{
-		/* still in the drive state */
-		nextStateM=DRIVE;
-	}
-
-	/* store the new state to set the required state in the loop */
-	currStateM=nextStateM;
 
 
 }
@@ -404,14 +424,14 @@ void DISCHARGE_Func()
 	if(HAL_GPIO_ReadPin(AIR_POSITIVE_FB_GPIO_Port,AIR_POSITIVE_FB_Pin)==1)
 	{
 		errorType = ERROR_AIRposFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* if the AIR negative relay is enabled then there is a a problem in the relay or its connection. So, call ERROR function. */
 	if(HAL_GPIO_ReadPin(AIR_NEGATIVE_FB_GPIO_Port,AIR_NEGATIVE_FB_Pin)==1)
 	{
 		errorType = ERROR_AIRnegFB;
-		//ErrorAction();
+		ErrorAction();
 	}
 
 	/* if DC60 is high then go to IDLE state */
@@ -483,15 +503,13 @@ void loop()
  */
 void ErrorAction()
 {
-	/* open the shutdown circuit and go in infinite loop */
-	HAL_GPIO_WritePin(EVMS_RELAY_GPIO_Port,EVMS_RELAY_Pin, 1);
 
 	/* perform the discharge function without going to discharge state */
-	HAL_GPIO_WritePin(EVMS_RELAY_GPIO_Port,EVMS_RELAY_Pin,1);
-	HAL_GPIO_WritePin(RFE_ENABLE_GPIO_Port,RFE_ENABLE_Pin,0);
-	HAL_GPIO_WritePin(DRIVE_ENABLE_GPIO_Port,DRIVE_ENABLE_Pin,0);
-	HAL_GPIO_WritePin(AIR_POSITIVE_GPIO_Port,AIR_POSITIVE_Pin,0);
-
+//	HAL_GPIO_WritePin(EVMS_RELAY_GPIO_Port,EVMS_RELAY_Pin,1);
+//	HAL_GPIO_WritePin(RFE_ENABLE_GPIO_Port,RFE_ENABLE_Pin,0);
+//	HAL_GPIO_WritePin(DRIVE_ENABLE_GPIO_Port,DRIVE_ENABLE_Pin,0);
+//	HAL_GPIO_WritePin(AIR_POSITIVE_GPIO_Port,AIR_POSITIVE_Pin,0);
+//
 
 	/* Store the updated ADC values of the two pedals in a string */
     int buf_len = sprintf(UART_massage, "E");
@@ -521,5 +539,5 @@ void ErrorAction()
     	break;
     }
 
-	while(1);
+//	while(1);
 }

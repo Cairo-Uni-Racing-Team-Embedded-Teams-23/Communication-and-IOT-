@@ -4,8 +4,8 @@
 #ifndef EVMS_H
 #define EVMS_H
 
-#define VAL_BRAKE_ANGLE_RTD		900
-#define PWM_MAX_OUTPUT			65535
+#define VAL_BRAKE_ANGLE_RTD		3300
+#define PWM_MAX_OUTPUT			199
 #define APPS_MIN	(490)
 #define APPS_MAX	(3600)
 /***************************************************************************
