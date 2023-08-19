@@ -13,6 +13,7 @@
  *                              Includes                                       *
  *******************************************************************************/
 
+#include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../../LIB/BIT_MATH.h"
 #include "../../LIB/STD_TYPES.h"
 #include "../CURT_Systick_headers/SYSTICK_CONFIG.h"
@@ -25,6 +26,7 @@
 
 static volatile u8 STK_modeOfInterval = 0;
 static volatile void (*STK_callBack)(void) = NULLPTR;
+static volatile u32 STK_ticksPerMs = 0;
 static volatile u32 STK_ticksGoal = 0;
 static volatile u32 STK_ticks = 0;
 
@@ -32,8 +34,7 @@ static volatile u32 STK_ticks = 0;
  *                         Public functions definitions                        *
  *******************************************************************************/
 
-void STK_init(void)
-{
+void STK_init(void) {
 
 	/* Stop system timer as we are configuring it*/
 	SYSTICK->CTRL = 0;
@@ -43,15 +44,16 @@ void STK_init(void)
 	 * */
 #if STK_CLK_SRC == STK_SRC_AHB_8
 	/* Leave CLKSOURCE bit as zero */
+	STK_ticksPerMs = RCC_getSystemCoreClock() / 8000 - 1;
 #elif STK_CLK_SRC == STK_SRC_AHB
-
+	STK_ticksPerMs = RCC_getSystemCoreClock() / 1000 - 1;
 	SET_BIT(SYSTICK->CTRL, CLKSOURCE);
 
 #else
 #error "[ERROR] SysTick clock source is incorrectly configured. Please refer to SysTick_CONFIG.h"
 #endif
 	/* Pre-load the timer with the max value initially */
-	SYSTICK->LOAD = STK_MAX_PRELOAD_VALUE;
+	SYSTICK->LOAD = STK_ticksPerMs;
 
 	/* Clear timer value */
 	SYSTICK->VAL = 0;
@@ -66,8 +68,7 @@ void STK_init(void)
 	STK_ticks = 0;
 }
 
-void STK_stopInterval(void)
-{
+void STK_stopInterval(void) {
 
 	/* Stop the timer */
 	CLR_BIT(SYSTICK->CTRL, 0);
@@ -82,42 +83,42 @@ void STK_stopInterval(void)
 	STK_callBack = NULLPTR;
 }
 
-u32 STK_getElapsedTime(void)
-{
-	return (u32)(STK_ticks);
+u32 STK_getElapsedTime(void) {
+	return (u32) (STK_ticks);
 }
 
-u32 STK_getRemainingTime(void)
-{
-	return (u32)(STK_ticksGoal - STK_ticks);
+u32 STK_getRemainingTime(void) {
+	return (u32) (STK_ticksGoal - STK_ticks);
 }
 
-void STK_setBusyWait(u32 Ticks)
-{
+void STK_setBusyWait(u32 msec) {
 	/* Stop the timer */
 	CLR_BIT(SYSTICK->CTRL, 0);
 
 	/* Disable systick interrupt */
 	CLR_BIT(SYSTICK->CTRL, TICKINT);
 
-	/* Start SysTick */
-	SET_BIT(SYSTICK->CTRL, 0);
+	for (u32 timer_ticks = 0; timer_ticks < msec; ++timer_ticks) {
+		SYSTICK->LOAD = STK_ticksPerMs;
 
-	for (u32 timer_ticks = 0; timer_ticks < Ticks; ++timer_ticks)
-	{
+		/* Start SysTick */
+		SET_BIT(SYSTICK->CTRL, 0);
 		/* Busy wait on the COUNTFLAG until it is 1
 		 * which means the counter has reset */
 		while (GET_BIT(SYSTICK->CTRL, COUNTFLAG) == 0)
 			;
 	}
+	/* Stop the timer */
+	CLR_BIT(SYSTICK->CTRL, 0);
 }
 
-void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void))
-{
+void STK_setIntervalSingle(u32 msec, void (*ptr)(void)) {
 
 	/* Null check*/
 	if (ptr == NULLPTR)
 		return;
+
+	SYSTICK->LOAD = STK_ticksPerMs;
 
 	/* Set callback when interval is over */
 	STK_callBack = ptr;
@@ -126,7 +127,7 @@ void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void))
 	STK_modeOfInterval = SysTick_IntervalMode_Single;
 
 	/* Set the ticks variable to a global private variable */
-	STK_ticksGoal = Ticks;
+	STK_ticksGoal = msec;
 
 	/* Reset ticks variable */
 	STK_ticks = 0;
@@ -138,11 +139,12 @@ void STK_setIntervalSingle(u32 Ticks, void (*ptr)(void))
 	SET_BIT(SYSTICK->CTRL, 0);
 }
 
-void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void))
-{
+void STK_setIntervalPeriodic(u32 msec, void (*ptr)(void)) {
 	/* Null check*/
 	if (ptr == NULLPTR)
 		return;
+
+	SYSTICK->LOAD = STK_ticksPerMs;
 
 	/* Set callback when interval is over */
 	STK_callBack = ptr;
@@ -151,7 +153,7 @@ void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void))
 	STK_modeOfInterval = SysTick_IntervalMode_Period;
 
 	/* Set the ticks variable to a global private variable */
-	STK_ticksGoal = Ticks;
+	STK_ticksGoal = msec;
 
 	/* Reset ticks variable */
 	STK_ticks = 0;
@@ -163,23 +165,21 @@ void STK_setIntervalPeriodic(u32 Ticks, void (*ptr)(void))
 	SET_BIT(SYSTICK->CTRL, 0);
 }
 
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void) {
 
 	/* Increment ticks */
 	++STK_ticks;
 
 	/* Reset the mode of interval to non specified if it was configured as single interval interrupt
 	 * then stop the timer */
-	if (STK_modeOfInterval == SysTick_IntervalMode_Single && STK_ticks == STK_ticksGoal)
-	{
+	if (STK_modeOfInterval == SysTick_IntervalMode_Single
+			&& STK_ticks == STK_ticksGoal) {
 		/* Callback notification for the user before stoppng the interval & resetting the callback ptr */
 		if (STK_callBack != NULLPTR)
 			(*STK_callBack)();
 		STK_stopInterval();
-	}
-	else if (STK_modeOfInterval == SysTick_IntervalMode_Period && STK_ticks == STK_ticksGoal)
-	{
+	} else if (STK_modeOfInterval == SysTick_IntervalMode_Period
+			&& STK_ticks == STK_ticksGoal) {
 		/* Callback notification for the user */
 		if (STK_callBack != NULLPTR)
 			(*STK_callBack)();

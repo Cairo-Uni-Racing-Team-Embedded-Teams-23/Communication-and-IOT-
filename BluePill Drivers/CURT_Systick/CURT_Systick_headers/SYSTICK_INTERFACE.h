@@ -109,9 +109,9 @@ u32 STK_getRemainingTime(void);
  * 		timer to reach zero for Ticks number of times. Loops on the
  * 		COUNTFLAG every tick to check if the counter reset.
  *
- * @param Ticks Timer ticks to wait for
+ * @param msec Timer ticks to wait for
  */
-void STK_setBusyWait(u32 Ticks);
+void STK_setBusyWait(u32 msec);
 /**
  * @brief Sets up the timer with the specified number of ticks and
  *		attaches the interrupt to the systick interrupt. The interrupt

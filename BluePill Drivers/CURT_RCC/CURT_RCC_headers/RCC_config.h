@@ -27,7 +27,7 @@
 				 RCC_PLL             	;Phase Lock Loop
 	*/
 
-#define RCC_CLOCK_TYPE RCC_PLL
+#define RCC_CLOCK_TYPE RCC_HSE_CRYSTAL
 
 /* Options :
 

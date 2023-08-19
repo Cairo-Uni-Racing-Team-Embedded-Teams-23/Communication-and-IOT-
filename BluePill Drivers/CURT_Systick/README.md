@@ -80,7 +80,7 @@ u32 ticksElapsed = STK_ElapsedTime();
 
 #### Notes
 
-- A 'tick' definition here refers to a complete countdown of the timer from the value `0x00FFFFFF` to `0x00000000`. Therefore, if used for a millisecond delay function, the correct number of ticks needs to be calculated according to the maximum pre-load value & the frequency of the timer.
+- ~~A 'tick' definition here refers to a complete countdown of the timer from the value `0x00FFFFFF` to `0x00000000`. Therefore, if used for a millisecond delay function, the correct number of ticks needs to be calculated according to the maximum pre-load value & the frequency of the timer.~~
 - The provided callback function should be as small as possible as it executes under the context of the Systick_Handler.
 - The provided callback function must not rely on other interrupts with lower priority than the Systick interrupt.
 - If the **core** clock is halted for any reason, the Systick timer also halts as it is a core peripheral.
