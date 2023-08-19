@@ -14,18 +14,22 @@
  *******************************************************************************/
 
 #include "../../CURT_GPIO/CURT_GPIO_headers/GPIO_interface.h"
+#include "../../CURT_NVIC/CURT_NVIC_headers/NVIC_interface.h"
 #include "../../CURT_RCC/CURT_RCC_headers/RCC_interface.h"
 #include "../../LIB/BIT_MATH.h"
 #include "../CURT_USART_headers/USART_config.h"
 #include "../CURT_USART_headers/USART_interface.h"
 #include "../CURT_USART_headers/USART_private.h"
-
 /*******************************************************************************
  *                         Private global variables                            *
  *******************************************************************************/
 
-static u16 **usart_data_in = NULLPTR;
-static u16 *usart_data_len = NULLPTR;
+static u8 **usart_tx_data = NULLPTR;
+static u16 usart_tx_data_len = 0;
+
+static void (*usart1_rxne_callback)(u8) = NULLPTR;
+static void (*usart2_rxne_callback)(u8) = NULLPTR;
+static void (*usart3_rxne_callback)(u8) = NULLPTR;
 
 /*******************************************************************************
  *                         Private Functions                                   *
@@ -69,26 +73,73 @@ static void USART_initPins(USART_Typedef *a_usart)
 	}
 }
 
+static void USART_enableIRQ(USART_Typedef *a_usart)
+{
+
+	if (a_usart == USART1)
+	{
+		NVIC_enableIRQ(IRQ_USART1);
+		NVIC_setPriority(IRQ_USART1, 0);
+	}
+	else if (a_usart == USART2)
+	{
+		NVIC_enableIRQ(IRQ_USART2);
+		NVIC_setPriority(IRQ_USART2, 0);
+	}
+	else if (a_usart == USART3)
+	{
+		NVIC_enableIRQ(IRQ_USART3);
+		NVIC_setPriority(IRQ_USART3, 0);
+	}
+	else
+	{
+		return;
+	}
+}
+
+static void USART_disableIRQ(USART_Typedef *a_usart)
+{
+
+	if (a_usart == USART1)
+	{
+		NVIC_disableIRQ(IRQ_USART1);
+	}
+	else if (a_usart == USART2)
+	{
+		NVIC_disableIRQ(IRQ_USART2);
+	}
+	else if (a_usart == USART3)
+	{
+		NVIC_disableIRQ(IRQ_USART3);
+	}
+	else
+	{
+		return;
+	}
+}
+
 /*******************************************************************************
  *                         Public functions definitions                        *
  *******************************************************************************/
 
-USART_Status_Typedef USART_init(USART_Typedef *a_usart,
-								USART_Config_Typedef *a_config)
+USART_Status_t USART_init(USART_Typedef *a_usart, USART_Config_t *a_config)
 {
 
 	if (a_usart == NULLPTR || a_config == NULLPTR)
 	{
 		return USART_ERROR;
 	}
-	USART_Status_Typedef status = USART_OK;
+	USART_Status_t status = USART_OK;
 	USART_initPins(a_usart);
 
 	/* Calculate the baud rate */
 	u32 l_core_clock = F_CPU;
-	u32 l_USART_Fraction = (l_core_clock) / (16UL * (a_config->baud_rate));
-	u32 l_USART_Mantissa = ((((l_core_clock * 100UL) / (16UL * (a_config->baud_rate))) * 100UL) % 100UL) * 16UL;
-	a_usart->USART_BRR = (l_USART_Fraction / 100UL) || (l_USART_Mantissa << 4UL);
+	u32 l_USART_DIV = l_core_clock / (16 * a_config->baud_rate);
+
+	u32 l_USART_Mantissa = l_USART_DIV;
+	u32 l_USART_Fraction = ((l_core_clock % (16 * a_config->baud_rate)) * 16 + (16 * a_config->baud_rate) / 2) / (16 * a_config->baud_rate);
+
+	a_usart->USART_BRR = (l_USART_Fraction) | (l_USART_Mantissa << 4);
 	a_usart->USART_SR = 0;
 
 	/* Set the UE bit in USART register to enable UART*/
@@ -121,20 +172,19 @@ USART_Status_Typedef USART_init(USART_Typedef *a_usart,
 	return status;
 }
 
-USART_Status_Typedef USART_sendChar(USART_Typedef *a_usart, u16 a_data)
+USART_Status_t USART_sendChar(USART_Typedef *a_usart, u8 a_data)
 {
 	a_usart->USART_CR1 |= (1 << USART_CR1_TE);
-	a_usart->USART_DR = (a_data & 0x1FFU);
+	a_usart->USART_DR = (a_data & 0xFFU);
 	while (!CHK_BIT(a_usart->USART_SR, USART_SR_TC))
 		;
 	CLR_BIT(a_usart->USART_SR, USART_SR_TC);
 	return USART_OK;
 }
 
-USART_Status_Typedef USART_sendString(USART_Typedef *a_usart, u16 a_data[],
-									  u16 size)
+USART_Status_t USART_sendString(USART_Typedef *a_usart, u8 a_data[], u16 size)
 {
-	USART_Status_Typedef l_status = USART_OK;
+	USART_Status_t l_status = USART_OK;
 	for (u16 idx = 0; idx < size && l_status == USART_OK; idx++)
 	{
 		l_status = USART_sendChar(a_usart, a_data[idx]);
@@ -142,36 +192,67 @@ USART_Status_Typedef USART_sendString(USART_Typedef *a_usart, u16 a_data[],
 	return l_status;
 }
 
-u16 USART_receiveChar(USART_Typedef *a_usart)
+USART_Status_t USART_sendString_Interrupt(USART_Typedef *a_usart, u8 a_data[],
+										  u16 size)
+{
+	USART_Status_t l_status = USART_OK;
+	USART_enableInterrupt(a_usart, USART_Interrupt_TXE);
+	/* Set size and data array */
+	usart_tx_data = &a_data;
+	usart_tx_data_len = size;
+
+	return l_status;
+}
+
+USART_Status_t USART_receiveChar(USART_Typedef *a_usart, u8 *data)
 {
 	while (!CHK_BIT(a_usart->USART_SR, USART_SR_RXNE))
 		;
-	return (a_usart->USART_DR & 0x1FFU);
+	if (data)
+		*data = (a_usart->USART_DR & 0xFFU);
+	return USART_OK;
 }
 
-void USART_receiveString(USART_Typedef *a_usart, u16 a_data[], u16 size)
+USART_Status_t USART_receiveString(USART_Typedef *a_usart, u8 a_data[],
+								   u16 size)
 {
 	for (u16 idx = 0; idx < size; idx++)
 	{
-		a_data[idx] = USART_receiveChar(a_usart);
+		USART_Status_t status = USART_receiveChar(a_usart, &a_data[idx]);
+		if (status == USART_NO_DATA)
+		{
+			// No data received
+			return USART_NO_DATA;
+		}
 	}
+	return USART_OK;
 }
 
-void USART_receiveString_Interrupt(USART_Typedef *a_usart, u16 a_data[],
-								   u16 size)
+void USART_receiveString_Interrupt(USART_Typedef *a_usart, void (*callback)(u8))
 {
-	/* Set size and data array */
-	usart_data_in = &a_data;
-	usart_data_len = size;
+	if (callback)
+	{
+		if (a_usart == USART1)
+			usart1_rxne_callback = callback;
+		else if (a_usart == USART2)
+			usart2_rxne_callback = callback;
+		else if (a_usart == USART3)
+			usart3_rxne_callback = callback;
+		else
+			return;
+	}
 
 	/* Enable the RXNE interrupt for reception */
 	USART_enableInterrupt(a_usart, USART_Interrupt_RXNE);
 }
 
-USART_Status_Typedef USART_enableInterrupt(USART_Typedef *a_usart,
-										   USART_Interrupt_Typedef a_interrupt)
+USART_Status_t USART_enableInterrupt(USART_Typedef *a_usart,
+									 USART_Interrupt_t a_interrupt)
 {
-	USART_Status_Typedef l_status = USART_OK;
+
+	USART_Status_t l_status = USART_OK;
+
+	USART_enableIRQ(a_usart);
 
 	switch (a_interrupt)
 	{
@@ -206,10 +287,10 @@ USART_Status_Typedef USART_enableInterrupt(USART_Typedef *a_usart,
 	return l_status;
 }
 
-USART_Status_Typedef USART_disableInterrupt(USART_Typedef *a_usart,
-											USART_Interrupt_Typedef a_interrupt)
+USART_Status_t USART_disableInterrupt(USART_Typedef *a_usart,
+									  USART_Interrupt_t a_interrupt)
 {
-	USART_Status_Typedef l_status = USART_OK;
+	USART_Status_t l_status = USART_OK;
 
 	switch (a_interrupt)
 	{
@@ -241,5 +322,40 @@ USART_Status_Typedef USART_disableInterrupt(USART_Typedef *a_usart,
 		break;
 	}
 
+	USART_disableIRQ(a_usart);
+
 	return l_status;
+}
+
+__attribute((__weak__)) void USART1_IRQHandler(void)
+{
+	USART_disableIRQ(USART1);
+	if (usart1_rxne_callback)
+	{
+		u8 byte = 0;
+		USART_receiveChar(USART1, &byte);
+		(*usart1_rxne_callback)(byte);
+	}
+}
+
+__attribute((__weak__)) void USART2_IRQHandler(void)
+{
+	USART_disableIRQ(USART2);
+	if (usart2_rxne_callback)
+	{
+		u8 byte = 0;
+		USART_receiveChar(USART2, &byte);
+		(*usart2_rxne_callback)(byte);
+	}
+}
+
+__attribute((__weak__)) void USART3_IRQHandler(void)
+{
+	USART_disableIRQ(USART3);
+	if (usart3_rxne_callback)
+	{
+		u8 byte = 0;
+		USART_receiveChar(USART3, &byte);
+		(*usart3_rxne_callback)(byte);
+	}
 }

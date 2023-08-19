@@ -28,11 +28,11 @@
 #define UART4_BASE_ADDRESS (0x40004C00UL)
 #define UART5_BASE_ADDRESS (0x40005000UL)
 
-#define USART1 ((volatile USART_Typedef *)USART1_BASE_ADDRESS)
-#define USART2 ((volatile USART_Typedef *)USART2_BASE_ADDRESS)
-#define USART3 ((volatile USART_Typedef *)USART3_BASE_ADDRESS)
-#define UART4 ((volatile USART_Typedef *)UART4_BASE_ADDRESS)
-#define UART5 ((volatile USART_Typedef *)UART5_BASE_ADDRESS)
+#define USART1 ((USART_Typedef *)USART1_BASE_ADDRESS)
+#define USART2 ((USART_Typedef *)USART2_BASE_ADDRESS)
+#define USART3 ((USART_Typedef *)USART3_BASE_ADDRESS)
+#define UART4 ((USART_Typedef *)UART4_BASE_ADDRESS)
+#define UART5 ((USART_Typedef *)UART5_BASE_ADDRESS)
 
 #define USART1_PORT GPIO_PortA
 #define USART1_CLK APB2
@@ -89,7 +89,8 @@
  * @brief
  *
  */
-typedef struct {
+typedef struct
+{
 	volatile u32 USART_SR;
 	volatile u32 USART_DR;
 	volatile u32 USART_BRR;

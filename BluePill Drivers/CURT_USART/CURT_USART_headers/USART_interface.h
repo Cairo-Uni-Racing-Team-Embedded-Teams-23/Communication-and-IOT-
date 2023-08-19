@@ -24,15 +24,17 @@
  *******************************************************************************/
 
 /**
- * @enum  USART_Status_Typedef
+ * @enum  USART_Status_t
  * @brief USART status enum
  *
  */
 typedef enum
 {
-  USART_OK,   /**< USART_OK */
-  USART_ERROR /**< USART_ERROR */
-} USART_Status_Typedef;
+	USART_OK,	 /**< USART_OK */
+	USART_ERROR, /**< USART_ERROR */
+	USART_NO_DATA,
+	USART_INCOMPLETE_DATA
+} USART_Status_t;
 
 /**
  * @enum
@@ -41,10 +43,10 @@ typedef enum
  */
 typedef enum
 {
-  USART_PARITY_NONE = 0, /**< USART_PARITY_NONE */
-  USART_PARITY_EVEN = 1, /**< USART_PARITY_EVEN */
-  USART_PARITY_ODD = 2   /**< USART_PARITY_ODD */
-} USART_Parity_Typedef;
+	USART_PARITY_NONE = 0, /**< USART_PARITY_NONE */
+	USART_PARITY_EVEN = 1, /**< USART_PARITY_EVEN */
+	USART_PARITY_ODD = 2   /**< USART_PARITY_ODD */
+} USART_Parity_t;
 
 /**
  * @enum
@@ -53,11 +55,11 @@ typedef enum
  */
 typedef enum
 {
-  USART_STOPBITS_1 = 0b00,   /**< USART_STOPBITS_1 */
-  USART_STOPBITS_0_5 = 0b01, /**< USART_STOPBITS_0_5 */
-  USART_STOPBITS_2 = 0b10,   /**< USART_STOPBITS_2 */
-  USART_STOPBITS_1_5 = 0b11, /**< USART_STOPBITS_1_5 */
-} USART_StopBits_Typedef;
+	USART_STOPBITS_1 = 0b00,   /**< USART_STOPBITS_1 */
+	USART_STOPBITS_0_5 = 0b01, /**< USART_STOPBITS_0_5 */
+	USART_STOPBITS_2 = 0b10,   /**< USART_STOPBITS_2 */
+	USART_STOPBITS_1_5 = 0b11, /**< USART_STOPBITS_1_5 */
+} USART_StopBits_t;
 
 /**
  * @enum
@@ -66,9 +68,9 @@ typedef enum
  */
 typedef enum
 {
-  USART_WORDLENGTH_8BIT = 0, /**< USART_WORDLENGTH_8BIT */
-  USART_WORDLENGTH_9BIT = 1  /**< USART_WORDLENGTH_9BIT */
-} USART_WordLength_Typedef;
+	USART_WORDLENGTH_8BIT = 0, /**< USART_WORDLENGTH_8BIT */
+	USART_WORDLENGTH_9BIT = 1  /**< USART_WORDLENGTH_9BIT */
+} USART_WordLength_t;
 
 /**
  * @enum
@@ -77,9 +79,9 @@ typedef enum
  */
 typedef enum
 {
-  USART_CPOL_LOW, /**< USART_CPOL_LOW */
-  USART_CPOL_HIGH /**< USART_CPOL_HIGH */
-} USART_CPOL_Typedef;
+	USART_CPOL_LOW, /**< USART_CPOL_LOW */
+	USART_CPOL_HIGH /**< USART_CPOL_HIGH */
+} USART_CPOL_t;
 
 /**
  * @enum
@@ -88,9 +90,9 @@ typedef enum
  */
 typedef enum
 {
-  USART_CPHA_FIRST, /**< USART_CPHA_FIRST */
-  USART_CPHA_SECOND /**< USART_CPHA_SECOND */
-} USART_CPHA_Typedef;
+	USART_CPHA_FIRST, /**< USART_CPHA_FIRST */
+	USART_CPHA_SECOND /**< USART_CPHA_SECOND */
+} USART_CPHA_t;
 
 /**
  * @enum
@@ -98,16 +100,16 @@ typedef enum
  */
 typedef enum
 {
-  USART_Interrupt_TXE,  /**< USART_Interrupt_TXE */
-  USART_Interrupt_CTS,  /**< USART_Interrupt_CTS */
-  USART_Interrupt_TC,   /**< USART_Interrupt_TC */
-  USART_Interrupt_RXNE, /**< USART_Interrupt_RXNE */
-  USART_Interrupt_ORE,  /**< USART_Interrupt_ORE */
-  USART_Interrupt_IDLE, /**< USART_Interrupt_IDLE */
-  USART_Interrupt_PE,   /**< USART_Interrupt_PE */
-  USART_Interrupt_FE,   /**< USART_Interrupt_FE */
-  USART_Interrupt_LBD,  /**< USART_Interrupt_LBD */
-} USART_Interrupt_Typedef;
+	USART_Interrupt_TXE,  /**< USART_Interrupt_TXE */
+	USART_Interrupt_CTS,  /**< USART_Interrupt_CTS */
+	USART_Interrupt_TC,	  /**< USART_Interrupt_TC */
+	USART_Interrupt_RXNE, /**< USART_Interrupt_RXNE */
+	USART_Interrupt_ORE,  /**< USART_Interrupt_ORE */
+	USART_Interrupt_IDLE, /**< USART_Interrupt_IDLE */
+	USART_Interrupt_PE,	  /**< USART_Interrupt_PE */
+	USART_Interrupt_FE,	  /**< USART_Interrupt_FE */
+	USART_Interrupt_LBD,  /**< USART_Interrupt_LBD */
+} USART_Interrupt_t;
 
 /**
  * @struct
@@ -115,14 +117,14 @@ typedef enum
  */
 typedef struct
 {
-  u32 baud_rate;
-  u32 prescaler;
-  USART_Parity_Typedef parity;
-  USART_StopBits_Typedef stop_bits;
-  USART_WordLength_Typedef word_length;
-  USART_CPHA_Typedef cpha;
-  USART_CPOL_Typedef cpol;
-} USART_Config_Typedef;
+	u32 baud_rate;
+	u32 prescaler;
+	USART_Parity_t parity;
+	USART_StopBits_t stop_bits;
+	USART_WordLength_t word_length;
+	USART_CPHA_t cpha;
+	USART_CPOL_t cpol;
+} USART_Config_t;
 
 /*******************************************************************************
  *                         Public functions prototypes                         *
@@ -136,8 +138,7 @@ typedef struct
  * @param a_config
  * @return
  */
-USART_Status_Typedef USART_init(USART_Typedef *a_usart,
-                                USART_Config_Typedef *a_config);
+USART_Status_t USART_init(USART_Typedef *a_usart, USART_Config_t *a_config);
 
 /**
  * @brief Sends a single character over USART
@@ -146,7 +147,7 @@ USART_Status_Typedef USART_init(USART_Typedef *a_usart,
  * @param a_data Data buffer
  * @return
  */
-USART_Status_Typedef USART_sendChar(USART_Typedef *a_usart, u16 a_data);
+USART_Status_t USART_sendChar(USART_Typedef *a_usart, u8 a_data);
 
 /**
  * @brief Sends a string over USART
@@ -156,8 +157,17 @@ USART_Status_Typedef USART_sendChar(USART_Typedef *a_usart, u16 a_data);
  * @param size Size of the data buffer
  * @return
  */
-USART_Status_Typedef USART_sendString(USART_Typedef *a_usart, u16 a_data[],
-                                      u16 size);
+USART_Status_t USART_sendString(USART_Typedef *a_usart, u8 a_data[], u16 size);
+/**
+ * @brief
+ *
+ * @param a_usart USART interface on which to perform the operation
+ * @param a_data  Data buffer
+ * @param size    Size of the data buffer
+ * @return USART_Status_t
+ */
+USART_Status_t USART_sendString_Interrupt(USART_Typedef *a_usart, u8 a_data[],
+										  u16 size);
 
 /**
  * @brief Receives a single character over USART
@@ -165,17 +175,17 @@ USART_Status_Typedef USART_sendString(USART_Typedef *a_usart, u16 a_data[],
  * @param a_usart USART interface on which to perform the operation
  * @return
  */
-u16 USART_receiveChar(USART_Typedef *a_usart);
+USART_Status_t USART_receiveChar(USART_Typedef *a_usart, u8 *data);
 
 /**
  * @brief Receives a string over USART using interrupt
  *
  * @param a_usart USART interface on which to perform the operation
  * @param a_data Data buffer
- * @param size Size of the data buffer
+ * @param size Pointer to size of the data received
  * @return
  */
-void USART_receiveString_Interrupt(USART_Typedef *a_usart, u16 a_data[], u16 size);
+void USART_receiveString_Interrupt(USART_Typedef *a_usart, void (*callback)(u8));
 
 /**
  * @brief Receives a string over USART
@@ -184,20 +194,22 @@ void USART_receiveString_Interrupt(USART_Typedef *a_usart, u16 a_data[], u16 siz
  * @param a_data Data buffer
  * @param size Size of the data buffer
  */
-void USART_receiveString(USART_Typedef *a_usart, u16 a_data[], u16 size);
-
+USART_Status_t USART_receiveString(USART_Typedef *a_usart, u8 a_data[],
+								   u16 size);
 /**
  * @brief Enables the given interrupt
  *
  * @param a_interrupt Interrupt type
  */
-USART_Status_Typedef USART_enableInterrupt(USART_Typedef *a_usart, USART_Interrupt_Typedef a_interrupt);
+USART_Status_t USART_enableInterrupt(USART_Typedef *a_usart,
+									 USART_Interrupt_t a_interrupt);
 
 /**
  * @brief Disables the given interrupt
  *
  * @param a_interrupt Interrupt type
  */
-USART_Status_Typedef USART_disableInterrupt(USART_Typedef *a_usart, USART_Interrupt_Typedef a_interrupt);
+USART_Status_t USART_disableInterrupt(USART_Typedef *a_usart,
+									  USART_Interrupt_t a_interrupt);
 
 #endif
