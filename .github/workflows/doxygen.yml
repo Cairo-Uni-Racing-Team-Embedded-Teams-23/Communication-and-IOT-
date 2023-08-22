@@ -1,16 +1,26 @@
+name: Generate Doxygen Docs
 
-name: Generate doxygen docs
 on:
   push:
     branches:
-      - "Hazem_Montasser"
+      - Hazem_Montasser
+
 jobs:
-  docs:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: "Doxygen"
-        run: |
-          sudo apt-get install -y doxygen
-          doxygen Doxyfile
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    - name: Setup Doxygen
+      run: sudo apt-get install -y doxygen
 
+    - name: Generate Doxygen Docs
+      run: doxygen Doxyfile
+
+    - name: Deploy Docs
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/html
