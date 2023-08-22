@@ -12,6 +12,6 @@ jobs:
         with:
           additional-packages: font-fira-code
           working-directory: './'
-          doxyfile-path: './'
+          doxyfile-path: './Doxyfile'
 
 
